@@ -1,0 +1,25 @@
+name: $etp_procedure_process
+
+on:
+  workflow_dispatch:
+  push:
+  pull_request:
+#   schedule:
+#     - cron: "0 7 * * *"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: hyoo-ru/mam_build@master2
+        with:
+          token: ${{ secrets.GH_PATH }}
+          package: "etp"
+          modules: "procedure_process/app"
+
+      - uses: alex-page/blazing-fast-gh-pages-deploy@v1.1.0
+        if: github.ref == 'refs/heads/master'
+        with:
+          repo-token: ${{ secrets.GH_PATH }}
+          site-directory: "etp/procedure/process/app/-"
