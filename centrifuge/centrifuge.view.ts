@@ -9,32 +9,24 @@ namespace $.$$ {
 
     @$mol_mem
     state() {
-      //   console.log("sttt", this.client().state);
       return this.client().state;
+    }
+
+    @$mol_action
+    subscribe() {
+      const weightChannel = this.client().newSubscription("channel");
+      console.log("ccc", weightChannel);
+      weightChannel.on("publication", (ctx) => {
+        console.log("weight sub", ctx.data);
+      });
+      weightChannel.subscribe();
+      this.client().connect();
     }
 
     auto() {
       this.client();
       this.state();
+      this.subscribe();
     }
   }
-  //   const centrifuge = require("centrifuge") as typeof import("centrifuge");
-  //   //   export const $scale_centrifuge = centrifuge;
-  //   export const $scale_centrifuge_Client = centrifuge.Centrifuge;
-  //   //   export class $scale_centrifuge extends $.$scale_centrifuge {}
-  //   //   import("centrifuge").then((centrifuge) => {
-  //   //     console.log("client", centrifuge);
-  //   //   });
-  //   //   export class $scale_centrifuge extends $mol_object2 {
-  //   //     constructor() {
-  //   //       super();
-  //   //       import("centrifuge").then((centrifuge) => {
-  //   //         console.log("client", centrifuge);
-  //   //         // this.client(centrifuge.Centrifuge);
-  //   //       });
-  //   //     }
-  //   //     client(next?: any) {
-  //   //       return next;
-  //   //     }
-  //   //   }
 }

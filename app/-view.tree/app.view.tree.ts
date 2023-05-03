@@ -3,10 +3,10 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * menu_tools / <= Centrifuge
+		 * menu_foot / <= Centrifuge
 		 * ```
 		 */
-		menu_tools() {
+		menu_foot() {
 			return [
 				this.Centrifuge()
 			] as readonly any[]

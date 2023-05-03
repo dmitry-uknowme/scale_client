@@ -6413,9 +6413,17 @@ var $;
             state() {
                 return this.client().state;
             }
+            subscribe() {
+                const weightChannel = this.client().newSubscription("channel");
+                console.log("ccc", weightChannel);
+                weightChannel.on("publication", (ctx) => {
+                    console.log("weight sub", ctx.data);
+                });
+                weightChannel.subscribe();
+                this.client().connect();
+            }
             auto() {
                 this.client();
-                this.state();
             }
         }
         __decorate([
@@ -6424,6 +6432,9 @@ var $;
         __decorate([
             $mol_mem
         ], $scale_centrifuge.prototype, "state", null);
+        __decorate([
+            $mol_action
+        ], $scale_centrifuge.prototype, "subscribe", null);
         $$.$scale_centrifuge = $scale_centrifuge;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -8021,7 +8032,7 @@ var $;
 var $;
 (function ($) {
     class $scale_app extends $mol_book2_catalog {
-        menu_tools() {
+        menu_foot() {
             return [
                 this.Centrifuge()
             ];

@@ -1,5 +1,5 @@
 $scale_app $mol_book2_catalog
-	menu_tools /
+	menu_foot /
 		<= Centrifuge $scale_centrifuge
 	menu_title \Scale Client 2.0
 	spreads *
