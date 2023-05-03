@@ -10,6 +10,7 @@ $scale_app $mol_book2_catalog
 			Spread_close => Dash_close
 			spreads *
 				form_enter <= Form_enter $mol_book2_catalog
+					menu_body / <= Form_enter_body $scale_form_enter
 					param \form_enter
 					menu_title \Создать запись на въезд
 					menu_tools /

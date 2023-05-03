@@ -24,39 +24,33 @@ $scale_dash $mol_view sub /
 		<= Auto_list $mol_section
 			title \На территории
 			content /
-				<= Rows $mol_list rows <= rows /
-					<= Row*0 $mol_row
+				<= Table $mol_list rows <= rows /
+					<= Table_row*0 $mol_row
 						minimal_height 100
 						minimal_width 200
 						sub <= row_content* /
-							<= Id_labeler* $mol_labeler
-								title \ID
-								Content <= Id* $mol_check_box
-									title <= row_id*? \0000
-									checked? <=> row_checked*? false
-							<= Title_labeler* $mol_labeler
-								title \Product Name
-								Content <= Title* $mol_link_iconed
-									uri <= row_uri* \
-									title <= row_title* \
-							<= Color_labeler* $mol_labeler
-								title \Color
-								Content <= Color* $mol_select
-									value? <=> row_color*? \
-									options <= colors /
-							<= Status_labeler* $mol_labeler
-								title \Status
-								Content <= Status* $mol_switch
-									value? <=> row_status*? \
-									options <= status_options *
-										minor \Store
-										major \Sale
-										critical \Support
-							<= Quantity_labeler* $mol_labeler
-								title \Quantity
-								Content <= Quantity* $mol_number
-									value? <=> row_quantity*? 0
-							<= Date_labeler* $mol_labeler
-								title \Supply Time
-								Content <= Date* $mol_date
-									value_moment?val <=> row_moment*?val $mol_time_moment
+							<= Number_labeler* $mol_labeler
+								title \Гос. номер
+								Content <= Number_content* $mol_paragraph
+									title \dwd
+							<= Transporter_labeler* $mol_labeler
+								title \Перевозчик
+								Content <= Transporter_content* $mol_paragraph
+									title \00dwd
+							<= Weight_gross_labeler* $mol_labeler
+								title \Брутто (кг)
+								Content <= Weight_gross_content* $mol_paragraph
+									title \00dwd
+							<= Type_weight_labeler* $mol_labeler
+								title \Вид груза
+								Content <= Type_weight_content* $mol_paragraph
+									title \00dwd
+							<= Category_weight_labeler* $mol_labeler
+								title \Категория груза
+								Content <= Category_weight_content* $mol_paragraph
+									title \00dwd
+							<= Date_enter_labeler* $mol_labeler
+								title \Дата и время въезда
+								Content <= Date_enter_content* $mol_paragraph
+									title \00dwd
+							

@@ -1,0 +1,9 @@
+[mol_form_field] {
+	flex-direction: row;
+	align-items: center;
+	min-height: auto !important;
+}
+
+[scale_app_dash_body_table_row]  [mol_labeler_label]{
+	padding: 0;
+}

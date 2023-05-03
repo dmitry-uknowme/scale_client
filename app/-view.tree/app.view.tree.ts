@@ -21,7 +21,7 @@ namespace $ {
 			return {
 				dash: this.Dash(),
 				stats: this.Stats()
-			} as Record< string, any >
+			}
 		}
 		
 		/**
@@ -38,6 +38,18 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Form_enter_body $scale_form_enter
+		 * ```
+		 */
+		@ $mol_mem
+		Form_enter_body() {
+			const obj = new this.$.$scale_form_enter()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * Form_enter_close
 		 * ```
 		 */
@@ -48,6 +60,7 @@ namespace $ {
 		/**
 		 * ```tree
 		 * Form_enter $mol_book2_catalog
+		 * 	menu_body / <= Form_enter_body
 		 * 	param \form_enter
 		 * 	menu_title \Создать запись на въезд
 		 * 	menu_tools / <= Spread_close
@@ -58,6 +71,9 @@ namespace $ {
 		Form_enter() {
 			const obj = new this.$.$mol_book2_catalog()
 			
+			obj.menu_body = () => [
+				this.Form_enter_body()
+			] as readonly any[]
 			obj.param = () => "form_enter"
 			obj.menu_title = () => "Создать запись на въезд"
 			obj.menu_tools = () => [
@@ -135,7 +151,7 @@ namespace $ {
 			obj.spreads = () => ({
 				form_enter: this.Form_enter(),
 				form_close: this.Form_close()
-			} as Record< string, any >)
+			})
 			
 			return obj
 		}

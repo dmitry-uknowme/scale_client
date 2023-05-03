@@ -200,310 +200,186 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * row_id*? \0000
+		 * Number_content* $mol_paragraph title \dwd
 		 * ```
 		 */
 		@ $mol_mem_key
-		row_id(id: any, next?: any) {
-			if ( next !== undefined ) return next as never
-			return "0000"
-		}
-		
-		/**
-		 * ```tree
-		 * row_checked*? false
-		 * ```
-		 */
-		@ $mol_mem_key
-		row_checked(id: any, next?: any) {
-			if ( next !== undefined ) return next as never
-			return false
-		}
-		
-		/**
-		 * ```tree
-		 * Id* $mol_check_box
-		 * 	title <= row_id*?
-		 * 	checked? <=> row_checked*?
-		 * ```
-		 */
-		@ $mol_mem_key
-		Id(id: any) {
-			const obj = new this.$.$mol_check_box()
+		Number_content(id: any) {
+			const obj = new this.$.$mol_paragraph()
 			
-			obj.title = () => this.row_id(id)
-			obj.checked = (next?: any) => this.row_checked(id, next)
+			obj.title = () => "dwd"
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * Id_labeler* $mol_labeler
-		 * 	title \ID
-		 * 	Content <= Id*
+		 * Number_labeler* $mol_labeler
+		 * 	title \Гос. номер
+		 * 	Content <= Number_content*
 		 * ```
 		 */
 		@ $mol_mem_key
-		Id_labeler(id: any) {
+		Number_labeler(id: any) {
 			const obj = new this.$.$mol_labeler()
 			
-			obj.title = () => "ID"
-			obj.Content = () => this.Id(id)
+			obj.title = () => "Гос. номер"
+			obj.Content = () => this.Number_content(id)
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * row_uri* \
-		 * ```
-		 */
-		row_uri(id: any) {
-			return ""
-		}
-		
-		/**
-		 * ```tree
-		 * row_title* \
-		 * ```
-		 */
-		row_title(id: any) {
-			return ""
-		}
-		
-		/**
-		 * ```tree
-		 * Title* $mol_link_iconed
-		 * 	uri <= row_uri*
-		 * 	title <= row_title*
+		 * Transporter_content* $mol_paragraph title \00dwd
 		 * ```
 		 */
 		@ $mol_mem_key
-		Title(id: any) {
-			const obj = new this.$.$mol_link_iconed()
+		Transporter_content(id: any) {
+			const obj = new this.$.$mol_paragraph()
 			
-			obj.uri = () => this.row_uri(id)
-			obj.title = () => this.row_title(id)
+			obj.title = () => "00dwd"
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * Title_labeler* $mol_labeler
-		 * 	title \Product Name
-		 * 	Content <= Title*
+		 * Transporter_labeler* $mol_labeler
+		 * 	title \Перевозчик
+		 * 	Content <= Transporter_content*
 		 * ```
 		 */
 		@ $mol_mem_key
-		Title_labeler(id: any) {
+		Transporter_labeler(id: any) {
 			const obj = new this.$.$mol_labeler()
 			
-			obj.title = () => "Product Name"
-			obj.Content = () => this.Title(id)
+			obj.title = () => "Перевозчик"
+			obj.Content = () => this.Transporter_content(id)
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * row_color*? \
+		 * Weight_gross_content* $mol_paragraph title \00dwd
 		 * ```
 		 */
 		@ $mol_mem_key
-		row_color(id: any, next?: any) {
-			if ( next !== undefined ) return next as never
-			return ""
-		}
-		
-		/**
-		 * ```tree
-		 * colors /
-		 * ```
-		 */
-		colors() {
-			return [
-			] as readonly any[]
-		}
-		
-		/**
-		 * ```tree
-		 * Color* $mol_select
-		 * 	value? <=> row_color*?
-		 * 	options <= colors
-		 * ```
-		 */
-		@ $mol_mem_key
-		Color(id: any) {
-			const obj = new this.$.$mol_select()
+		Weight_gross_content(id: any) {
+			const obj = new this.$.$mol_paragraph()
 			
-			obj.value = (next?: any) => this.row_color(id, next)
-			obj.options = () => this.colors()
+			obj.title = () => "00dwd"
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * Color_labeler* $mol_labeler
-		 * 	title \Color
-		 * 	Content <= Color*
+		 * Weight_gross_labeler* $mol_labeler
+		 * 	title \Брутто (кг)
+		 * 	Content <= Weight_gross_content*
 		 * ```
 		 */
 		@ $mol_mem_key
-		Color_labeler(id: any) {
+		Weight_gross_labeler(id: any) {
 			const obj = new this.$.$mol_labeler()
 			
-			obj.title = () => "Color"
-			obj.Content = () => this.Color(id)
+			obj.title = () => "Брутто (кг)"
+			obj.Content = () => this.Weight_gross_content(id)
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * row_status*? \
+		 * Type_weight_content* $mol_paragraph title \00dwd
 		 * ```
 		 */
 		@ $mol_mem_key
-		row_status(id: any, next?: any) {
-			if ( next !== undefined ) return next as never
-			return ""
-		}
-		
-		/**
-		 * ```tree
-		 * status_options *
-		 * 	minor \Store
-		 * 	major \Sale
-		 * 	critical \Support
-		 * ```
-		 */
-		status_options() {
-			return {
-				minor: "Store",
-				major: "Sale",
-				critical: "Support"
-			} as Record< string, any >
-		}
-		
-		/**
-		 * ```tree
-		 * Status* $mol_switch
-		 * 	value? <=> row_status*?
-		 * 	options <= status_options
-		 * ```
-		 */
-		@ $mol_mem_key
-		Status(id: any) {
-			const obj = new this.$.$mol_switch()
+		Type_weight_content(id: any) {
+			const obj = new this.$.$mol_paragraph()
 			
-			obj.value = (next?: any) => this.row_status(id, next)
-			obj.options = () => this.status_options()
+			obj.title = () => "00dwd"
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * Status_labeler* $mol_labeler
-		 * 	title \Status
-		 * 	Content <= Status*
+		 * Type_weight_labeler* $mol_labeler
+		 * 	title \Вид груза
+		 * 	Content <= Type_weight_content*
 		 * ```
 		 */
 		@ $mol_mem_key
-		Status_labeler(id: any) {
+		Type_weight_labeler(id: any) {
 			const obj = new this.$.$mol_labeler()
 			
-			obj.title = () => "Status"
-			obj.Content = () => this.Status(id)
+			obj.title = () => "Вид груза"
+			obj.Content = () => this.Type_weight_content(id)
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * row_quantity*? 0
+		 * Category_weight_content* $mol_paragraph title \00dwd
 		 * ```
 		 */
 		@ $mol_mem_key
-		row_quantity(id: any, next?: any) {
-			if ( next !== undefined ) return next as never
-			return 0
-		}
-		
-		/**
-		 * ```tree
-		 * Quantity* $mol_number value? <=> row_quantity*?
-		 * ```
-		 */
-		@ $mol_mem_key
-		Quantity(id: any) {
-			const obj = new this.$.$mol_number()
+		Category_weight_content(id: any) {
+			const obj = new this.$.$mol_paragraph()
 			
-			obj.value = (next?: any) => this.row_quantity(id, next)
+			obj.title = () => "00dwd"
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * Quantity_labeler* $mol_labeler
-		 * 	title \Quantity
-		 * 	Content <= Quantity*
+		 * Category_weight_labeler* $mol_labeler
+		 * 	title \Категория груза
+		 * 	Content <= Category_weight_content*
 		 * ```
 		 */
 		@ $mol_mem_key
-		Quantity_labeler(id: any) {
+		Category_weight_labeler(id: any) {
 			const obj = new this.$.$mol_labeler()
 			
-			obj.title = () => "Quantity"
-			obj.Content = () => this.Quantity(id)
+			obj.title = () => "Категория груза"
+			obj.Content = () => this.Category_weight_content(id)
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * row_moment*?val $mol_time_moment
+		 * Date_enter_content* $mol_paragraph title \00dwd
 		 * ```
 		 */
 		@ $mol_mem_key
-		row_moment(id: any, val?: any) {
-			if ( val !== undefined ) return val as never
-			const obj = new this.$.$mol_time_moment()
+		Date_enter_content(id: any) {
+			const obj = new this.$.$mol_paragraph()
+			
+			obj.title = () => "00dwd"
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * Date* $mol_date value_moment?val <=> row_moment*?val
+		 * Date_enter_labeler* $mol_labeler
+		 * 	title \Дата и время въезда
+		 * 	Content <= Date_enter_content*
 		 * ```
 		 */
 		@ $mol_mem_key
-		Date(id: any) {
-			const obj = new this.$.$mol_date()
-			
-			obj.value_moment = (val?: any) => this.row_moment(id, val)
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Date_labeler* $mol_labeler
-		 * 	title \Supply Time
-		 * 	Content <= Date*
-		 * ```
-		 */
-		@ $mol_mem_key
-		Date_labeler(id: any) {
+		Date_enter_labeler(id: any) {
 			const obj = new this.$.$mol_labeler()
 			
-			obj.title = () => "Supply Time"
-			obj.Content = () => this.Date(id)
+			obj.title = () => "Дата и время въезда"
+			obj.Content = () => this.Date_enter_content(id)
 			
 			return obj
 		}
@@ -511,35 +387,35 @@ namespace $ {
 		/**
 		 * ```tree
 		 * row_content* /
-		 * 	<= Id_labeler*
-		 * 	<= Title_labeler*
-		 * 	<= Color_labeler*
-		 * 	<= Status_labeler*
-		 * 	<= Quantity_labeler*
-		 * 	<= Date_labeler*
+		 * 	<= Number_labeler*
+		 * 	<= Transporter_labeler*
+		 * 	<= Weight_gross_labeler*
+		 * 	<= Type_weight_labeler*
+		 * 	<= Category_weight_labeler*
+		 * 	<= Date_enter_labeler*
 		 * ```
 		 */
 		row_content(id: any) {
 			return [
-				this.Id_labeler(id),
-				this.Title_labeler(id),
-				this.Color_labeler(id),
-				this.Status_labeler(id),
-				this.Quantity_labeler(id),
-				this.Date_labeler(id)
+				this.Number_labeler(id),
+				this.Transporter_labeler(id),
+				this.Weight_gross_labeler(id),
+				this.Type_weight_labeler(id),
+				this.Category_weight_labeler(id),
+				this.Date_enter_labeler(id)
 			] as readonly any[]
 		}
 		
 		/**
 		 * ```tree
-		 * Row*0 $mol_row
+		 * Table_row*0 $mol_row
 		 * 	minimal_height 100
 		 * 	minimal_width 200
 		 * 	sub <= row_content*
 		 * ```
 		 */
 		@ $mol_mem_key
-		Row(id: any) {
+		Table_row(id: any) {
 			const obj = new this.$.$mol_row()
 			
 			obj.minimal_height = () => 100
@@ -551,22 +427,22 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * rows / <= Row*0
+		 * rows / <= Table_row*0
 		 * ```
 		 */
 		rows() {
 			return [
-				this.Row("0")
+				this.Table_row("0")
 			] as readonly any[]
 		}
 		
 		/**
 		 * ```tree
-		 * Rows $mol_list rows <= rows
+		 * Table $mol_list rows <= rows
 		 * ```
 		 */
 		@ $mol_mem
-		Rows() {
+		Table() {
 			const obj = new this.$.$mol_list()
 			
 			obj.rows = () => this.rows()
@@ -578,7 +454,7 @@ namespace $ {
 		 * ```tree
 		 * Auto_list $mol_section
 		 * 	title \На территории
-		 * 	content / <= Rows
+		 * 	content / <= Table
 		 * ```
 		 */
 		@ $mol_mem
@@ -587,7 +463,7 @@ namespace $ {
 			
 			obj.title = () => "На территории"
 			obj.content = () => [
-				this.Rows()
+				this.Table()
 			] as readonly any[]
 			
 			return obj
