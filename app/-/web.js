@@ -7859,7 +7859,6 @@ var $;
             const obj = new this.$.$mol_button_major();
             obj.title = () => "Создать запись на въезд";
             obj.click = (val) => this.signup(val);
-            obj.enabled = () => "true";
             return obj;
         }
         result(val) {
