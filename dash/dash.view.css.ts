@@ -7,7 +7,6 @@ namespace $.$$ {
     flexBasis: "40rem",
     // Auto_list: {Row},
     // Table_rows: {r},
-    Table_rows: {},
     Number_labeler: { padding: 0 },
     // Table_row_content: { padding: $mol_gap.text },
   });

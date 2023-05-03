@@ -7113,7 +7113,6 @@ var $;
             flexDirection: "column",
             flexGrow: "1",
             flexBasis: "40rem",
-            Table_rows: {},
             Number_labeler: { padding: 0 },
         });
     })($$ = $.$$ || ($.$$ = {}));
