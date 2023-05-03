@@ -1,4 +1,4 @@
-name: $etp_procedure_process
+name: $scale_client
 
 on:
   workflow_dispatch:
@@ -14,12 +14,12 @@ jobs:
     steps:
       - uses: hyoo-ru/mam_build@master2
         with:
-          token: ${{ secrets.GH_PATH }}
-          package: "etp"
-          modules: "procedure_process/app"
+          token: ${{ secrets.GH_PAT }}
+          package: "scale"
+          modules: "scale/app"
 
       - uses: alex-page/blazing-fast-gh-pages-deploy@v1.1.0
         if: github.ref == 'refs/heads/master'
         with:
-          repo-token: ${{ secrets.GH_PATH }}
-          site-directory: "etp/procedure/process/app/-"
+          repo-token: ${{ secrets.GH_PAT }}
+          site-directory: "scale/app/-"
