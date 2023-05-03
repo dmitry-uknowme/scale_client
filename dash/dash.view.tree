@@ -1,0 +1,62 @@
+$scale_dash $mol_view sub /
+	<= Top_row $mol_row sub /
+		<= Control $mol_section
+			title \Управление
+			content /
+				<= Control_form $mol_form
+					form_fields /
+					buttons /
+						<= Enter_button $mol_button_major
+							title \Создать запись на въезд
+							click?val <=> open_enter_form?val null
+						<= Exit_button $mol_button_major
+							title \Создать запись на выезд
+							click?val <=> open_close_form?val null
+		<= Camera_list $mol_section
+			title \Камеры
+			content /
+				<= Camera_row $mol_row sub /
+					<= Camera_1 $mol_image
+						uri \camera1
+					<= Camera_2 $mol_image
+						uri \camera2
+	<= Bottom_row $mol_row sub /
+		<= Auto_list $mol_section
+			title \На территории
+			content /
+				<= Rows $mol_list rows <= rows /
+					<= Row*0 $mol_row
+						minimal_height 100
+						minimal_width 200
+						sub <= row_content* /
+							<= Id_labeler* $mol_labeler
+								title \ID
+								Content <= Id* $mol_check_box
+									title <= row_id*? \0000
+									checked? <=> row_checked*? false
+							<= Title_labeler* $mol_labeler
+								title \Product Name
+								Content <= Title* $mol_link_iconed
+									uri <= row_uri* \
+									title <= row_title* \
+							<= Color_labeler* $mol_labeler
+								title \Color
+								Content <= Color* $mol_select
+									value? <=> row_color*? \
+									options <= colors /
+							<= Status_labeler* $mol_labeler
+								title \Status
+								Content <= Status* $mol_switch
+									value? <=> row_status*? \
+									options <= status_options *
+										minor \Store
+										major \Sale
+										critical \Support
+							<= Quantity_labeler* $mol_labeler
+								title \Quantity
+								Content <= Quantity* $mol_number
+									value? <=> row_quantity*? 0
+							<= Date_labeler* $mol_labeler
+								title \Supply Time
+								Content <= Date* $mol_date
+									value_moment?val <=> row_moment*?val $mol_time_moment
