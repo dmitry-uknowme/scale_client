@@ -6358,6 +6358,63 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $scale_centrifuge extends $mol_view {
+        sub() {
+            return [
+                this.State()
+            ];
+        }
+        state() {
+            return this.State().title();
+        }
+        State() {
+            const obj = new this.$.$mol_paragraph();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $scale_centrifuge.prototype, "State", null);
+    $.$scale_centrifuge = $scale_centrifuge;
+})($ || ($ = {}));
+//scale/centrifuge/-view.tree/centrifuge.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $.$scale_centrifuge_lib = require("centrifuge");
+})($ || ($ = {}));
+//scale/centrifuge/lib/lib.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $scale_centrifuge extends $.$scale_centrifuge {
+            client() {
+                console.log("pckdwdw", new $scale_centrifuge_lib("ws://192.168.88.67:8877/connection/websocket"));
+                return new $scale_centrifuge_lib("ws://192.168.88.67:8877/connection/websocket");
+            }
+            state() {
+                console.log("sttt", this.client().state);
+                return this.client().state;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $scale_centrifuge.prototype, "client", null);
+        __decorate([
+            $mol_mem
+        ], $scale_centrifuge.prototype, "state", null);
+        $$.$scale_centrifuge = $scale_centrifuge;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//scale/centrifuge/centrifuge.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_button_major extends $mol_button_typed {
         attr() {
             return {
@@ -6828,8 +6885,8 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $scale_dash extends $mol_view {
-        sub() {
+    class $scale_dash extends $mol_list {
+        rows() {
             return [
                 this.Top_row(),
                 this.Bottom_row()
@@ -6991,14 +7048,14 @@ var $;
             obj.sub = () => this.row_content(id);
             return obj;
         }
-        rows() {
+        table_rows() {
             return [
                 this.Table_row("0")
             ];
         }
         Table() {
             const obj = new this.$.$mol_list();
-            obj.rows = () => this.rows();
+            obj.rows = () => this.table_rows();
             return obj;
         }
         Auto_list() {
@@ -7859,6 +7916,7 @@ var $;
             const obj = new this.$.$mol_button_major();
             obj.title = () => "Создать запись на въезд";
             obj.click = (val) => this.signup(val);
+            obj.enabled = () => true;
             return obj;
         }
         result(val) {
@@ -7946,6 +8004,11 @@ var $;
 var $;
 (function ($) {
     class $scale_app extends $mol_book2_catalog {
+        menu_tools() {
+            return [
+                this.Centrifuge()
+            ];
+        }
         menu_title() {
             return "Scale Client 2.0";
         }
@@ -7954,6 +8017,10 @@ var $;
                 dash: this.Dash(),
                 stats: this.Stats()
             };
+        }
+        Centrifuge() {
+            const obj = new this.$.$scale_centrifuge();
+            return obj;
         }
         Dash_body() {
             const obj = new this.$.$scale_dash();
@@ -8022,6 +8089,9 @@ var $;
             return obj;
         }
     }
+    __decorate([
+        $mol_mem
+    ], $scale_app.prototype, "Centrifuge", null);
     __decorate([
         $mol_mem
     ], $scale_app.prototype, "Dash_body", null);

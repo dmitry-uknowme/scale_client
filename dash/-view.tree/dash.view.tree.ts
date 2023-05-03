@@ -1,14 +1,14 @@
 namespace $ {
-	export class $scale_dash extends $mol_view {
+	export class $scale_dash extends $mol_list {
 		
 		/**
 		 * ```tree
-		 * sub /
+		 * rows /
 		 * 	<= Top_row
 		 * 	<= Bottom_row
 		 * ```
 		 */
-		sub() {
+		rows() {
 			return [
 				this.Top_row(),
 				this.Bottom_row()
@@ -427,10 +427,10 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * rows / <= Table_row*0
+		 * table_rows / <= Table_row*0
 		 * ```
 		 */
-		rows() {
+		table_rows() {
 			return [
 				this.Table_row("0")
 			] as readonly any[]
@@ -438,14 +438,14 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Table $mol_list rows <= rows
+		 * Table $mol_list rows <= table_rows
 		 * ```
 		 */
 		@ $mol_mem
 		Table() {
 			const obj = new this.$.$mol_list()
 			
-			obj.rows = () => this.rows()
+			obj.rows = () => this.table_rows()
 			
 			return obj
 		}

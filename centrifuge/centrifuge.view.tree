@@ -1,0 +1,4 @@
+$scale_centrifuge $mol_view sub /
+	<= State $mol_paragraph
+		title => state
+	

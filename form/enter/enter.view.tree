@@ -52,5 +52,6 @@ $scale_form_enter $mol_form
 		<= Signup $mol_button_major
 			title \Создать запись на въезд
 			click?val <=> signup?val null
+			enabled true
 		<= Result $mol_status
 			message <= result?val \

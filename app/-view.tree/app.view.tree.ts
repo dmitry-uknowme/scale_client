@@ -3,6 +3,17 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * menu_tools / <= Centrifuge
+		 * ```
+		 */
+		menu_tools() {
+			return [
+				this.Centrifuge()
+			] as readonly any[]
+		}
+		
+		/**
+		 * ```tree
 		 * menu_title \Scale Client 2.0
 		 * ```
 		 */
@@ -22,6 +33,18 @@ namespace $ {
 				dash: this.Dash(),
 				stats: this.Stats()
 			}
+		}
+		
+		/**
+		 * ```tree
+		 * Centrifuge $scale_centrifuge
+		 * ```
+		 */
+		@ $mol_mem
+		Centrifuge() {
+			const obj = new this.$.$scale_centrifuge()
+			
+			return obj
 		}
 		
 		/**
