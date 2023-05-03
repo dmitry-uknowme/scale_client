@@ -2,12 +2,6 @@ namespace $.$$ {
   export class $scale_centrifuge extends $.$scale_centrifuge {
     @$mol_mem
     client() {
-      console.log(
-        "pckdwdw",
-        new $scale_centrifuge_lib(
-          "ws://192.168.88.67:8877/connection/websocket"
-        )
-      );
       return new $scale_centrifuge_lib(
         "ws://192.168.88.67:8877/connection/websocket"
       );
@@ -15,8 +9,13 @@ namespace $.$$ {
 
     @$mol_mem
     state() {
-      console.log("sttt", this.client().state);
+      //   console.log("sttt", this.client().state);
       return this.client().state;
+    }
+
+    auto() {
+      this.client();
+      this.state();
     }
   }
   //   const centrifuge = require("centrifuge") as typeof import("centrifuge");

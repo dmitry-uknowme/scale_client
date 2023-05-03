@@ -14,6 +14,8 @@
 // }
 
 namespace $ {
+  require("centrifuge/dist/centrifuge.js") as typeof import("centrifuge").Centrifuge;
   export let $scale_centrifuge_lib =
-    require("centrifuge") as typeof import("centrifuge").Centrifuge;
+    //@ts-expect-error
+    window.Centrifuge as typeof import("centrifuge").Centrifuge;
 }
