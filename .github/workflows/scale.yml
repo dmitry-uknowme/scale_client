@@ -1,4 +1,4 @@
-name: $scale_client
+name: $scale
 
 on:
   workflow_dispatch:
@@ -16,7 +16,7 @@ jobs:
         with:
           token: ${{ secrets.GH_PAT }}
           package: "scale"
-          modules: "scale/app"
+          modules: "app"
 
       - uses: alex-page/blazing-fast-gh-pages-deploy@v1.1.0
         if: github.ref == 'refs/heads/master'
