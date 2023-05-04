@@ -8,25 +8,33 @@ namespace $.$$ {
     }
 
     @$mol_mem
-    state() {
-      return this.client().state;
+    state(next?: any) {
+      return next;
     }
 
     @$mol_action
     subscribe() {
       const weightChannel = this.client().newSubscription("channel");
-      console.log("ccc", weightChannel);
       weightChannel.on("publication", (ctx) => {
         console.log("weight sub", ctx.data);
       });
       weightChannel.subscribe();
+      const autoNumberChannel = this.client().newSubscription("autoNumber");
+      autoNumberChannel.on("publication", (ctx) => {
+        console.log("autoNumber sub", ctx.data);
+      });
+      autoNumberChannel.subscribe();
       this.client().connect();
     }
 
     auto() {
       this.client();
-      this.state();
+      //   this.state();
       this.subscribe();
+      this.client().on("connected", (ctx) => {
+        console.log("ccccc", ctx);
+        this.state(JSON.stringify(ctx.data));
+      });
     }
   }
 }

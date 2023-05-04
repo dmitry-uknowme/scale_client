@@ -30,5 +30,3 @@ $scale_app $mol_book2_catalog
 			menu_tools /
 				<= Spread_close
 			Spread_close => Stats_close
-		
-

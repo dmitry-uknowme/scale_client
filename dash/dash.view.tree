@@ -1,4 +1,5 @@
 $scale_dash $mol_list
+	api $scale_api
 	rows /
 		<= Top_row $mol_row sub /
 			<= Control $mol_section
@@ -12,7 +13,7 @@ $scale_dash $mol_list
 								click?val <=> open_enter_form?val null
 							<= Exit_button $mol_button_major
 								title \Создать запись на выезд
-								click?val <=> open_close_form?val null
+								click?val <=> open_exit_form?val null
 			<= Camera_list $mol_section
 				title \Камеры
 				content /
@@ -25,33 +26,48 @@ $scale_dash $mol_list
 			<= Auto_list $mol_section
 				title \На территории
 				content /
-					<= Table $mol_list rows <= table_rows /
-						<= Table_row*0 $mol_row
+					<= Table_header $mol_row
+						minimal_height 100
+						minimal_width 200
+						sub <= row_content /
+							<= Number_labeler $mol_labeler
+								title \Гос. номер
+								
+							<= Transporter_labeler $mol_labeler
+								title \Перевозчик
+							<= Weight_gross_labeler $mol_labeler
+								title \Брутто (кг)
+							<= Type_weight_labeler $mol_labeler
+								title \Вид груза
+							<= Category_weight_labeler $mol_labeler
+								title \Категория груза
+							<= Date_enter_labeler $mol_labeler
+								title \Дата и время въезда
+					<= Act_list $mol_list rows <= act_list /
+						<= Act_row*0 $mol_row
 							minimal_height 100
 							minimal_width 200
-							sub <= row_content* /
-								<= Number_labeler* $mol_labeler
-									title \Гос. номер
-									Content <= Number_content* $mol_paragraph
-										title \dwd
-								<= Transporter_labeler* $mol_labeler
-									title \Перевозчик
-									Content <= Transporter_content* $mol_paragraph
-										title \00dwd
-								<= Weight_gross_labeler* $mol_labeler
-									title \Брутто (кг)
-									Content <= Weight_gross_content* $mol_paragraph
-										title \00dwd
-								<= Type_weight_labeler* $mol_labeler
-									title \Вид груза
-									Content <= Type_weight_content* $mol_paragraph
-										title \00dwd
-								<= Category_weight_labeler* $mol_labeler
-									title \Категория груза
-									Content <= Category_weight_content* $mol_paragraph
-										title \00dwd
-								<= Date_enter_labeler* $mol_labeler
-									title \Дата и время въезда
-									Content <= Date_enter_content* $mol_paragraph
-										title \00dwd
-								
+							sub /
+								<= Number_content* $mol_paragraph
+									title <= act_autoNumber*? \
+								<= Transporter_content* $mol_paragraph
+									title <= act_transporter*? \
+								<= Weight_gross_content* $mol_paragraph
+									title <= act_weightGross*? \
+								<= Cargo_type_content* $mol_paragraph
+									title <= act_cargoType*? \
+								<= Cargo_category_content* $mol_paragraph
+									title <= act_cargoCategory*? \
+								<= Date_enter_content* $mol_paragraph
+									title <= act_enteredMoment*? \
+								<= Act_options_pop $mol_pick
+									hint <= act_options_out \Создать запись на выезд для
+									trigger_content /
+										<= Options_trigger_icon $mol_icon_menu
+									bubble_content /
+										<= Options_content $mol_list rows /
+											<= Menu_item_copy $mol_button_minor
+												sub /
+													<= act_options_out \Создать запись на выезд для
+
+
