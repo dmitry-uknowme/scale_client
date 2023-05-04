@@ -14,6 +14,10 @@ $scale_dash $mol_list
 							<= Exit_button $mol_button_major
 								title \Создать запись на выезд
 								click?val <=> open_exit_form?val null
+			<= Count_text $mol_paragraph
+				title \Количество: 
+			<= Count $mol_paragraph
+				title <= count
 			<= Camera_list $mol_section
 				title \Камеры
 				content /
@@ -24,7 +28,7 @@ $scale_dash $mol_list
 							uri \camera2
 		<= Bottom_row $mol_row sub /
 			<= Auto_list $mol_section
-				title \На территории
+				title <= act_table_title \На территории
 				content /
 					<= Act_list $mol_list rows <= act_list /
 						<= Act_row*0 $mol_row
@@ -55,14 +59,14 @@ $scale_dash $mol_list
 									title \Дата и время въезда
 									Content <= Date_enter_content* $mol_paragraph
 										title <= act_enteredMoment*? \
-								<= Act_options_pop $mol_pick
+								<= Act_options_pop* $mol_pick
 									align \bottom_right
 									hint <= act_options_out \Создать запись на выезд для
 									trigger_content /
 										<= Options_trigger_icon $mol_icon_menu
 									bubble_content /
-										<= Options_content $mol_list rows /
-											<= Menu_item_copy $mol_button_minor
+										<= Options_content* $mol_list rows /
+											<= Menu_item_copy* $mol_button_minor
 												click? <=> open_exit_form? null
 												sub /
 													<= act_options_out \Создать запись на выезд для

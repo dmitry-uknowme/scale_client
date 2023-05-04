@@ -1,6 +1,11 @@
 $scale_form_enter $mol_form
 	api $scale_api
+	dash $scale_dash
 	body /
+		<= Count_text $mol_paragraph
+			title \Количество: 
+		<= Count $mol_paragraph
+			title <= count
 		<= Centrifuge $scale_centrifuge
 			weight_channel? => weight?
 		<= Names $mol_form_group sub /

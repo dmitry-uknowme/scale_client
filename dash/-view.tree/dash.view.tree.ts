@@ -127,6 +127,34 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Count_text $mol_paragraph title \Количество:
+		 * ```
+		 */
+		@ $mol_mem
+		Count_text() {
+			const obj = new this.$.$mol_paragraph()
+			
+			obj.title = () => "Количество: "
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Count $mol_paragraph title <= count
+		 * ```
+		 */
+		@ $mol_mem
+		Count() {
+			const obj = new this.$.$mol_paragraph()
+			
+			obj.title = () => this.count()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * Camera_1 $mol_image uri \camera1
 		 * ```
 		 */
@@ -195,6 +223,8 @@ namespace $ {
 		 * ```tree
 		 * Top_row $mol_row sub /
 		 * 	<= Control
+		 * 	<= Count_text
+		 * 	<= Count
 		 * 	<= Camera_list
 		 * ```
 		 */
@@ -204,10 +234,21 @@ namespace $ {
 			
 			obj.sub = () => [
 				this.Control(),
+				this.Count_text(),
+				this.Count(),
 				this.Camera_list()
 			] as readonly any[]
 			
 			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * act_table_title \На территории
+		 * ```
+		 */
+		act_table_title() {
+			return "На территории"
 		}
 		
 		/**
@@ -485,13 +526,13 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Menu_item_copy $mol_button_minor
+		 * Menu_item_copy* $mol_button_minor
 		 * 	click? <=> open_exit_form?
 		 * 	sub / <= act_options_out
 		 * ```
 		 */
-		@ $mol_mem
-		Menu_item_copy() {
+		@ $mol_mem_key
+		Menu_item_copy(id: any) {
 			const obj = new this.$.$mol_button_minor()
 			
 			obj.click = (next?: any) => this.open_exit_form(next)
@@ -504,15 +545,15 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Options_content $mol_list rows / <= Menu_item_copy
+		 * Options_content* $mol_list rows / <= Menu_item_copy*
 		 * ```
 		 */
-		@ $mol_mem
-		Options_content() {
+		@ $mol_mem_key
+		Options_content(id: any) {
 			const obj = new this.$.$mol_list()
 			
 			obj.rows = () => [
-				this.Menu_item_copy()
+				this.Menu_item_copy(id)
 			] as readonly any[]
 			
 			return obj
@@ -520,15 +561,15 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Act_options_pop $mol_pick
+		 * Act_options_pop* $mol_pick
 		 * 	align \bottom_right
 		 * 	hint <= act_options_out
 		 * 	trigger_content / <= Options_trigger_icon
-		 * 	bubble_content / <= Options_content
+		 * 	bubble_content / <= Options_content*
 		 * ```
 		 */
-		@ $mol_mem
-		Act_options_pop() {
+		@ $mol_mem_key
+		Act_options_pop(id: any) {
 			const obj = new this.$.$mol_pick()
 			
 			obj.align = () => "bottom_right"
@@ -537,7 +578,7 @@ namespace $ {
 				this.Options_trigger_icon()
 			] as readonly any[]
 			obj.bubble_content = () => [
-				this.Options_content()
+				this.Options_content(id)
 			] as readonly any[]
 			
 			return obj
@@ -555,7 +596,7 @@ namespace $ {
 		 * 		<= Cargo_type_labeler*
 		 * 		<= Cargo_category_labeler*
 		 * 		<= Date_enter_labeler*
-		 * 		<= Act_options_pop
+		 * 		<= Act_options_pop*
 		 * ```
 		 */
 		@ $mol_mem_key
@@ -571,7 +612,7 @@ namespace $ {
 				this.Cargo_type_labeler(id),
 				this.Cargo_category_labeler(id),
 				this.Date_enter_labeler(id),
-				this.Act_options_pop()
+				this.Act_options_pop(id)
 			] as readonly any[]
 			
 			return obj
@@ -605,7 +646,7 @@ namespace $ {
 		/**
 		 * ```tree
 		 * Auto_list $mol_section
-		 * 	title \На территории
+		 * 	title <= act_table_title
 		 * 	content / <= Act_list
 		 * ```
 		 */
@@ -613,7 +654,7 @@ namespace $ {
 		Auto_list() {
 			const obj = new this.$.$mol_section()
 			
-			obj.title = () => "На территории"
+			obj.title = () => this.act_table_title()
 			obj.content = () => [
 				this.Act_list()
 			] as readonly any[]

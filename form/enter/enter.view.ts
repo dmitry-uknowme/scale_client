@@ -51,14 +51,25 @@ namespace $.$$ {
     }
 
     enter_submit() {
-      console.log("numm", this.number());
-      //   var formData = new FormData(this.dom_node());
+      this.api().createAct({
+        autoNumber: this.auto_number(),
+        payerPublicId: this.payer(),
+        transporterPublicId: this.transporter(),
+        cargoTypePublicId: this.cargo_type(),
+        wasteCategoryPublicId: this.cargo_category(),
+        comment: "",
+        weight: parseFloat(this.weight()),
+        apiClientSecretKey: "123456",
+      });
 
-      //   // iterate through entries...
-      //   for (var pair of formData.entries()) {
-      //     console.log(pair[0] + ": " + pair[1]);
-      //   }
-      //   //   console.log("ffff", this.dom_node());
+      this.dash().act_list("reset");
+      //   this.dash().render()
+
+      //   new $mol_after_timeout(1500, () => this.dash().act_list("reset"));
+    }
+
+    count() {
+      return this.dash().act_list().length;
     }
   }
 }

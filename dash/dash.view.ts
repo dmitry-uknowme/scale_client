@@ -10,7 +10,13 @@ namespace $.$$ {
     }
 
     @$mol_mem
-    act_list() {
+    act_list(reset?: "reset") {
+      console.log(
+        "listttt",
+        this.api()
+          .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
+          .map((obj) => this.Act_row(obj))
+      );
       return this.api()
         .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
         .map((obj) => this.Act_row(obj));
@@ -38,6 +44,14 @@ namespace $.$$ {
 
     act_enteredMoment(obj: $scale_modelAct) {
       return obj.entryDateTime;
+    }
+
+    count() {
+      return this.act_list().length;
+    }
+
+    act_table_title() {
+      return `На территории (${this.count()})`;
     }
   }
 }

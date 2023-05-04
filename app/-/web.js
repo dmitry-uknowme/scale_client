@@ -6488,6 +6488,17 @@ var $;
             }
             return response.data;
         }
+        createAct(payload) {
+            const BASE_URL = $scale_env_BASE_URL;
+            const response = $mol_fetch.json(`${BASE_URL}/createAct`, {
+                method: "POST",
+                body: JSON.stringify(payload),
+            });
+            if (response.status !== "success") {
+                throw new Error(`Response failed with status ${response.status}`);
+            }
+            return response.data;
+        }
         getOrganizations(filter = {
             status: $scale_modelOrganizationStatus.ACTIVE,
         }) {
@@ -7244,6 +7255,16 @@ var $;
             ];
             return obj;
         }
+        Count_text() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Количество: ";
+            return obj;
+        }
+        Count() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.count();
+            return obj;
+        }
         Camera_1() {
             const obj = new this.$.$mol_image();
             obj.uri = () => "camera1";
@@ -7274,9 +7295,14 @@ var $;
             const obj = new this.$.$mol_row();
             obj.sub = () => [
                 this.Control(),
+                this.Count_text(),
+                this.Count(),
                 this.Camera_list()
             ];
             return obj;
+        }
+        act_table_title() {
+            return "На территории";
         }
         act_autoNumber(id, next) {
             if (next !== undefined)
@@ -7381,7 +7407,7 @@ var $;
             const obj = new this.$.$mol_icon_menu();
             return obj;
         }
-        Menu_item_copy() {
+        Menu_item_copy(id) {
             const obj = new this.$.$mol_button_minor();
             obj.click = (next) => this.open_exit_form(next);
             obj.sub = () => [
@@ -7389,14 +7415,14 @@ var $;
             ];
             return obj;
         }
-        Options_content() {
+        Options_content(id) {
             const obj = new this.$.$mol_list();
             obj.rows = () => [
-                this.Menu_item_copy()
+                this.Menu_item_copy(id)
             ];
             return obj;
         }
-        Act_options_pop() {
+        Act_options_pop(id) {
             const obj = new this.$.$mol_pick();
             obj.align = () => "bottom_right";
             obj.hint = () => this.act_options_out();
@@ -7404,7 +7430,7 @@ var $;
                 this.Options_trigger_icon()
             ];
             obj.bubble_content = () => [
-                this.Options_content()
+                this.Options_content(id)
             ];
             return obj;
         }
@@ -7419,7 +7445,7 @@ var $;
                 this.Cargo_type_labeler(id),
                 this.Cargo_category_labeler(id),
                 this.Date_enter_labeler(id),
-                this.Act_options_pop()
+                this.Act_options_pop(id)
             ];
             return obj;
         }
@@ -7435,7 +7461,7 @@ var $;
         }
         Auto_list() {
             const obj = new this.$.$mol_section();
-            obj.title = () => "На территории";
+            obj.title = () => this.act_table_title();
             obj.content = () => [
                 this.Act_list()
             ];
@@ -7470,6 +7496,12 @@ var $;
     __decorate([
         $mol_mem
     ], $scale_dash.prototype, "Control", null);
+    __decorate([
+        $mol_mem
+    ], $scale_dash.prototype, "Count_text", null);
+    __decorate([
+        $mol_mem
+    ], $scale_dash.prototype, "Count", null);
     __decorate([
         $mol_mem
     ], $scale_dash.prototype, "Camera_1", null);
@@ -7543,13 +7575,13 @@ var $;
         $mol_mem
     ], $scale_dash.prototype, "Options_trigger_icon", null);
     __decorate([
-        $mol_mem
+        $mol_mem_key
     ], $scale_dash.prototype, "Menu_item_copy", null);
     __decorate([
-        $mol_mem
+        $mol_mem_key
     ], $scale_dash.prototype, "Options_content", null);
     __decorate([
-        $mol_mem
+        $mol_mem_key
     ], $scale_dash.prototype, "Act_options_pop", null);
     __decorate([
         $mol_mem_key
@@ -7596,7 +7628,10 @@ var $;
             open_exit_form() {
                 $mol_state_arg.dict({ "": "dash", dash: "form_exit" });
             }
-            act_list() {
+            act_list(reset) {
+                console.log("listttt", this.api()
+                    .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
+                    .map((obj) => this.Act_row(obj)));
                 return this.api()
                     .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
                     .map((obj) => this.Act_row(obj));
@@ -7618,6 +7653,12 @@ var $;
             }
             act_enteredMoment(obj) {
                 return obj.entryDateTime;
+            }
+            count() {
+                return this.act_list().length;
+            }
+            act_table_title() {
+                return `На территории (${this.count()})`;
             }
         }
         __decorate([
@@ -7999,8 +8040,14 @@ var $;
             const obj = new this.$.$scale_api();
             return obj;
         }
+        dash() {
+            const obj = new this.$.$scale_dash();
+            return obj;
+        }
         body() {
             return [
+                this.Count_text(),
+                this.Count(),
                 this.Centrifuge(),
                 this.Names()
             ];
@@ -8010,6 +8057,16 @@ var $;
                 this.Signup(),
                 this.Result()
             ];
+        }
+        Count_text() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => "Количество: ";
+            return obj;
+        }
+        Count() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.count();
+            return obj;
         }
         weight(next) {
             return this.Centrifuge().weight_channel(next);
@@ -8190,6 +8247,15 @@ var $;
     ], $scale_form_enter.prototype, "api", null);
     __decorate([
         $mol_mem
+    ], $scale_form_enter.prototype, "dash", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_enter.prototype, "Count_text", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_enter.prototype, "Count", null);
+    __decorate([
+        $mol_mem
     ], $scale_form_enter.prototype, "Centrifuge", null);
     __decorate([
         $mol_mem
@@ -8297,7 +8363,20 @@ var $;
                 return `${this.weight() || 0} кг`;
             }
             enter_submit() {
-                console.log("numm", this.number());
+                this.api().createAct({
+                    autoNumber: this.auto_number(),
+                    payerPublicId: this.payer(),
+                    transporterPublicId: this.transporter(),
+                    cargoTypePublicId: this.cargo_type(),
+                    wasteCategoryPublicId: this.cargo_category(),
+                    comment: "",
+                    weight: parseFloat(this.weight()),
+                    apiClientSecretKey: "123456",
+                });
+                this.dash().act_list("reset");
+            }
+            count() {
+                return this.dash().act_list().length;
             }
         }
         __decorate([

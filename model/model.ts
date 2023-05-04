@@ -19,6 +19,17 @@ namespace $ {
     COMPLETED = "STATUS_COMPLETED",
   }
 
+  export interface $scale_modelActCreatePayload {
+    payerPublicId: string;
+    transporterPublicId: string;
+    autoNumber: string;
+    cargoTypePublicId: string;
+    wasteCategoryPublicId: string;
+    weight: number;
+    comment: string;
+    apiClientSecretKey: "123456";
+  }
+
   export interface $scale_modelOrganization {
     id: number;
     public_id: string;
