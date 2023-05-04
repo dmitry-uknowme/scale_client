@@ -1,4 +1,5 @@
 $scale_form_enter $mol_form
+	api $scale_api
 	body /
 		<= Names $mol_form_group sub /
 			<= Weight_field $mol_form_field
@@ -11,24 +12,20 @@ $scale_form_enter $mol_form
 				bid <= number_bid \
 				Content <= Number_control $mol_string
 					value?val <=> number?val \
+					hint \Введите гос. номер
 			<= Payer_field $mol_form_field
 				name \Оператор
 				bid <= payer_bid \
 				Content <= Payer_control $mol_select
-					value?val <=> payer?val \ТКО
-					dictionary <= payers *
-						red \ТКО
-						green \Green
-						blue \Blue
+					value?val <=> payer?val \Выберите оператора
+					dictionary <= payers_options *
+					hint \Выберите
 			<= Transporter_field $mol_form_field
 				name \Перевозчик
 				bid <= transporter_bid \
 				Content <= Transporter_control $mol_select
-					value?val <=> transporter?val \ТКО
-					dictionary <= transporters *
-						red \ТКО
-						green \Green
-						blue \Blue
+					value?val <=> transporter?val \Выберите перевозчика
+					dictionary <= transporters_options *
 			<= Cargo_type_field $mol_form_field
 				name \Вид груза
 				bid <= cargo_type_bid \

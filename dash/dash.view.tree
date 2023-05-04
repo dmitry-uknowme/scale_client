@@ -26,47 +26,44 @@ $scale_dash $mol_list
 			<= Auto_list $mol_section
 				title \На территории
 				content /
-					<= Table_header $mol_row
-						minimal_height 100
-						minimal_width 200
-						sub <= row_content /
-							<= Number_labeler $mol_labeler
-								title \Гос. номер
-								
-							<= Transporter_labeler $mol_labeler
-								title \Перевозчик
-							<= Weight_gross_labeler $mol_labeler
-								title \Брутто (кг)
-							<= Type_weight_labeler $mol_labeler
-								title \Вид груза
-							<= Category_weight_labeler $mol_labeler
-								title \Категория груза
-							<= Date_enter_labeler $mol_labeler
-								title \Дата и время въезда
 					<= Act_list $mol_list rows <= act_list /
 						<= Act_row*0 $mol_row
 							minimal_height 100
 							minimal_width 200
 							sub /
-								<= Number_content* $mol_paragraph
-									title <= act_autoNumber*? \
-								<= Transporter_content* $mol_paragraph
-									title <= act_transporter*? \
-								<= Weight_gross_content* $mol_paragraph
-									title <= act_weightGross*? \
-								<= Cargo_type_content* $mol_paragraph
-									title <= act_cargoType*? \
-								<= Cargo_category_content* $mol_paragraph
-									title <= act_cargoCategory*? \
-								<= Date_enter_content* $mol_paragraph
-									title <= act_enteredMoment*? \
+								<= Number_labeler* $mol_labeler
+									title \Гос. номер
+									Content <= Number_content* $mol_paragraph
+										title <= act_autoNumber*? \
+								<= Transporter_labeler* $mol_labeler
+									title \Перевозчик
+									Content <= Transporter_content* $mol_paragraph
+										title <= act_transporter*? \
+								<= Weight_gross_labeler* $mol_labeler
+									title \Брутто (кг)
+									Content <= Weight_gross_content* $mol_paragraph
+										title <= act_weightGross*? \
+								<= Cargo_type_labeler* $mol_labeler
+									title \Вид груза
+									Content <= Cargo_type_content* $mol_paragraph
+										title <= act_cargoType*? \
+								<= Cargo_category_labeler* $mol_labeler
+									title \Категория
+									Content <= Cargo_category_content* $mol_paragraph
+										title <= act_cargoCategory*? \
+								<= Date_enter_labeler* $mol_labeler
+									title \Дата и время въезда
+									Content <= Date_enter_content* $mol_paragraph
+										title <= act_enteredMoment*? \
 								<= Act_options_pop $mol_pick
+									align \bottom_right
 									hint <= act_options_out \Создать запись на выезд для
 									trigger_content /
 										<= Options_trigger_icon $mol_icon_menu
 									bubble_content /
 										<= Options_content $mol_list rows /
 											<= Menu_item_copy $mol_button_minor
+												click? <=> open_exit_form? null
 												sub /
 													<= act_options_out \Создать запись на выезд для
 

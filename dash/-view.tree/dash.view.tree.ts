@@ -212,131 +212,6 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Number_labeler $mol_labeler title \Гос. номер
-		 * ```
-		 */
-		@ $mol_mem
-		Number_labeler() {
-			const obj = new this.$.$mol_labeler()
-			
-			obj.title = () => "Гос. номер"
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Transporter_labeler $mol_labeler title \Перевозчик
-		 * ```
-		 */
-		@ $mol_mem
-		Transporter_labeler() {
-			const obj = new this.$.$mol_labeler()
-			
-			obj.title = () => "Перевозчик"
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Weight_gross_labeler $mol_labeler title \Брутто (кг)
-		 * ```
-		 */
-		@ $mol_mem
-		Weight_gross_labeler() {
-			const obj = new this.$.$mol_labeler()
-			
-			obj.title = () => "Брутто (кг)"
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Type_weight_labeler $mol_labeler title \Вид груза
-		 * ```
-		 */
-		@ $mol_mem
-		Type_weight_labeler() {
-			const obj = new this.$.$mol_labeler()
-			
-			obj.title = () => "Вид груза"
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Category_weight_labeler $mol_labeler title \Категория груза
-		 * ```
-		 */
-		@ $mol_mem
-		Category_weight_labeler() {
-			const obj = new this.$.$mol_labeler()
-			
-			obj.title = () => "Категория груза"
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Date_enter_labeler $mol_labeler title \Дата и время въезда
-		 * ```
-		 */
-		@ $mol_mem
-		Date_enter_labeler() {
-			const obj = new this.$.$mol_labeler()
-			
-			obj.title = () => "Дата и время въезда"
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * row_content /
-		 * 	<= Number_labeler
-		 * 	<= Transporter_labeler
-		 * 	<= Weight_gross_labeler
-		 * 	<= Type_weight_labeler
-		 * 	<= Category_weight_labeler
-		 * 	<= Date_enter_labeler
-		 * ```
-		 */
-		row_content() {
-			return [
-				this.Number_labeler(),
-				this.Transporter_labeler(),
-				this.Weight_gross_labeler(),
-				this.Type_weight_labeler(),
-				this.Category_weight_labeler(),
-				this.Date_enter_labeler()
-			] as readonly any[]
-		}
-		
-		/**
-		 * ```tree
-		 * Table_header $mol_row
-		 * 	minimal_height 100
-		 * 	minimal_width 200
-		 * 	sub <= row_content
-		 * ```
-		 */
-		@ $mol_mem
-		Table_header() {
-			const obj = new this.$.$mol_row()
-			
-			obj.minimal_height = () => 100
-			obj.minimal_width = () => 200
-			obj.sub = () => this.row_content()
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
 		 * act_autoNumber*? \
 		 * ```
 		 */
@@ -356,6 +231,23 @@ namespace $ {
 			const obj = new this.$.$mol_paragraph()
 			
 			obj.title = () => this.act_autoNumber(id)
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Number_labeler* $mol_labeler
+		 * 	title \Гос. номер
+		 * 	Content <= Number_content*
+		 * ```
+		 */
+		@ $mol_mem_key
+		Number_labeler(id: any) {
+			const obj = new this.$.$mol_labeler()
+			
+			obj.title = () => "Гос. номер"
+			obj.Content = () => this.Number_content(id)
 			
 			return obj
 		}
@@ -387,6 +279,23 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Transporter_labeler* $mol_labeler
+		 * 	title \Перевозчик
+		 * 	Content <= Transporter_content*
+		 * ```
+		 */
+		@ $mol_mem_key
+		Transporter_labeler(id: any) {
+			const obj = new this.$.$mol_labeler()
+			
+			obj.title = () => "Перевозчик"
+			obj.Content = () => this.Transporter_content(id)
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * act_weightGross*? \
 		 * ```
 		 */
@@ -406,6 +315,23 @@ namespace $ {
 			const obj = new this.$.$mol_paragraph()
 			
 			obj.title = () => this.act_weightGross(id)
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Weight_gross_labeler* $mol_labeler
+		 * 	title \Брутто (кг)
+		 * 	Content <= Weight_gross_content*
+		 * ```
+		 */
+		@ $mol_mem_key
+		Weight_gross_labeler(id: any) {
+			const obj = new this.$.$mol_labeler()
+			
+			obj.title = () => "Брутто (кг)"
+			obj.Content = () => this.Weight_gross_content(id)
 			
 			return obj
 		}
@@ -437,6 +363,23 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Cargo_type_labeler* $mol_labeler
+		 * 	title \Вид груза
+		 * 	Content <= Cargo_type_content*
+		 * ```
+		 */
+		@ $mol_mem_key
+		Cargo_type_labeler(id: any) {
+			const obj = new this.$.$mol_labeler()
+			
+			obj.title = () => "Вид груза"
+			obj.Content = () => this.Cargo_type_content(id)
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * act_cargoCategory*? \
 		 * ```
 		 */
@@ -456,6 +399,23 @@ namespace $ {
 			const obj = new this.$.$mol_paragraph()
 			
 			obj.title = () => this.act_cargoCategory(id)
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Cargo_category_labeler* $mol_labeler
+		 * 	title \Категория
+		 * 	Content <= Cargo_category_content*
+		 * ```
+		 */
+		@ $mol_mem_key
+		Cargo_category_labeler(id: any) {
+			const obj = new this.$.$mol_labeler()
+			
+			obj.title = () => "Категория"
+			obj.Content = () => this.Cargo_category_content(id)
 			
 			return obj
 		}
@@ -487,6 +447,23 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Date_enter_labeler* $mol_labeler
+		 * 	title \Дата и время въезда
+		 * 	Content <= Date_enter_content*
+		 * ```
+		 */
+		@ $mol_mem_key
+		Date_enter_labeler(id: any) {
+			const obj = new this.$.$mol_labeler()
+			
+			obj.title = () => "Дата и время въезда"
+			obj.Content = () => this.Date_enter_content(id)
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * act_options_out \Создать запись на выезд для
 		 * ```
 		 */
@@ -508,13 +485,16 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Menu_item_copy $mol_button_minor sub / <= act_options_out
+		 * Menu_item_copy $mol_button_minor
+		 * 	click? <=> open_exit_form?
+		 * 	sub / <= act_options_out
 		 * ```
 		 */
 		@ $mol_mem
 		Menu_item_copy() {
 			const obj = new this.$.$mol_button_minor()
 			
+			obj.click = (next?: any) => this.open_exit_form(next)
 			obj.sub = () => [
 				this.act_options_out()
 			] as readonly any[]
@@ -541,6 +521,7 @@ namespace $ {
 		/**
 		 * ```tree
 		 * Act_options_pop $mol_pick
+		 * 	align \bottom_right
 		 * 	hint <= act_options_out
 		 * 	trigger_content / <= Options_trigger_icon
 		 * 	bubble_content / <= Options_content
@@ -550,6 +531,7 @@ namespace $ {
 		Act_options_pop() {
 			const obj = new this.$.$mol_pick()
 			
+			obj.align = () => "bottom_right"
 			obj.hint = () => this.act_options_out()
 			obj.trigger_content = () => [
 				this.Options_trigger_icon()
@@ -567,12 +549,12 @@ namespace $ {
 		 * 	minimal_height 100
 		 * 	minimal_width 200
 		 * 	sub /
-		 * 		<= Number_content*
-		 * 		<= Transporter_content*
-		 * 		<= Weight_gross_content*
-		 * 		<= Cargo_type_content*
-		 * 		<= Cargo_category_content*
-		 * 		<= Date_enter_content*
+		 * 		<= Number_labeler*
+		 * 		<= Transporter_labeler*
+		 * 		<= Weight_gross_labeler*
+		 * 		<= Cargo_type_labeler*
+		 * 		<= Cargo_category_labeler*
+		 * 		<= Date_enter_labeler*
 		 * 		<= Act_options_pop
 		 * ```
 		 */
@@ -583,12 +565,12 @@ namespace $ {
 			obj.minimal_height = () => 100
 			obj.minimal_width = () => 200
 			obj.sub = () => [
-				this.Number_content(id),
-				this.Transporter_content(id),
-				this.Weight_gross_content(id),
-				this.Cargo_type_content(id),
-				this.Cargo_category_content(id),
-				this.Date_enter_content(id),
+				this.Number_labeler(id),
+				this.Transporter_labeler(id),
+				this.Weight_gross_labeler(id),
+				this.Cargo_type_labeler(id),
+				this.Cargo_category_labeler(id),
+				this.Date_enter_labeler(id),
 				this.Act_options_pop()
 			] as readonly any[]
 			
@@ -624,9 +606,7 @@ namespace $ {
 		 * ```tree
 		 * Auto_list $mol_section
 		 * 	title \На территории
-		 * 	content /
-		 * 		<= Table_header
-		 * 		<= Act_list
+		 * 	content / <= Act_list
 		 * ```
 		 */
 		@ $mol_mem
@@ -635,7 +615,6 @@ namespace $ {
 			
 			obj.title = () => "На территории"
 			obj.content = () => [
-				this.Table_header(),
 				this.Act_list()
 			] as readonly any[]
 			

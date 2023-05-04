@@ -16,7 +16,7 @@ namespace $.$$ {
         flexBasis: "30rem",
       },
     },
-    Form_close: {
+    Form_exit: {
       Menu: {
         display: "flex",
         flexDirection: "column",

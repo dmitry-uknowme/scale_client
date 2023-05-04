@@ -18,8 +18,9 @@ $scale_app $mol_book2_catalog
 					menu_tools /
 						<= Spread_close
 					Spread_close => Form_enter_close
-				form_close <= Form_close $mol_book2_catalog
-					param \form_close
+				form_exit <= Form_exit $mol_book2_catalog
+					menu_body / <= Form_exit_body $scale_form_exit
+					param \form_exit
 					menu_title \Создать запись на выезд
 					menu_tools /
 						<= Spread_close

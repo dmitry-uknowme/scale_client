@@ -108,27 +108,43 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Form_close_close
+		 * Form_exit_body $scale_form_exit
 		 * ```
 		 */
-		Form_close_close() {
-			return this.Form_close().Spread_close()
+		@ $mol_mem
+		Form_exit_body() {
+			const obj = new this.$.$scale_form_exit()
+			
+			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * Form_close $mol_book2_catalog
-		 * 	param \form_close
+		 * Form_close_close
+		 * ```
+		 */
+		Form_close_close() {
+			return this.Form_exit().Spread_close()
+		}
+		
+		/**
+		 * ```tree
+		 * Form_exit $mol_book2_catalog
+		 * 	menu_body / <= Form_exit_body
+		 * 	param \form_exit
 		 * 	menu_title \Создать запись на выезд
 		 * 	menu_tools / <= Spread_close
 		 * 	Spread_close => Form_close_close
 		 * ```
 		 */
 		@ $mol_mem
-		Form_close() {
+		Form_exit() {
 			const obj = new this.$.$mol_book2_catalog()
 			
-			obj.param = () => "form_close"
+			obj.menu_body = () => [
+				this.Form_exit_body()
+			] as readonly any[]
+			obj.param = () => "form_exit"
 			obj.menu_title = () => "Создать запись на выезд"
 			obj.menu_tools = () => [
 				this.Spread_close()
@@ -156,7 +172,7 @@ namespace $ {
 		 * 	Spread_close => Dash_close
 		 * 	spreads *
 		 * 		form_enter <= Form_enter
-		 * 		form_close <= Form_close
+		 * 		form_exit <= Form_exit
 		 * ```
 		 */
 		@ $mol_mem
@@ -173,7 +189,7 @@ namespace $ {
 			] as readonly any[]
 			obj.spreads = () => ({
 				form_enter: this.Form_enter(),
-				form_close: this.Form_close()
+				form_exit: this.Form_exit()
 			})
 			
 			return obj

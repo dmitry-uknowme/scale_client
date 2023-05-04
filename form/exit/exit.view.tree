@@ -1,0 +1,21 @@
+$scale_form_exit $mol_form
+	body /
+		<= Names $mol_form_group sub /
+			<= Weight_field $mol_form_field
+				name \Текущий вес
+				bid <= weight_bid \
+				Content <= Weight_control $mol_paragraph
+					title <= weight \00
+			<= Number_field $mol_form_field
+				name \Гос. номер
+				bid <= number_bid \
+				Content <= Number_control $mol_string
+					value?val <=> number?val \
+	submit?val <=> signup?val null
+	buttons /
+		<= Signup $mol_button_major
+			title \Создать запись на выезд
+			click?val <=> signup?val null
+			enabled true
+		<= Result $mol_status
+			message <= result?val \

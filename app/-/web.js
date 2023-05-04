@@ -6458,6 +6458,15 @@ var $;
         $scale_modelActStatus["ON_TERRITORY"] = "STATUS_ON_TERRITORY";
         $scale_modelActStatus["COMPLETED"] = "STATUS_COMPLETED";
     })($scale_modelActStatus = $.$scale_modelActStatus || ($.$scale_modelActStatus = {}));
+    let $scale_modelOrganizationRole;
+    (function ($scale_modelOrganizationRole) {
+        $scale_modelOrganizationRole["TRANSPORTER"] = "ROLE_TRANSPORTER";
+        $scale_modelOrganizationRole["PAYER"] = "ROLE_PAYER";
+    })($scale_modelOrganizationRole = $.$scale_modelOrganizationRole || ($.$scale_modelOrganizationRole = {}));
+    let $scale_modelOrganizationStatus;
+    (function ($scale_modelOrganizationStatus) {
+        $scale_modelOrganizationStatus["ACTIVE"] = "STATUS_ACTIVE";
+    })($scale_modelOrganizationStatus = $.$scale_modelOrganizationStatus || ($.$scale_modelOrganizationStatus = {}));
 })($ || ($ = {}));
 //scale/model/model.ts
 ;
@@ -6470,6 +6479,18 @@ var $;
         }) {
             const BASE_URL = $scale_env_BASE_URL;
             const response = $mol_fetch.json(`${BASE_URL}/getActs?status=${filter.status}`, {
+                method: "GET",
+            });
+            if (response.status !== "success") {
+                throw new Error(`Response failed with status ${response.status}`);
+            }
+            return response.data;
+        }
+        getOrganizations(filter = {
+            status: $scale_modelOrganizationStatus.ACTIVE,
+        }) {
+            const BASE_URL = $scale_env_BASE_URL;
+            const response = $mol_fetch.json(`${BASE_URL}/getUsers?status=${filter.status}${filter.role ? `&role=${filter.role}` : ""}`, {
                 method: "GET",
             });
             if (response.status !== "success") {
@@ -7235,53 +7256,6 @@ var $;
             ];
             return obj;
         }
-        Number_labeler() {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "Гос. номер";
-            return obj;
-        }
-        Transporter_labeler() {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "Перевозчик";
-            return obj;
-        }
-        Weight_gross_labeler() {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "Брутто (кг)";
-            return obj;
-        }
-        Type_weight_labeler() {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "Вид груза";
-            return obj;
-        }
-        Category_weight_labeler() {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "Категория груза";
-            return obj;
-        }
-        Date_enter_labeler() {
-            const obj = new this.$.$mol_labeler();
-            obj.title = () => "Дата и время въезда";
-            return obj;
-        }
-        row_content() {
-            return [
-                this.Number_labeler(),
-                this.Transporter_labeler(),
-                this.Weight_gross_labeler(),
-                this.Type_weight_labeler(),
-                this.Category_weight_labeler(),
-                this.Date_enter_labeler()
-            ];
-        }
-        Table_header() {
-            const obj = new this.$.$mol_row();
-            obj.minimal_height = () => 100;
-            obj.minimal_width = () => 200;
-            obj.sub = () => this.row_content();
-            return obj;
-        }
         act_autoNumber(id, next) {
             if (next !== undefined)
                 return next;
@@ -7290,6 +7264,12 @@ var $;
         Number_content(id) {
             const obj = new this.$.$mol_paragraph();
             obj.title = () => this.act_autoNumber(id);
+            return obj;
+        }
+        Number_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Гос. номер";
+            obj.Content = () => this.Number_content(id);
             return obj;
         }
         act_transporter(id, next) {
@@ -7302,6 +7282,12 @@ var $;
             obj.title = () => this.act_transporter(id);
             return obj;
         }
+        Transporter_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Перевозчик";
+            obj.Content = () => this.Transporter_content(id);
+            return obj;
+        }
         act_weightGross(id, next) {
             if (next !== undefined)
                 return next;
@@ -7310,6 +7296,12 @@ var $;
         Weight_gross_content(id) {
             const obj = new this.$.$mol_paragraph();
             obj.title = () => this.act_weightGross(id);
+            return obj;
+        }
+        Weight_gross_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Брутто (кг)";
+            obj.Content = () => this.Weight_gross_content(id);
             return obj;
         }
         act_cargoType(id, next) {
@@ -7322,6 +7314,12 @@ var $;
             obj.title = () => this.act_cargoType(id);
             return obj;
         }
+        Cargo_type_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Вид груза";
+            obj.Content = () => this.Cargo_type_content(id);
+            return obj;
+        }
         act_cargoCategory(id, next) {
             if (next !== undefined)
                 return next;
@@ -7330,6 +7328,12 @@ var $;
         Cargo_category_content(id) {
             const obj = new this.$.$mol_paragraph();
             obj.title = () => this.act_cargoCategory(id);
+            return obj;
+        }
+        Cargo_category_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Категория";
+            obj.Content = () => this.Cargo_category_content(id);
             return obj;
         }
         act_enteredMoment(id, next) {
@@ -7342,6 +7346,12 @@ var $;
             obj.title = () => this.act_enteredMoment(id);
             return obj;
         }
+        Date_enter_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Дата и время въезда";
+            obj.Content = () => this.Date_enter_content(id);
+            return obj;
+        }
         act_options_out() {
             return "Создать запись на выезд для";
         }
@@ -7351,6 +7361,7 @@ var $;
         }
         Menu_item_copy() {
             const obj = new this.$.$mol_button_minor();
+            obj.click = (next) => this.open_exit_form(next);
             obj.sub = () => [
                 this.act_options_out()
             ];
@@ -7365,6 +7376,7 @@ var $;
         }
         Act_options_pop() {
             const obj = new this.$.$mol_pick();
+            obj.align = () => "bottom_right";
             obj.hint = () => this.act_options_out();
             obj.trigger_content = () => [
                 this.Options_trigger_icon()
@@ -7379,12 +7391,12 @@ var $;
             obj.minimal_height = () => 100;
             obj.minimal_width = () => 200;
             obj.sub = () => [
-                this.Number_content(id),
-                this.Transporter_content(id),
-                this.Weight_gross_content(id),
-                this.Cargo_type_content(id),
-                this.Cargo_category_content(id),
-                this.Date_enter_content(id),
+                this.Number_labeler(id),
+                this.Transporter_labeler(id),
+                this.Weight_gross_labeler(id),
+                this.Cargo_type_labeler(id),
+                this.Cargo_category_labeler(id),
+                this.Date_enter_labeler(id),
                 this.Act_options_pop()
             ];
             return obj;
@@ -7403,7 +7415,6 @@ var $;
             const obj = new this.$.$mol_section();
             obj.title = () => "На территории";
             obj.content = () => [
-                this.Table_header(),
                 this.Act_list()
             ];
             return obj;
@@ -7453,32 +7464,14 @@ var $;
         $mol_mem
     ], $scale_dash.prototype, "Top_row", null);
     __decorate([
-        $mol_mem
-    ], $scale_dash.prototype, "Number_labeler", null);
-    __decorate([
-        $mol_mem
-    ], $scale_dash.prototype, "Transporter_labeler", null);
-    __decorate([
-        $mol_mem
-    ], $scale_dash.prototype, "Weight_gross_labeler", null);
-    __decorate([
-        $mol_mem
-    ], $scale_dash.prototype, "Type_weight_labeler", null);
-    __decorate([
-        $mol_mem
-    ], $scale_dash.prototype, "Category_weight_labeler", null);
-    __decorate([
-        $mol_mem
-    ], $scale_dash.prototype, "Date_enter_labeler", null);
-    __decorate([
-        $mol_mem
-    ], $scale_dash.prototype, "Table_header", null);
-    __decorate([
         $mol_mem_key
     ], $scale_dash.prototype, "act_autoNumber", null);
     __decorate([
         $mol_mem_key
     ], $scale_dash.prototype, "Number_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_dash.prototype, "Number_labeler", null);
     __decorate([
         $mol_mem_key
     ], $scale_dash.prototype, "act_transporter", null);
@@ -7487,10 +7480,16 @@ var $;
     ], $scale_dash.prototype, "Transporter_content", null);
     __decorate([
         $mol_mem_key
+    ], $scale_dash.prototype, "Transporter_labeler", null);
+    __decorate([
+        $mol_mem_key
     ], $scale_dash.prototype, "act_weightGross", null);
     __decorate([
         $mol_mem_key
     ], $scale_dash.prototype, "Weight_gross_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_dash.prototype, "Weight_gross_labeler", null);
     __decorate([
         $mol_mem_key
     ], $scale_dash.prototype, "act_cargoType", null);
@@ -7499,16 +7498,25 @@ var $;
     ], $scale_dash.prototype, "Cargo_type_content", null);
     __decorate([
         $mol_mem_key
+    ], $scale_dash.prototype, "Cargo_type_labeler", null);
+    __decorate([
+        $mol_mem_key
     ], $scale_dash.prototype, "act_cargoCategory", null);
     __decorate([
         $mol_mem_key
     ], $scale_dash.prototype, "Cargo_category_content", null);
     __decorate([
         $mol_mem_key
+    ], $scale_dash.prototype, "Cargo_category_labeler", null);
+    __decorate([
+        $mol_mem_key
     ], $scale_dash.prototype, "act_enteredMoment", null);
     __decorate([
         $mol_mem_key
     ], $scale_dash.prototype, "Date_enter_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_dash.prototype, "Date_enter_labeler", null);
     __decorate([
         $mol_mem
     ], $scale_dash.prototype, "Options_trigger_icon", null);
@@ -7564,7 +7572,7 @@ var $;
                 $mol_state_arg.dict({ "": "dash", dash: "form_enter" });
             }
             open_exit_form() {
-                $mol_state_arg.dict({ "": "dash", dash: "form_close" });
+                $mol_state_arg.dict({ "": "dash", dash: "form_exit" });
             }
             act_list() {
                 return this.api()
@@ -7965,6 +7973,10 @@ var $;
 var $;
 (function ($) {
     class $scale_form_enter extends $mol_form {
+        api() {
+            const obj = new this.$.$scale_api();
+            return obj;
+        }
         body() {
             return [
                 this.Names()
@@ -8008,6 +8020,7 @@ var $;
         Number_control() {
             const obj = new this.$.$mol_string();
             obj.value = (val) => this.number(val);
+            obj.hint = () => "Введите гос. номер";
             return obj;
         }
         Number_field() {
@@ -8023,19 +8036,16 @@ var $;
         payer(val) {
             if (val !== undefined)
                 return val;
-            return "ТКО";
+            return "Выберите оператора";
         }
-        payers() {
-            return {
-                red: "ТКО",
-                green: "Green",
-                blue: "Blue"
-            };
+        payers_options() {
+            return {};
         }
         Payer_control() {
             const obj = new this.$.$mol_select();
             obj.value = (val) => this.payer(val);
-            obj.dictionary = () => this.payers();
+            obj.dictionary = () => this.payers_options();
+            obj.hint = () => "Выберите";
             return obj;
         }
         Payer_field() {
@@ -8051,19 +8061,15 @@ var $;
         transporter(val) {
             if (val !== undefined)
                 return val;
-            return "ТКО";
+            return "Выберите перевозчика";
         }
-        transporters() {
-            return {
-                red: "ТКО",
-                green: "Green",
-                blue: "Blue"
-            };
+        transporters_options() {
+            return {};
         }
         Transporter_control() {
             const obj = new this.$.$mol_select();
             obj.value = (val) => this.transporter(val);
-            obj.dictionary = () => this.transporters();
+            obj.dictionary = () => this.transporters_options();
             return obj;
         }
         Transporter_field() {
@@ -8159,6 +8165,9 @@ var $;
     }
     __decorate([
         $mol_mem
+    ], $scale_form_enter.prototype, "api", null);
+    __decorate([
+        $mol_mem
     ], $scale_form_enter.prototype, "Weight_control", null);
     __decorate([
         $mol_mem
@@ -8230,6 +8239,155 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    var $$;
+    (function ($$) {
+        class $scale_form_enter extends $.$scale_form_enter {
+            payers_options() {
+                const data = this.api().getOrganizations({
+                    status: $scale_modelOrganizationStatus.ACTIVE,
+                    role: $scale_modelOrganizationRole.PAYER,
+                });
+                const result = data.reduce((acc, curr) => ((acc[curr.public_id] = curr.title), acc), {});
+                return result;
+            }
+            transporters_options() {
+                const data = this.api().getOrganizations({
+                    status: $scale_modelOrganizationStatus.ACTIVE,
+                    role: $scale_modelOrganizationRole.TRANSPORTER,
+                });
+                const result = data.reduce((acc, curr) => ((acc[curr.public_id] = curr.title), acc), {});
+                return result;
+            }
+        }
+        $$.$scale_form_enter = $scale_form_enter;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//scale/form/enter/enter.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $scale_form_exit extends $mol_form {
+        body() {
+            return [
+                this.Names()
+            ];
+        }
+        submit(val) {
+            return this.signup(val);
+        }
+        buttons() {
+            return [
+                this.Signup(),
+                this.Result()
+            ];
+        }
+        weight_bid() {
+            return "";
+        }
+        weight() {
+            return "00";
+        }
+        Weight_control() {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.weight();
+            return obj;
+        }
+        Weight_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.name = () => "Текущий вес";
+            obj.bid = () => this.weight_bid();
+            obj.Content = () => this.Weight_control();
+            return obj;
+        }
+        number_bid() {
+            return "";
+        }
+        number(val) {
+            if (val !== undefined)
+                return val;
+            return "";
+        }
+        Number_control() {
+            const obj = new this.$.$mol_string();
+            obj.value = (val) => this.number(val);
+            return obj;
+        }
+        Number_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.name = () => "Гос. номер";
+            obj.bid = () => this.number_bid();
+            obj.Content = () => this.Number_control();
+            return obj;
+        }
+        Names() {
+            const obj = new this.$.$mol_form_group();
+            obj.sub = () => [
+                this.Weight_field(),
+                this.Number_field()
+            ];
+            return obj;
+        }
+        signup(val) {
+            if (val !== undefined)
+                return val;
+            return null;
+        }
+        Signup() {
+            const obj = new this.$.$mol_button_major();
+            obj.title = () => "Создать запись на выезд";
+            obj.click = (val) => this.signup(val);
+            obj.enabled = () => true;
+            return obj;
+        }
+        result(val) {
+            if (val !== undefined)
+                return val;
+            return "";
+        }
+        Result() {
+            const obj = new this.$.$mol_status();
+            obj.message = () => this.result();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "Weight_control", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "Weight_field", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "number", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "Number_control", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "Number_field", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "Names", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "signup", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "Signup", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "result", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "Result", null);
+    $.$scale_form_exit = $scale_form_exit;
+})($ || ($ = {}));
+//scale/form/exit/-view.tree/exit.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $scale_app extends $mol_book2_catalog {
         menu_foot() {
             return [
@@ -8272,12 +8430,19 @@ var $;
             ];
             return obj;
         }
-        Form_close_close() {
-            return this.Form_close().Spread_close();
+        Form_exit_body() {
+            const obj = new this.$.$scale_form_exit();
+            return obj;
         }
-        Form_close() {
+        Form_close_close() {
+            return this.Form_exit().Spread_close();
+        }
+        Form_exit() {
             const obj = new this.$.$mol_book2_catalog();
-            obj.param = () => "form_close";
+            obj.menu_body = () => [
+                this.Form_exit_body()
+            ];
+            obj.param = () => "form_exit";
             obj.menu_title = () => "Создать запись на выезд";
             obj.menu_tools = () => [
                 this.Spread_close()
@@ -8299,7 +8464,7 @@ var $;
             ];
             obj.spreads = () => ({
                 form_enter: this.Form_enter(),
-                form_close: this.Form_close()
+                form_exit: this.Form_exit()
             });
             return obj;
         }
@@ -8330,7 +8495,10 @@ var $;
     ], $scale_app.prototype, "Form_enter", null);
     __decorate([
         $mol_mem
-    ], $scale_app.prototype, "Form_close", null);
+    ], $scale_app.prototype, "Form_exit_body", null);
+    __decorate([
+        $mol_mem
+    ], $scale_app.prototype, "Form_exit", null);
     __decorate([
         $mol_mem
     ], $scale_app.prototype, "Dash", null);
@@ -8344,7 +8512,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("scale/app/app.view.css", "[mol_form_field] {\n\tflex-direction: row;\n\talign-items: center;\n\tmin-height: auto !important;\n}\n\n[scale_app_dash_body_table_row]  [mol_labeler_label]{\n\tpadding: 0;\n}\n");
+    $mol_style_attach("scale/app/app.view.css", "[mol_form_field] {\n\tflex-direction: row;\n\talign-items: center;\n\tmin-height: auto !important;\n}\n\n[scale_app_dash_body_act_row]  [mol_labeler_label]{\n\tpadding: 0;\n}\n");
 })($ || ($ = {}));
 //scale/app/-css/app.view.css.ts
 ;
@@ -8370,7 +8538,7 @@ var $;
                     flexBasis: "30rem",
                 },
             },
-            Form_close: {
+            Form_exit: {
                 Menu: {
                     display: "flex",
                     flexDirection: "column",

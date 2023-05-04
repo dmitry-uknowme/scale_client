@@ -18,4 +18,20 @@ namespace $ {
     ON_TERRITORY = "STATUS_ON_TERRITORY",
     COMPLETED = "STATUS_COMPLETED",
   }
+
+  export interface $scale_modelOrganization {
+    id: number;
+    public_id: string;
+    title: string;
+    role: $scale_modelOrganizationRole;
+    status: $scale_modelOrganizationStatus;
+  }
+
+  export enum $scale_modelOrganizationRole {
+    TRANSPORTER = "ROLE_TRANSPORTER",
+    PAYER = "ROLE_PAYER",
+  }
+  export enum $scale_modelOrganizationStatus {
+    ACTIVE = "STATUS_ACTIVE",
+  }
 }
