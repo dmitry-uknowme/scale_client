@@ -1,17 +1,19 @@
 $scale_form_enter $mol_form
 	api $scale_api
 	body /
+		<= Centrifuge $scale_centrifuge
+			weight_channel? => weight?
 		<= Names $mol_form_group sub /
 			<= Weight_field $mol_form_field
 				name \Текущий вес
 				bid <= weight_bid \
 				Content <= Weight_control $mol_paragraph
-					title <= weight \00
+					title <= weight_formatted
 			<= Number_field $mol_form_field
 				name \Гос. номер
 				bid <= number_bid \
 				Content <= Number_control $mol_string
-					value?val <=> number?val \
+					value?val <=> auto_number?val \
 					hint \Введите гос. номер
 			<= Payer_field $mol_form_field
 				name \Оператор
@@ -30,25 +32,17 @@ $scale_form_enter $mol_form
 				name \Вид груза
 				bid <= cargo_type_bid \
 				Content <= Cargo_type_control $mol_select
-					value?val <=> cargo_type?val \ТКО
-					dictionary <= colors *
-						red \ТКО
-						green \Green
-						blue \Blue
+					value?val <=> cargo_type?val \Выберите вид груза
+					dictionary <= cargoTypes_options *
 			<= Category_cargo_field $mol_form_field
 				name \Категория груза
 				bid <= cargo_category_bid \
 				Content <= Color $mol_select
-					value?val <=> color?val \ТКО
-					dictionary <= colors *
-						red \ТКО
-						green \Green
-						blue \Blue
-	submit?val <=> signup?val null
+					value?val <=> cargo_category?val \Выберите категорию груза
+					dictionary <= cargoCategories_options *
 	buttons /
 		<= Signup $mol_button_major
 			title \Создать запись на въезд
-			click?val <=> signup?val null
-			enabled true
+			click?val <=> enter_submit?val null
 		<= Result $mol_status
 			message <= result?val \

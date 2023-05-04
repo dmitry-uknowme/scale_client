@@ -51,5 +51,27 @@ namespace $ {
       }
       return response.data;
     }
+
+    getCargoTypes() {
+      const BASE_URL = $scale_env_BASE_URL;
+      const response = $mol_fetch.json(`${BASE_URL}/getCargoTypes`, {
+        method: "GET",
+      }) as $scale_apiResponse<$scale_modelCargoType[]>;
+      if (response.status !== "success") {
+        throw new Error(`Response failed with status ${response.status}`);
+      }
+      return response.data;
+    }
+
+    getCargoCategories() {
+      const BASE_URL = $scale_env_BASE_URL;
+      const response = $mol_fetch.json(`${BASE_URL}/getWasteCategories`, {
+        method: "GET",
+      }) as $scale_apiResponse<$scale_modelCargoCategory[]>;
+      if (response.status !== "success") {
+        throw new Error(`Response failed with status ${response.status}`);
+      }
+      return response.data;
+    }
   }
 }

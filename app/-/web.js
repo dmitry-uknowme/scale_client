@@ -6360,19 +6360,16 @@ var $;
 (function ($) {
     class $scale_centrifuge extends $mol_view {
         sub() {
-            return [
-                this.State()
-            ];
+            return [];
         }
-        State() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.state();
-            return obj;
+        attr() {
+            return {
+                ...super.attr(),
+                weight: this.weight_channel(),
+                client_state: this.state()
+            };
         }
     }
-    __decorate([
-        $mol_mem
-    ], $scale_centrifuge.prototype, "State", null);
     $.$scale_centrifuge = $scale_centrifuge;
 })($ || ($ = {}));
 //scale/centrifuge/-view.tree/centrifuge.view.tree.ts
@@ -6413,10 +6410,13 @@ var $;
             state(next) {
                 return next;
             }
+            weight_channel(next) {
+                return next;
+            }
             subscribe() {
                 const weightChannel = this.client().newSubscription("channel");
                 weightChannel.on("publication", (ctx) => {
-                    console.log("weight sub", ctx.data);
+                    this.weight_channel(ctx.data.value.toString());
                 });
                 weightChannel.subscribe();
                 const autoNumberChannel = this.client().newSubscription("autoNumber");
@@ -6430,7 +6430,6 @@ var $;
                 this.client();
                 this.subscribe();
                 this.client().on("connected", (ctx) => {
-                    console.log("ccccc", ctx);
                     this.state(JSON.stringify(ctx.data));
                 });
             }
@@ -6441,6 +6440,9 @@ var $;
         __decorate([
             $mol_mem
         ], $scale_centrifuge.prototype, "state", null);
+        __decorate([
+            $mol_mem
+        ], $scale_centrifuge.prototype, "weight_channel", null);
         __decorate([
             $mol_action
         ], $scale_centrifuge.prototype, "subscribe", null);
@@ -6491,6 +6493,26 @@ var $;
         }) {
             const BASE_URL = $scale_env_BASE_URL;
             const response = $mol_fetch.json(`${BASE_URL}/getUsers?status=${filter.status}${filter.role ? `&role=${filter.role}` : ""}`, {
+                method: "GET",
+            });
+            if (response.status !== "success") {
+                throw new Error(`Response failed with status ${response.status}`);
+            }
+            return response.data;
+        }
+        getCargoTypes() {
+            const BASE_URL = $scale_env_BASE_URL;
+            const response = $mol_fetch.json(`${BASE_URL}/getCargoTypes`, {
+                method: "GET",
+            });
+            if (response.status !== "success") {
+                throw new Error(`Response failed with status ${response.status}`);
+            }
+            return response.data;
+        }
+        getCargoCategories() {
+            const BASE_URL = $scale_env_BASE_URL;
+            const response = $mol_fetch.json(`${BASE_URL}/getWasteCategories`, {
                 method: "GET",
             });
             if (response.status !== "success") {
@@ -7979,11 +8001,9 @@ var $;
         }
         body() {
             return [
+                this.Centrifuge(),
                 this.Names()
             ];
-        }
-        submit(val) {
-            return this.signup(val);
         }
         buttons() {
             return [
@@ -7991,15 +8011,19 @@ var $;
                 this.Result()
             ];
         }
+        weight(next) {
+            return this.Centrifuge().weight_channel(next);
+        }
+        Centrifuge() {
+            const obj = new this.$.$scale_centrifuge();
+            return obj;
+        }
         weight_bid() {
             return "";
         }
-        weight() {
-            return "00";
-        }
         Weight_control() {
             const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.weight();
+            obj.title = () => this.weight_formatted();
             return obj;
         }
         Weight_field() {
@@ -8012,14 +8036,14 @@ var $;
         number_bid() {
             return "";
         }
-        number(val) {
+        auto_number(val) {
             if (val !== undefined)
                 return val;
             return "";
         }
         Number_control() {
             const obj = new this.$.$mol_string();
-            obj.value = (val) => this.number(val);
+            obj.value = (val) => this.auto_number(val);
             obj.hint = () => "Введите гос. номер";
             return obj;
         }
@@ -8085,19 +8109,15 @@ var $;
         cargo_type(val) {
             if (val !== undefined)
                 return val;
-            return "ТКО";
+            return "Выберите вид груза";
         }
-        colors() {
-            return {
-                red: "ТКО",
-                green: "Green",
-                blue: "Blue"
-            };
+        cargoTypes_options() {
+            return {};
         }
         Cargo_type_control() {
             const obj = new this.$.$mol_select();
             obj.value = (val) => this.cargo_type(val);
-            obj.dictionary = () => this.colors();
+            obj.dictionary = () => this.cargoTypes_options();
             return obj;
         }
         Cargo_type_field() {
@@ -8110,15 +8130,18 @@ var $;
         cargo_category_bid() {
             return "";
         }
-        color(val) {
+        cargo_category(val) {
             if (val !== undefined)
                 return val;
-            return "ТКО";
+            return "Выберите категорию груза";
+        }
+        cargoCategories_options() {
+            return {};
         }
         Color() {
             const obj = new this.$.$mol_select();
-            obj.value = (val) => this.color(val);
-            obj.dictionary = () => this.colors();
+            obj.value = (val) => this.cargo_category(val);
+            obj.dictionary = () => this.cargoCategories_options();
             return obj;
         }
         Category_cargo_field() {
@@ -8140,7 +8163,7 @@ var $;
             ];
             return obj;
         }
-        signup(val) {
+        enter_submit(val) {
             if (val !== undefined)
                 return val;
             return null;
@@ -8148,8 +8171,7 @@ var $;
         Signup() {
             const obj = new this.$.$mol_button_major();
             obj.title = () => "Создать запись на въезд";
-            obj.click = (val) => this.signup(val);
-            obj.enabled = () => true;
+            obj.click = (val) => this.enter_submit(val);
             return obj;
         }
         result(val) {
@@ -8168,13 +8190,16 @@ var $;
     ], $scale_form_enter.prototype, "api", null);
     __decorate([
         $mol_mem
+    ], $scale_form_enter.prototype, "Centrifuge", null);
+    __decorate([
+        $mol_mem
     ], $scale_form_enter.prototype, "Weight_control", null);
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "Weight_field", null);
     __decorate([
         $mol_mem
-    ], $scale_form_enter.prototype, "number", null);
+    ], $scale_form_enter.prototype, "auto_number", null);
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "Number_control", null);
@@ -8210,7 +8235,7 @@ var $;
     ], $scale_form_enter.prototype, "Cargo_type_field", null);
     __decorate([
         $mol_mem
-    ], $scale_form_enter.prototype, "color", null);
+    ], $scale_form_enter.prototype, "cargo_category", null);
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "Color", null);
@@ -8222,7 +8247,7 @@ var $;
     ], $scale_form_enter.prototype, "Names", null);
     __decorate([
         $mol_mem
-    ], $scale_form_enter.prototype, "signup", null);
+    ], $scale_form_enter.prototype, "enter_submit", null);
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "Signup", null);
@@ -8258,7 +8283,35 @@ var $;
                 const result = data.reduce((acc, curr) => ((acc[curr.public_id] = curr.title), acc), {});
                 return result;
             }
+            cargoTypes_options() {
+                const data = this.api().getCargoTypes();
+                const result = data.reduce((acc, curr) => ((acc[curr.publicId] = curr.title), acc), {});
+                return result;
+            }
+            cargoCategories_options() {
+                const data = this.api().getCargoCategories();
+                const result = data.reduce((acc, curr) => ((acc[curr.publicId] = curr.title), acc), {});
+                return result;
+            }
+            weight_formatted() {
+                return `${this.weight() || 0} кг`;
+            }
+            enter_submit() {
+                console.log("numm", this.number());
+            }
         }
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "payers_options", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "transporters_options", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "cargoTypes_options", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "cargoCategories_options", null);
         $$.$scale_form_enter = $scale_form_enter;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));

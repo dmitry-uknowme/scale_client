@@ -34,4 +34,11 @@ namespace $ {
   export enum $scale_modelOrganizationStatus {
     ACTIVE = "STATUS_ACTIVE",
   }
+
+  export interface $scale_modelCargoType {
+    publicId: string;
+    title: string;
+  }
+
+  export interface $scale_modelCargoCategory extends $scale_modelCargoType {}
 }

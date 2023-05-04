@@ -12,11 +12,16 @@ namespace $.$$ {
       return next;
     }
 
+    @$mol_mem
+    weight_channel(next?: number) {
+      return next;
+    }
+
     @$mol_action
     subscribe() {
       const weightChannel = this.client().newSubscription("channel");
       weightChannel.on("publication", (ctx) => {
-        console.log("weight sub", ctx.data);
+        this.weight_channel(ctx.data.value.toString() as string);
       });
       weightChannel.subscribe();
       const autoNumberChannel = this.client().newSubscription("autoNumber");
@@ -32,7 +37,6 @@ namespace $.$$ {
       //   this.state();
       this.subscribe();
       this.client().on("connected", (ctx) => {
-        console.log("ccccc", ctx);
         this.state(JSON.stringify(ctx.data));
       });
     }
