@@ -1,3 +1,14 @@
+$scale_dash_table_pick $mol_pick
+	align \bottom_right
+	hint <= act_options_out \Создать запись на выезд для
+	trigger_content /
+		<= Options_trigger_icon $mol_icon_menu
+	bubble_content* /
+		<= Options_content* $mol_list rows /
+			<= Menu_item_copy* $mol_button_minor
+				click? <=> open_exit_form_current*? null
+				sub /
+					<= act_options_out \Создать запись на выезд для
 $scale_dash $mol_list
 	api $scale_api
 		gateOpenEntry => open_entry_gate
@@ -61,6 +72,10 @@ $scale_dash $mol_list
 									title \Перевозчик
 									Content <= Transporter_content* $mol_paragraph
 										title <= act_transporter*? \
+								<= Payer_labeler* $mol_labeler
+									title \Оператор
+									Content <= Payer_content* $mol_paragraph
+										title <= act_payer*? \
 								<= Weight_gross_labeler* $mol_labeler
 									title \Брутто (кг)
 									Content <= Weight_gross_content* $mol_paragraph
@@ -70,23 +85,14 @@ $scale_dash $mol_list
 									Content <= Cargo_type_content* $mol_paragraph
 										title <= act_cargoType*? \
 								<= Cargo_category_labeler* $mol_labeler
-									title \Категория
+									title \Категория груза
 									Content <= Cargo_category_content* $mol_paragraph
 										title <= act_cargoCategory*? \
 								<= Date_enter_labeler* $mol_labeler
 									title \Дата и время въезда
 									Content <= Date_enter_content* $mol_paragraph
 										title <= act_enteredMoment*? \
-								<= Act_options_pop* $mol_pick
-									align \bottom_right
-									hint <= act_options_out \Создать запись на выезд для
-									trigger_content /
-										<= Options_trigger_icon $mol_icon_menu
-									bubble_content /
-										<= Options_content* $mol_list rows /
-											<= Menu_item_copy* $mol_button_minor
-												click? <=> open_exit_form_current*? null
-												sub /
-													<= act_options_out \Создать запись на выезд для
-
+								<= Act_options_pop* $scale_dash_table_pick
+									open_exit_form_current? <=> open_exit_form_current*? null
+									
 

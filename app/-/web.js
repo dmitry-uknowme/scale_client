@@ -6708,6 +6708,99 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_pick extends $mol_pop {
+        event() {
+            return {
+                ...super.event(),
+                keydown: (event) => this.keydown(event)
+            };
+        }
+        Anchor() {
+            return this.Trigger();
+        }
+        keydown(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        trigger_enabled() {
+            return true;
+        }
+        trigger_content() {
+            return [
+                this.title()
+            ];
+        }
+        hint() {
+            return "";
+        }
+        Trigger() {
+            const obj = new this.$.$mol_check();
+            obj.minimal_width = () => 40;
+            obj.minimal_height = () => 40;
+            obj.enabled = () => this.trigger_enabled();
+            obj.checked = (val) => this.showed(val);
+            obj.sub = () => this.trigger_content();
+            obj.hint = () => this.hint();
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $mol_pick.prototype, "keydown", null);
+    __decorate([
+        $mol_mem
+    ], $mol_pick.prototype, "Trigger", null);
+    $.$mol_pick = $mol_pick;
+})($ || ($ = {}));
+//mol/pick/-view.tree/pick.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/pick/pick.view.css", "[mol_pick_trigger] {\n\talign-items: center;\n\tflex-grow: 1;\n}\n");
+})($ || ($ = {}));
+//mol/pick/-css/pick.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_pick extends $.$mol_pick {
+            keydown(event) {
+                if (!this.trigger_enabled())
+                    return;
+                if (event.defaultPrevented)
+                    return;
+                if (event.keyCode === $mol_keyboard_code.escape) {
+                    if (!this.showed())
+                        return;
+                    event.preventDefault();
+                    this.showed(false);
+                }
+            }
+        }
+        $$.$mol_pick = $mol_pick;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/pick/pick.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_menu extends $mol_icon {
+        path() {
+            return "M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z";
+        }
+    }
+    $.$mol_icon_menu = $mol_icon_menu;
+})($ || ($ = {}));
+//mol/icon/menu/-view.tree/menu.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     let $scale_modelActStatus;
     (function ($scale_modelActStatus) {
         $scale_modelActStatus["ACTIVE"] = "STATUS_ACTIVE";
@@ -7618,99 +7711,64 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_icon_menu extends $mol_icon {
-        path() {
-            return "M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z";
+    class $scale_dash_table_pick extends $mol_pick {
+        align() {
+            return "bottom_right";
         }
-    }
-    $.$mol_icon_menu = $mol_icon_menu;
-})($ || ($ = {}));
-//mol/icon/menu/-view.tree/menu.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    class $mol_pick extends $mol_pop {
-        event() {
-            return {
-                ...super.event(),
-                keydown: (event) => this.keydown(event)
-            };
-        }
-        Anchor() {
-            return this.Trigger();
-        }
-        keydown(event) {
-            if (event !== undefined)
-                return event;
-            return null;
-        }
-        trigger_enabled() {
-            return true;
+        hint() {
+            return this.act_options_out();
         }
         trigger_content() {
             return [
-                this.title()
+                this.Options_trigger_icon()
             ];
         }
-        hint() {
-            return "";
+        bubble_content(id) {
+            return [
+                this.Options_content(id)
+            ];
         }
-        Trigger() {
-            const obj = new this.$.$mol_check();
-            obj.minimal_width = () => 40;
-            obj.minimal_height = () => 40;
-            obj.enabled = () => this.trigger_enabled();
-            obj.checked = (val) => this.showed(val);
-            obj.sub = () => this.trigger_content();
-            obj.hint = () => this.hint();
+        act_options_out() {
+            return "Создать запись на выезд для";
+        }
+        Options_trigger_icon() {
+            const obj = new this.$.$mol_icon_menu();
+            return obj;
+        }
+        open_exit_form_current(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
+        Menu_item_copy(id) {
+            const obj = new this.$.$mol_button_minor();
+            obj.click = (next) => this.open_exit_form_current(id, next);
+            obj.sub = () => [
+                this.act_options_out()
+            ];
+            return obj;
+        }
+        Options_content(id) {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => [
+                this.Menu_item_copy(id)
+            ];
             return obj;
         }
     }
     __decorate([
         $mol_mem
-    ], $mol_pick.prototype, "keydown", null);
+    ], $scale_dash_table_pick.prototype, "Options_trigger_icon", null);
     __decorate([
-        $mol_mem
-    ], $mol_pick.prototype, "Trigger", null);
-    $.$mol_pick = $mol_pick;
-})($ || ($ = {}));
-//mol/pick/-view.tree/pick.view.tree.ts
-;
-"use strict";
-var $;
-(function ($) {
-    $mol_style_attach("mol/pick/pick.view.css", "[mol_pick_trigger] {\n\talign-items: center;\n\tflex-grow: 1;\n}\n");
-})($ || ($ = {}));
-//mol/pick/-css/pick.view.css.ts
-;
-"use strict";
-var $;
-(function ($) {
-    var $$;
-    (function ($$) {
-        class $mol_pick extends $.$mol_pick {
-            keydown(event) {
-                if (!this.trigger_enabled())
-                    return;
-                if (event.defaultPrevented)
-                    return;
-                if (event.keyCode === $mol_keyboard_code.escape) {
-                    if (!this.showed())
-                        return;
-                    event.preventDefault();
-                    this.showed(false);
-                }
-            }
-        }
-        $$.$mol_pick = $mol_pick;
-    })($$ = $.$$ || ($.$$ = {}));
-})($ || ($ = {}));
-//mol/pick/pick.view.ts
-;
-"use strict";
-var $;
-(function ($) {
+        $mol_mem_key
+    ], $scale_dash_table_pick.prototype, "open_exit_form_current", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_dash_table_pick.prototype, "Menu_item_copy", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_dash_table_pick.prototype, "Options_content", null);
+    $.$scale_dash_table_pick = $scale_dash_table_pick;
     class $scale_dash extends $mol_list {
         open_entry_gate() {
             return this.api().gateOpenEntry();
@@ -7912,6 +7970,22 @@ var $;
             obj.Content = () => this.Transporter_content(id);
             return obj;
         }
+        act_payer(id, next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Payer_content(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.act_payer(id);
+            return obj;
+        }
+        Payer_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Оператор";
+            obj.Content = () => this.Payer_content(id);
+            return obj;
+        }
         act_weightGross(id, next) {
             if (next !== undefined)
                 return next;
@@ -7956,7 +8030,7 @@ var $;
         }
         Cargo_category_labeler(id) {
             const obj = new this.$.$mol_labeler();
-            obj.title = () => "Категория";
+            obj.title = () => "Категория груза";
             obj.Content = () => this.Cargo_category_content(id);
             return obj;
         }
@@ -7976,43 +8050,14 @@ var $;
             obj.Content = () => this.Date_enter_content(id);
             return obj;
         }
-        act_options_out() {
-            return "Создать запись на выезд для";
-        }
-        Options_trigger_icon() {
-            const obj = new this.$.$mol_icon_menu();
-            return obj;
-        }
         open_exit_form_current(id, next) {
             if (next !== undefined)
                 return next;
             return null;
         }
-        Menu_item_copy(id) {
-            const obj = new this.$.$mol_button_minor();
-            obj.click = (next) => this.open_exit_form_current(id, next);
-            obj.sub = () => [
-                this.act_options_out()
-            ];
-            return obj;
-        }
-        Options_content(id) {
-            const obj = new this.$.$mol_list();
-            obj.rows = () => [
-                this.Menu_item_copy(id)
-            ];
-            return obj;
-        }
         Act_options_pop(id) {
-            const obj = new this.$.$mol_pick();
-            obj.align = () => "bottom_right";
-            obj.hint = () => this.act_options_out();
-            obj.trigger_content = () => [
-                this.Options_trigger_icon()
-            ];
-            obj.bubble_content = () => [
-                this.Options_content(id)
-            ];
+            const obj = new this.$.$scale_dash_table_pick();
+            obj.open_exit_form_current = (next) => this.open_exit_form_current(id, next);
             return obj;
         }
         Act_row(id) {
@@ -8022,6 +8067,7 @@ var $;
             obj.sub = () => [
                 this.Number_labeler(id),
                 this.Transporter_labeler(id),
+                this.Payer_labeler(id),
                 this.Weight_gross_labeler(id),
                 this.Cargo_type_labeler(id),
                 this.Cargo_category_labeler(id),
@@ -8142,6 +8188,15 @@ var $;
     ], $scale_dash.prototype, "Transporter_labeler", null);
     __decorate([
         $mol_mem_key
+    ], $scale_dash.prototype, "act_payer", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_dash.prototype, "Payer_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_dash.prototype, "Payer_labeler", null);
+    __decorate([
+        $mol_mem_key
     ], $scale_dash.prototype, "act_weightGross", null);
     __decorate([
         $mol_mem_key
@@ -8177,17 +8232,8 @@ var $;
         $mol_mem_key
     ], $scale_dash.prototype, "Date_enter_labeler", null);
     __decorate([
-        $mol_mem
-    ], $scale_dash.prototype, "Options_trigger_icon", null);
-    __decorate([
         $mol_mem_key
     ], $scale_dash.prototype, "open_exit_form_current", null);
-    __decorate([
-        $mol_mem_key
-    ], $scale_dash.prototype, "Menu_item_copy", null);
-    __decorate([
-        $mol_mem_key
-    ], $scale_dash.prototype, "Options_content", null);
     __decorate([
         $mol_mem_key
     ], $scale_dash.prototype, "Act_options_pop", null);
@@ -8274,6 +8320,9 @@ var $;
             }
             act_transporter(obj) {
                 return obj.transporter.title;
+            }
+            act_payer(obj) {
+                return obj.payer.title;
             }
             act_weightGross(obj) {
                 return obj.weight.gross.toString();

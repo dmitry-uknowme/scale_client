@@ -1,4 +1,114 @@
 namespace $ {
+	export class $scale_dash_table_pick extends $mol_pick {
+		
+		/**
+		 * ```tree
+		 * align \bottom_right
+		 * ```
+		 */
+		align() {
+			return "bottom_right"
+		}
+		
+		/**
+		 * ```tree
+		 * hint <= act_options_out
+		 * ```
+		 */
+		hint() {
+			return this.act_options_out()
+		}
+		
+		/**
+		 * ```tree
+		 * trigger_content / <= Options_trigger_icon
+		 * ```
+		 */
+		trigger_content() {
+			return [
+				this.Options_trigger_icon()
+			] as readonly any[]
+		}
+		
+		/**
+		 * ```tree
+		 * bubble_content* / <= Options_content*
+		 * ```
+		 */
+		bubble_content(id: any) {
+			return [
+				this.Options_content(id)
+			] as readonly any[]
+		}
+		
+		/**
+		 * ```tree
+		 * act_options_out \Создать запись на выезд для
+		 * ```
+		 */
+		act_options_out() {
+			return "Создать запись на выезд для"
+		}
+		
+		/**
+		 * ```tree
+		 * Options_trigger_icon $mol_icon_menu
+		 * ```
+		 */
+		@ $mol_mem
+		Options_trigger_icon() {
+			const obj = new this.$.$mol_icon_menu()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * open_exit_form_current*? null
+		 * ```
+		 */
+		@ $mol_mem_key
+		open_exit_form_current(id: any, next?: any) {
+			if ( next !== undefined ) return next as never
+			return null as any
+		}
+		
+		/**
+		 * ```tree
+		 * Menu_item_copy* $mol_button_minor
+		 * 	click? <=> open_exit_form_current*?
+		 * 	sub / <= act_options_out
+		 * ```
+		 */
+		@ $mol_mem_key
+		Menu_item_copy(id: any) {
+			const obj = new this.$.$mol_button_minor()
+			
+			obj.click = (next?: any) => this.open_exit_form_current(id, next)
+			obj.sub = () => [
+				this.act_options_out()
+			] as readonly any[]
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Options_content* $mol_list rows / <= Menu_item_copy*
+		 * ```
+		 */
+		@ $mol_mem_key
+		Options_content(id: any) {
+			const obj = new this.$.$mol_list()
+			
+			obj.rows = () => [
+				this.Menu_item_copy(id)
+			] as readonly any[]
+			
+			return obj
+		}
+	}
+	
 	export class $scale_dash extends $mol_list {
 		
 		/**
@@ -521,6 +631,48 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * act_payer*? \
+		 * ```
+		 */
+		@ $mol_mem_key
+		act_payer(id: any, next?: any) {
+			if ( next !== undefined ) return next as never
+			return ""
+		}
+		
+		/**
+		 * ```tree
+		 * Payer_content* $mol_paragraph title <= act_payer*?
+		 * ```
+		 */
+		@ $mol_mem_key
+		Payer_content(id: any) {
+			const obj = new this.$.$mol_paragraph()
+			
+			obj.title = () => this.act_payer(id)
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Payer_labeler* $mol_labeler
+		 * 	title \Оператор
+		 * 	Content <= Payer_content*
+		 * ```
+		 */
+		@ $mol_mem_key
+		Payer_labeler(id: any) {
+			const obj = new this.$.$mol_labeler()
+			
+			obj.title = () => "Оператор"
+			obj.Content = () => this.Payer_content(id)
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * act_weightGross*? \
 		 * ```
 		 */
@@ -631,7 +783,7 @@ namespace $ {
 		/**
 		 * ```tree
 		 * Cargo_category_labeler* $mol_labeler
-		 * 	title \Категория
+		 * 	title \Категория груза
 		 * 	Content <= Cargo_category_content*
 		 * ```
 		 */
@@ -639,7 +791,7 @@ namespace $ {
 		Cargo_category_labeler(id: any) {
 			const obj = new this.$.$mol_labeler()
 			
-			obj.title = () => "Категория"
+			obj.title = () => "Категория груза"
 			obj.Content = () => this.Cargo_category_content(id)
 			
 			return obj
@@ -689,27 +841,6 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * act_options_out \Создать запись на выезд для
-		 * ```
-		 */
-		act_options_out() {
-			return "Создать запись на выезд для"
-		}
-		
-		/**
-		 * ```tree
-		 * Options_trigger_icon $mol_icon_menu
-		 * ```
-		 */
-		@ $mol_mem
-		Options_trigger_icon() {
-			const obj = new this.$.$mol_icon_menu()
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
 		 * open_exit_form_current*? null
 		 * ```
 		 */
@@ -721,60 +852,14 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Menu_item_copy* $mol_button_minor
-		 * 	click? <=> open_exit_form_current*?
-		 * 	sub / <= act_options_out
-		 * ```
-		 */
-		@ $mol_mem_key
-		Menu_item_copy(id: any) {
-			const obj = new this.$.$mol_button_minor()
-			
-			obj.click = (next?: any) => this.open_exit_form_current(id, next)
-			obj.sub = () => [
-				this.act_options_out()
-			] as readonly any[]
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Options_content* $mol_list rows / <= Menu_item_copy*
-		 * ```
-		 */
-		@ $mol_mem_key
-		Options_content(id: any) {
-			const obj = new this.$.$mol_list()
-			
-			obj.rows = () => [
-				this.Menu_item_copy(id)
-			] as readonly any[]
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Act_options_pop* $mol_pick
-		 * 	align \bottom_right
-		 * 	hint <= act_options_out
-		 * 	trigger_content / <= Options_trigger_icon
-		 * 	bubble_content / <= Options_content*
+		 * Act_options_pop* $scale_dash_table_pick open_exit_form_current? <=> open_exit_form_current*?
 		 * ```
 		 */
 		@ $mol_mem_key
 		Act_options_pop(id: any) {
-			const obj = new this.$.$mol_pick()
+			const obj = new this.$.$scale_dash_table_pick()
 			
-			obj.align = () => "bottom_right"
-			obj.hint = () => this.act_options_out()
-			obj.trigger_content = () => [
-				this.Options_trigger_icon()
-			] as readonly any[]
-			obj.bubble_content = () => [
-				this.Options_content(id)
-			] as readonly any[]
+			obj.open_exit_form_current = (next?: any) => this.open_exit_form_current(id, next)
 			
 			return obj
 		}
@@ -787,6 +872,7 @@ namespace $ {
 		 * 	sub /
 		 * 		<= Number_labeler*
 		 * 		<= Transporter_labeler*
+		 * 		<= Payer_labeler*
 		 * 		<= Weight_gross_labeler*
 		 * 		<= Cargo_type_labeler*
 		 * 		<= Cargo_category_labeler*
@@ -803,6 +889,7 @@ namespace $ {
 			obj.sub = () => [
 				this.Number_labeler(id),
 				this.Transporter_labeler(id),
+				this.Payer_labeler(id),
 				this.Weight_gross_labeler(id),
 				this.Cargo_type_labeler(id),
 				this.Cargo_category_labeler(id),

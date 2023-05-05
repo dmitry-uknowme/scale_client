@@ -59,6 +59,10 @@ namespace $.$$ {
       return obj.transporter.title;
     }
 
+    act_payer(obj: $scale_modelAct) {
+      return obj.payer.title;
+    }
+
     act_weightGross(obj: $scale_modelAct) {
       return obj.weight.gross.toString();
     }
