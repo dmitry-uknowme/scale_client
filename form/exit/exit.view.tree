@@ -20,7 +20,7 @@ $scale_form_exit $mol_form
 	buttons /
 		<= Signup $mol_button_major
 			title \Создать запись на выезд
-			click?val <=> signup?val null
+			click?val <=> exit_submit?val null
 			enabled true
 		<= Result $mol_status
 			message <= result?val \

@@ -4,22 +4,33 @@ namespace $.$$ {
     open_enter_form() {
       $mol_state_arg.dict({ "": "dash", dash: "form_enter" });
     }
+
     @$mol_action
-    open_exit_form() {
-      $mol_state_arg.dict({ "": "dash", dash: "form_exit" });
+    open_exit_form(obj: $scale_modelAct) {
+      $mol_state_arg.dict({
+        "": "dash",
+        dash: "form_exit",
+      });
+    }
+
+    @$mol_action
+    open_exit_form_current(obj: $scale_modelAct) {
+      $mol_state_arg.dict({
+        "": "dash",
+        dash: "form_exit",
+        form_data: JSON.stringify({ act_id: obj.publicId }),
+      });
     }
 
     @$mol_mem
     act_list(reset?: "reset") {
-      console.log(
-        "listttt",
-        this.api()
-          .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
-          .map((obj) => this.Act_row(obj))
-      );
       return this.api()
         .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
         .map((obj) => this.Act_row(obj));
+    }
+
+    act_id(obj: $scale_modelAct) {
+      return obj.publicId;
     }
 
     act_autoNumber(obj: $scale_modelAct) {

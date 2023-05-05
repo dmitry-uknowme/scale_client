@@ -61,7 +61,6 @@ namespace $.$$ {
         weight: parseFloat(this.weight()),
         apiClientSecretKey: "123456",
       });
-
       this.dash().act_list("reset");
       this.dash().render("reset");
       $mol_state_arg.dict({ "": "dash" });
@@ -71,5 +70,14 @@ namespace $.$$ {
     count() {
       return this.dash().act_list().length;
     }
+
+    @$mol_mem
+    auto_number(next?: any): string {
+      return next || this.autoNumber_IN();
+    }
+
+    // auto() {
+    //   this.auto_number(this.autoNumber_IN());
+    // }
   }
 }

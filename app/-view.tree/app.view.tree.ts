@@ -32,12 +32,21 @@ namespace $ {
 			return {
 				dash: this.Dash(),
 				stats: this.Stats()
-			} as Record< string, any >
+			}
 		}
 		
 		/**
 		 * ```tree
-		 * Centrifuge $scale_centrifuge
+		 * autoNumber_IN
+		 * ```
+		 */
+		autoNumber_IN() {
+			return this.Centrifuge().autoNumber_channel_IN()
+		}
+		
+		/**
+		 * ```tree
+		 * Centrifuge $scale_centrifuge autoNumber_channel_IN => autoNumber_IN
 		 * ```
 		 */
 		@ $mol_mem
@@ -190,7 +199,7 @@ namespace $ {
 			obj.spreads = () => ({
 				form_enter: this.Form_enter(),
 				form_exit: this.Form_exit()
-			} as Record< string, any >)
+			})
 			
 			return obj
 		}

@@ -3,7 +3,47 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * open_entry_gate
+		 * ```
+		 */
+		open_entry_gate() {
+			return this.api().gateOpenEntry()
+		}
+		
+		/**
+		 * ```tree
+		 * close_entry_gate
+		 * ```
+		 */
+		close_entry_gate() {
+			return this.api().gateCloseEntry()
+		}
+		
+		/**
+		 * ```tree
+		 * open_exit_gate
+		 * ```
+		 */
+		open_exit_gate() {
+			return this.api().gateOpenExit()
+		}
+		
+		/**
+		 * ```tree
+		 * close_exit_gate
+		 * ```
+		 */
+		close_exit_gate() {
+			return this.api().gateCloseExit()
+		}
+		
+		/**
+		 * ```tree
 		 * api $scale_api
+		 * 	gateOpenEntry => open_entry_gate
+		 * 	gateCloseEntry => close_entry_gate
+		 * 	gateOpenExit => open_exit_gate
+		 * 	gateCloseExit => close_exit_gate
 		 * ```
 		 */
 		@ $mol_mem
@@ -25,6 +65,44 @@ namespace $ {
 				this.Top_row(),
 				this.Bottom_row()
 			] as readonly any[]
+		}
+		
+		/**
+		 * ```tree
+		 * Gate_entry $scale_dash_gate
+		 * 	title \Шлагбаум №1
+		 * 	open_submit <= open_entry_gate
+		 * 	close_submit <= close_entry_gate
+		 * ```
+		 */
+		@ $mol_mem
+		Gate_entry() {
+			const obj = new this.$.$scale_dash_gate()
+			
+			obj.title = () => "Шлагбаум №1"
+			obj.open_submit = () => this.open_entry_gate()
+			obj.close_submit = () => this.close_entry_gate()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Gate_exit $scale_dash_gate
+		 * 	title \Шлагбаум №2
+		 * 	open_submit <= open_entry_gate
+		 * 	close_submit <= close_entry_gate
+		 * ```
+		 */
+		@ $mol_mem
+		Gate_exit() {
+			const obj = new this.$.$scale_dash_gate()
+			
+			obj.title = () => "Шлагбаум №2"
+			obj.open_submit = () => this.open_entry_gate()
+			obj.close_submit = () => this.close_entry_gate()
+			
+			return obj
 		}
 		
 		/**
@@ -85,11 +163,31 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Btn_row $mol_row sub /
+		 * 	<= Enter_button
+		 * 	<= Exit_button
+		 * ```
+		 */
+		@ $mol_mem
+		Btn_row() {
+			const obj = new this.$.$mol_row()
+			
+			obj.sub = () => [
+				this.Enter_button(),
+				this.Exit_button()
+			] as readonly any[]
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * Control_form $mol_form
 		 * 	form_fields /
 		 * 	buttons /
-		 * 		<= Enter_button
-		 * 		<= Exit_button
+		 * 		<= Gate_entry
+		 * 		<= Gate_exit
+		 * 		<= Btn_row
 		 * ```
 		 */
 		@ $mol_mem
@@ -99,8 +197,9 @@ namespace $ {
 			obj.form_fields = () => [
 			] as readonly any[]
 			obj.buttons = () => [
-				this.Enter_button(),
-				this.Exit_button()
+				this.Gate_entry(),
+				this.Gate_exit(),
+				this.Btn_row()
 			] as readonly any[]
 			
 			return obj
@@ -121,34 +220,6 @@ namespace $ {
 			obj.content = () => [
 				this.Control_form()
 			] as readonly any[]
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Count_text $mol_paragraph title \Количество:
-		 * ```
-		 */
-		@ $mol_mem
-		Count_text() {
-			const obj = new this.$.$mol_paragraph()
-			
-			obj.title = () => "Количество: "
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Count $mol_paragraph title <= count
-		 * ```
-		 */
-		@ $mol_mem
-		Count() {
-			const obj = new this.$.$mol_paragraph()
-			
-			obj.title = () => this.count()
 			
 			return obj
 		}
@@ -223,8 +294,6 @@ namespace $ {
 		 * ```tree
 		 * Top_row $mol_row sub /
 		 * 	<= Control
-		 * 	<= Count_text
-		 * 	<= Count
 		 * 	<= Camera_list
 		 * ```
 		 */
@@ -234,8 +303,6 @@ namespace $ {
 			
 			obj.sub = () => [
 				this.Control(),
-				this.Count_text(),
-				this.Count(),
 				this.Camera_list()
 			] as readonly any[]
 			
@@ -526,8 +593,19 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * open_exit_form_current*? null
+		 * ```
+		 */
+		@ $mol_mem_key
+		open_exit_form_current(id: any, next?: any) {
+			if ( next !== undefined ) return next as never
+			return null as any
+		}
+		
+		/**
+		 * ```tree
 		 * Menu_item_copy* $mol_button_minor
-		 * 	click? <=> open_exit_form?
+		 * 	click? <=> open_exit_form_current*?
 		 * 	sub / <= act_options_out
 		 * ```
 		 */
@@ -535,7 +613,7 @@ namespace $ {
 		Menu_item_copy(id: any) {
 			const obj = new this.$.$mol_button_minor()
 			
-			obj.click = (next?: any) => this.open_exit_form(next)
+			obj.click = (next?: any) => this.open_exit_form_current(id, next)
 			obj.sub = () => [
 				this.act_options_out()
 			] as readonly any[]

@@ -53,6 +53,50 @@ namespace $ {
       return response.data;
     }
 
+    gateOpenEntry() {
+      const BASE_URL = $scale_env_BASE_URL;
+      const response = $mol_fetch.json(`${BASE_URL}/openEntryGate`, {
+        method: "GET",
+      }) as $scale_apiResponse;
+      if (response.status !== "success") {
+        throw new Error(`Response failed with status ${response.status}`);
+      }
+      return response.data;
+    }
+
+    gateCloseEntry() {
+      const BASE_URL = $scale_env_BASE_URL;
+      const response = $mol_fetch.json(`${BASE_URL}/closeEntryGate`, {
+        method: "GET",
+      }) as $scale_apiResponse;
+      if (response.status !== "success") {
+        throw new Error(`Response failed with status ${response.status}`);
+      }
+      return response.data;
+    }
+
+    gateOpenExit() {
+      const BASE_URL = $scale_env_BASE_URL;
+      const response = $mol_fetch.json(`${BASE_URL}/openExitGate`, {
+        method: "GET",
+      }) as $scale_apiResponse;
+      if (response.status !== "success") {
+        throw new Error(`Response failed with status ${response.status}`);
+      }
+      return response.data;
+    }
+
+    gateCloseExit() {
+      const BASE_URL = $scale_env_BASE_URL;
+      const response = $mol_fetch.json(`${BASE_URL}/closeExitGate`, {
+        method: "GET",
+      }) as $scale_apiResponse;
+      if (response.status !== "success") {
+        throw new Error(`Response failed with status ${response.status}`);
+      }
+      return response.data;
+    }
+
     getOrganizations(
       filter: {
         status?: $scale_modelOrganizationStatus;

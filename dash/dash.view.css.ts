@@ -9,5 +9,9 @@ namespace $.$$ {
     // Table_rows: {r},
     Number_labeler: { padding: 0 },
     // Table_row_content: { padding: $mol_gap.text },
+    Control: { width: "60%" },
+    Camera_list: { width: "40%" },
+    Top_row: { flexWrap: "nowrap" },
+    Btn_row: { padding: 0, marginTop: "1rem" },
   });
 }

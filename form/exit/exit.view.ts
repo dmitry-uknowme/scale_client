@@ -29,5 +29,12 @@ namespace $.$$ {
       $mol_state_arg.dict({ "": "dash" });
       new $mol_after_timeout(200, () => window.location.reload());
     }
+
+    auto() {
+      const initialFormData = JSON.parse($mol_state_arg.value("form_data"));
+      if (initialFormData?.act_id) {
+        this.act(initialFormData?.act_id);
+      }
+    }
   }
 }

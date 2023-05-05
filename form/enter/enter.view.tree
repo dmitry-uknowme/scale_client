@@ -8,12 +8,18 @@ $scale_form_enter $mol_form
 			title <= count
 		<= Centrifuge $scale_centrifuge
 			weight_channel => weight
+			autoNumber_channel_IN => autoNumber_IN 
 		<= Names $mol_form_group sub /
 			<= Weight_field $mol_form_field
 				name \Текущий вес
 				bid <= weight_bid \
 				Content <= Weight_control $mol_paragraph
 					title <= weight_formatted
+			<= Number_channel_field $mol_form_field
+				name \Распознанный гос. номер
+				bid <= number_channel_bid \
+				Content <= Number_channel_control $mol_paragraph
+					title <= autoNumber_IN 
 			<= Number_field $mol_form_field
 				name \Гос. номер
 				bid <= number_bid \

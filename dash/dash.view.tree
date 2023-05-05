@@ -1,5 +1,9 @@
 $scale_dash $mol_list
 	api $scale_api
+		gateOpenEntry => open_entry_gate
+		gateCloseEntry => close_entry_gate
+		gateOpenExit => open_exit_gate
+		gateCloseExit => close_exit_gate
 	rows /
 		<= Top_row $mol_row sub /
 			<= Control $mol_section
@@ -8,16 +12,21 @@ $scale_dash $mol_list
 					<= Control_form $mol_form
 						form_fields /
 						buttons /
-							<= Enter_button $mol_button_major
-								title \Создать запись на въезд
-								click?val <=> open_enter_form?val null
-							<= Exit_button $mol_button_major
-								title \Создать запись на выезд
-								click?val <=> open_exit_form?val null
-			<= Count_text $mol_paragraph
-				title \Количество: 
-			<= Count $mol_paragraph
-				title <= count
+							<= Gate_entry $scale_dash_gate
+								title \Шлагбаум №1
+								open_submit <= open_entry_gate
+								close_submit <= close_entry_gate
+							<= Gate_exit $scale_dash_gate
+								title \Шлагбаум №2
+								open_submit <= open_entry_gate
+								close_submit <= close_entry_gate
+							<= Btn_row $mol_row sub /
+								<= Enter_button $mol_button_major
+									title \Создать запись на въезд
+									click?val <=> open_enter_form?val null
+								<= Exit_button $mol_button_major
+									title \Создать запись на выезд
+									click?val <=> open_exit_form?val null
 			<= Camera_list $mol_section
 				title \Камеры
 				content /
@@ -67,7 +76,7 @@ $scale_dash $mol_list
 									bubble_content /
 										<= Options_content* $mol_list rows /
 											<= Menu_item_copy* $mol_button_minor
-												click? <=> open_exit_form? null
+												click? <=> open_exit_form_current*? null
 												sub /
 													<= act_options_out \Создать запись на выезд для
 

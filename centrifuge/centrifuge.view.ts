@@ -18,23 +18,12 @@ namespace $.$$ {
     }
 
     @$mol_mem
-    autoNumber_channel(
-      next: { IN: string | null; OUT: string | null } = { IN: null, OUT: null }
-    ) {
+    autoNumber_channel_IN(next?: string) {
       return next;
     }
 
     @$mol_mem
-    autoNumber_channelIN(
-      next: { IN: string | null; OUT: string | null } = { IN: null, OUT: null }
-    ) {
-      return next;
-    }
-
-    @$mol_mem
-    autoNumber_channelOUT(
-      next: { IN: string | null; OUT: string | null } = { IN: null, OUT: null }
-    ) {
+    autoNumber_channel_OUT(next?: string) {
       return next;
     }
 
@@ -47,10 +36,11 @@ namespace $.$$ {
       weightChannel.subscribe();
       const autoNumberChannel = this.client().newSubscription("autoNumber");
       autoNumberChannel.on("publication", (ctx) => {
+        console.log("autoNumber sub", ctx.data);
         if (ctx.data.direction === "IN") {
-          this.autoNumber_channelIN(ctx.data.value);
+          this.autoNumber_channel_IN(ctx.data.value);
         } else if (ctx.data.direction === "OUT") {
-          this.autoNumber_channelOUT(ctx.data.value);
+          this.autoNumber_channel_OUT(ctx.data.value);
         }
       });
       autoNumberChannel.subscribe();
