@@ -3,6 +3,15 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Placeholder null
+		 * ```
+		 */
+		Placeholder() {
+			return null as any
+		}
+		
+		/**
+		 * ```tree
 		 * plugins / <= Theme
 		 * ```
 		 */

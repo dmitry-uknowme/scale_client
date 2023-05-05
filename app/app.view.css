@@ -12,7 +12,24 @@
 	padding: 0;
 }
 
+[scale_stats_filter_form_foot] {
+	display: none;
+}
+
 [scale_stats_filter_form_body] [mol_form_field] {
 	height: fit-content;
 	flex:initial
+}
+
+._row_expanded {
+	width: 100%;
+	flex-direction: column;
+}
+
+._row_expanded [scale_dash_control], ._row_expanded [scale_dash_camera_list] {
+	width: 100%;
+}
+
+._row_expanded [scale_dash_btn_row] {
+	margin-top: 0;
 }

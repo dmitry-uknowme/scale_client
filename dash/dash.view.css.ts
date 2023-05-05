@@ -9,9 +9,14 @@ namespace $.$$ {
     // Table_rows: {r},
     Number_labeler: { padding: 0 },
     // Table_row_content: { padding: $mol_gap.text },
-    Control: { width: "60%" },
-    Camera_list: { width: "40%" },
-    Top_row: { flexWrap: "nowrap" },
+    Control: { width: "50%" },
+    Camera_list: { width: "50%" },
+    Top_row_tools: {
+      display: "flex",
+      justifyContent: "flex-end",
+      padding: "0 1rem",
+    },
+    Top_row_body: { display: "flex", flexWrap: "nowrap" },
     Btn_row: { padding: 0, marginTop: "1rem" },
   });
 }

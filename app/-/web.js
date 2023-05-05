@@ -6851,6 +6851,42 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_icon_pin extends $mol_icon {
+        path() {
+            return "M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12Z";
+        }
+    }
+    $.$mol_icon_pin = $mol_icon_pin;
+})($ || ($ = {}));
+//mol/icon/pin/-view.tree/pin.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_pin_outline extends $mol_icon {
+        path() {
+            return "M16,12V4H17V2H7V4H8V12L6,14V16H11.2V22H12.8V16H18V14L16,12M8.8,14L10,12.8V4H14V12.8L15.2,14H8.8Z";
+        }
+    }
+    $.$mol_icon_pin_outline = $mol_icon_pin_outline;
+})($ || ($ = {}));
+//mol/icon/pin/outline/-view.tree/outline.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_icon_arrow_expand extends $mol_icon {
+        path() {
+            return "M10,21V19H6.41L10.91,14.5L9.5,13.09L5,17.59V14H3V21H10M14.5,10.91L19,6.41V10H21V3H14V5H17.59L13.09,9.5L14.5,10.91Z";
+        }
+    }
+    $.$mol_icon_arrow_expand = $mol_icon_arrow_expand;
+})($ || ($ = {}));
+//mol/icon/arrow/expand/-view.tree/expand.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_chevron extends $mol_icon {
         path() {
             return "M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z";
@@ -7363,121 +7399,221 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $mol_image extends $mol_view {
+    class $mol_video_player extends $mol_view {
         dom_name() {
-            return "img";
+            return "video";
         }
-        field() {
-            return {
-                ...super.field(),
-                src: this.uri(),
-                alt: this.title(),
-                loading: this.loading(),
-                decoding: this.decoding(),
-                crossOrigin: this.cors()
-            };
+        playing(val) {
+            if (val !== undefined)
+                return val;
+            return false;
+        }
+        volume(val) {
+            if (val !== undefined)
+                return val;
+            return 0;
+        }
+        time(val) {
+            if (val !== undefined)
+                return val;
+            return 0;
+        }
+        duration() {
+            return 0;
         }
         attr() {
             return {
-                ...super.attr(),
-                width: this.natural_width(),
-                height: this.natural_height()
+                src: this.uri(),
+                controls: this.controls(),
+                autoplay: this.autoplay(),
+                loop: this.loop(),
+                poster: this.poster()
             };
         }
         event() {
             return {
-                load: (next) => this.load(next)
+                volumechange: (event) => this.revolume(event),
+                timeupdate: (event) => this.retime(event),
+                durationchange: (event) => this.redurate(event),
+                playing: (event) => this.play_started(event),
+                play: (event) => this.play(event),
+                pause: (event) => this.pause(event)
             };
-        }
-        minimal_width() {
-            return 16;
-        }
-        minimal_height() {
-            return 16;
         }
         uri() {
             return "";
         }
-        loading() {
-            return "eager";
+        controls() {
+            return true;
         }
-        decoding() {
-            return "async";
+        autoplay() {
+            return true;
         }
-        cors() {
+        loop() {
+            return false;
+        }
+        poster() {
+            return "";
+        }
+        revolume(event) {
+            if (event !== undefined)
+                return event;
             return null;
         }
-        natural_width(next) {
-            if (next !== undefined)
-                return next;
-            return 0;
+        retime(event) {
+            if (event !== undefined)
+                return event;
+            return null;
         }
-        natural_height(next) {
-            if (next !== undefined)
-                return next;
-            return 0;
+        redurate(event) {
+            if (event !== undefined)
+                return event;
+            return null;
         }
-        load(next) {
-            if (next !== undefined)
-                return next;
+        play_started(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        play(event) {
+            if (event !== undefined)
+                return event;
+            return null;
+        }
+        pause(event) {
+            if (event !== undefined)
+                return event;
             return null;
         }
     }
     __decorate([
         $mol_mem
-    ], $mol_image.prototype, "natural_width", null);
+    ], $mol_video_player.prototype, "playing", null);
     __decorate([
         $mol_mem
-    ], $mol_image.prototype, "natural_height", null);
+    ], $mol_video_player.prototype, "volume", null);
     __decorate([
         $mol_mem
-    ], $mol_image.prototype, "load", null);
-    $.$mol_image = $mol_image;
+    ], $mol_video_player.prototype, "time", null);
+    __decorate([
+        $mol_mem
+    ], $mol_video_player.prototype, "revolume", null);
+    __decorate([
+        $mol_mem
+    ], $mol_video_player.prototype, "retime", null);
+    __decorate([
+        $mol_mem
+    ], $mol_video_player.prototype, "redurate", null);
+    __decorate([
+        $mol_mem
+    ], $mol_video_player.prototype, "play_started", null);
+    __decorate([
+        $mol_mem
+    ], $mol_video_player.prototype, "play", null);
+    __decorate([
+        $mol_mem
+    ], $mol_video_player.prototype, "pause", null);
+    $.$mol_video_player = $mol_video_player;
 })($ || ($ = {}));
-//mol/image/-view.tree/image.view.tree.ts
+//mol/video/player/-view.tree/player.view.tree.ts
 ;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("mol/image/image.view.css", "[mol_image] {\n\tborder-radius: var(--mol_gap_round);\n\toverflow: hidden;\n\tflex: 0 1 auto;\n\tmax-width: 100%;\n\tobject-fit: cover;\n\theight: fit-content;\n}\n");
+    $mol_style_attach("mol/video/player/player.view.css", "[mol_video_player] {\n\tflex: 1 1 auto;\n}\n");
 })($ || ($ = {}));
-//mol/image/-css/image.view.css.ts
+//mol/video/player/-css/player.view.css.ts
 ;
 "use strict";
 var $;
 (function ($) {
     var $$;
     (function ($$) {
-        class $mol_image extends $.$mol_image {
-            natural_width(next) {
-                const dom = this.dom_node();
-                if (dom.naturalWidth)
-                    return dom.naturalWidth;
-                const found = this.uri().match(/\bwidth=(\d+)/);
-                return found ? Number(found[1]) : null;
+        class $mol_video_player extends $.$mol_video_player {
+            dom_node() {
+                return super.dom_node();
             }
-            natural_height(next) {
-                const dom = this.dom_node();
-                if (dom.naturalHeight)
-                    return dom.naturalHeight;
-                const found = this.uri().match(/\bheight=(\d+)/);
-                return found ? Number(found[1]) : null;
+            volume(next) {
+                this.revolume();
+                if (next === undefined) {
+                    return this.dom_node().volume;
+                }
+                else {
+                    return this.dom_node().volume = Math.max(0, Math.min(next, 1));
+                }
             }
-            load() {
-                this.natural_width(null);
-                this.natural_height(null);
+            time(next) {
+                this.retime();
+                if (next === undefined) {
+                    return this.dom_node().currentTime;
+                }
+                else {
+                    return this.dom_node().currentTime = Math.max(0, Math.min(next, this.duration()));
+                }
+            }
+            duration() {
+                this.redurate();
+                return this.dom_node().duration;
+            }
+            playing(next) {
+                if (next === undefined) {
+                    return false;
+                }
+                else {
+                    if (next) {
+                        this.dom_node().play();
+                    }
+                    else {
+                        this.dom_node().pause();
+                    }
+                    return next;
+                }
+            }
+            play() {
+                this.playing(true);
+            }
+            pause() {
+                this.playing(false);
             }
         }
         __decorate([
             $mol_mem
-        ], $mol_image.prototype, "natural_width", null);
+        ], $mol_video_player.prototype, "volume", null);
         __decorate([
             $mol_mem
-        ], $mol_image.prototype, "natural_height", null);
-        $$.$mol_image = $mol_image;
+        ], $mol_video_player.prototype, "time", null);
+        __decorate([
+            $mol_mem
+        ], $mol_video_player.prototype, "duration", null);
+        __decorate([
+            $mol_mem
+        ], $mol_video_player.prototype, "playing", null);
+        $$.$mol_video_player = $mol_video_player;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
-//mol/image/image.view.ts
+//mol/video/player/player.view.ts
+;
+"use strict";
+var $;
+(function ($) {
+    class $mol_float extends $mol_view {
+        style() {
+            return {
+                ...super.style(),
+                minHeight: "auto"
+            };
+        }
+    }
+    $.$mol_float = $mol_float;
+})($ || ($ = {}));
+//mol/float/-view.tree/float.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/float/float.view.css", "[mol_float] {\n\tposition: sticky;\n\ttop: 0;\n\tleft: 0;\n\tz-index: var(--mol_layer_float);\n\topacity: 1;\n\ttransition: opacity .25s ease-in;\n\tdisplay: block;\n\tbackground: linear-gradient( var(--mol_theme_card), var(--mol_theme_card) ), var(--mol_theme_back);\n\tbox-shadow: 0 0 .5rem hsla(0,0%,0%,.25);\n}\n\n");
+})($ || ($ = {}));
+//mol/float/-css/float.view.css.ts
 ;
 "use strict";
 var $;
@@ -7598,6 +7734,42 @@ var $;
                 this.Bottom_row()
             ];
         }
+        Top_row_pin_icon() {
+            const obj = new this.$.$mol_icon_pin_outline();
+            return obj;
+        }
+        Top_row__pin() {
+            const obj = new this.$.$mol_button_minor();
+            obj.sub = () => [
+                this.Top_row_pin_icon()
+            ];
+            return obj;
+        }
+        expand_controls(val) {
+            if (val !== undefined)
+                return val;
+            return null;
+        }
+        Top_row_expand_icon() {
+            const obj = new this.$.$mol_icon_arrow_expand();
+            return obj;
+        }
+        Top_row_expand() {
+            const obj = new this.$.$mol_button_minor();
+            obj.click = (val) => this.expand_controls(val);
+            obj.sub = () => [
+                this.Top_row_expand_icon()
+            ];
+            return obj;
+        }
+        Top_row_tools() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => [
+                this.Top_row__pin(),
+                this.Top_row_expand()
+            ];
+            return obj;
+        }
         Gate_entry() {
             const obj = new this.$.$scale_dash_gate();
             obj.title = () => "Шлагбаум №1";
@@ -7660,14 +7832,17 @@ var $;
             ];
             return obj;
         }
+        uri() {
+            return "";
+        }
         Camera_1() {
-            const obj = new this.$.$mol_image();
-            obj.uri = () => "camera1";
+            const obj = new this.$.$mol_video_player();
+            obj.uri = () => this.uri();
             return obj;
         }
         Camera_2() {
-            const obj = new this.$.$mol_image();
-            obj.uri = () => "camera2";
+            const obj = new this.$.$mol_video_player();
+            obj.uri = () => this.uri();
             return obj;
         }
         Camera_row() {
@@ -7686,11 +7861,19 @@ var $;
             ];
             return obj;
         }
-        Top_row() {
-            const obj = new this.$.$mol_row();
+        Top_row_body() {
+            const obj = new this.$.$mol_view();
             obj.sub = () => [
                 this.Control(),
                 this.Camera_list()
+            ];
+            return obj;
+        }
+        Top_row() {
+            const obj = new this.$.$mol_float();
+            obj.sub = () => [
+                this.Top_row_tools(),
+                this.Top_row_body()
             ];
             return obj;
         }
@@ -7878,6 +8061,24 @@ var $;
     ], $scale_dash.prototype, "api", null);
     __decorate([
         $mol_mem
+    ], $scale_dash.prototype, "Top_row_pin_icon", null);
+    __decorate([
+        $mol_mem
+    ], $scale_dash.prototype, "Top_row__pin", null);
+    __decorate([
+        $mol_mem
+    ], $scale_dash.prototype, "expand_controls", null);
+    __decorate([
+        $mol_mem
+    ], $scale_dash.prototype, "Top_row_expand_icon", null);
+    __decorate([
+        $mol_mem
+    ], $scale_dash.prototype, "Top_row_expand", null);
+    __decorate([
+        $mol_mem
+    ], $scale_dash.prototype, "Top_row_tools", null);
+    __decorate([
+        $mol_mem
     ], $scale_dash.prototype, "Gate_entry", null);
     __decorate([
         $mol_mem
@@ -7915,6 +8116,9 @@ var $;
     __decorate([
         $mol_mem
     ], $scale_dash.prototype, "Camera_list", null);
+    __decorate([
+        $mol_mem
+    ], $scale_dash.prototype, "Top_row_body", null);
     __decorate([
         $mol_mem
     ], $scale_dash.prototype, "Top_row", null);
@@ -8015,9 +8219,14 @@ var $;
             flexGrow: "1",
             flexBasis: "40rem",
             Number_labeler: { padding: 0 },
-            Control: { width: "60%" },
-            Camera_list: { width: "40%" },
-            Top_row: { flexWrap: "nowrap" },
+            Control: { width: "50%" },
+            Camera_list: { width: "50%" },
+            Top_row_tools: {
+                display: "flex",
+                justifyContent: "flex-end",
+                padding: "0 1rem",
+            },
+            Top_row_body: { display: "flex", flexWrap: "nowrap" },
             Btn_row: { padding: 0, marginTop: "1rem" },
         });
     })($$ = $.$$ || ($.$$ = {}));
@@ -8030,6 +8239,12 @@ var $;
     var $$;
     (function ($$) {
         class $scale_dash extends $.$scale_dash {
+            expand_controls() {
+                this.Top_row_body().dom_node().classList.toggle("_row_expanded");
+            }
+            expanded_controls(next) {
+                return next;
+            }
             open_enter_form() {
                 $mol_state_arg.dict({ "": "dash", dash: "form_enter" });
             }
@@ -8076,9 +8291,15 @@ var $;
                 return this.act_list().length;
             }
             act_table_title() {
-                return `На территории (${this.count()})`;
+                return `Авто на территории (${this.count()})`;
             }
         }
+        __decorate([
+            $mol_action
+        ], $scale_dash.prototype, "expand_controls", null);
+        __decorate([
+            $mol_mem
+        ], $scale_dash.prototype, "expanded_controls", null);
         __decorate([
             $mol_action
         ], $scale_dash.prototype, "open_enter_form", null);
@@ -9566,6 +9787,9 @@ var $;
 var $;
 (function ($) {
     class $scale_app extends $mol_book2_catalog {
+        Placeholder() {
+            return null;
+        }
         plugins() {
             return [
                 this.Theme()
@@ -9722,7 +9946,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("scale/app/app.view.css", "[mol_form_field] {\n\tflex-direction: row;\n\talign-items: center;\n\tmin-height: auto !important;\n}\n\n[scale_app_dash_body_act_row]  [mol_labeler_label]{\n\tpadding: 0;\n}\n\n[scale_app_stats_body_act_row]  [mol_labeler_label]{\n\tpadding: 0;\n}\n\n[scale_stats_filter_form_body] [mol_form_field] {\n\theight: fit-content;\n\tflex:initial\n}\n");
+    $mol_style_attach("scale/app/app.view.css", "[mol_form_field] {\n\tflex-direction: row;\n\talign-items: center;\n\tmin-height: auto !important;\n}\n\n[scale_app_dash_body_act_row]  [mol_labeler_label]{\n\tpadding: 0;\n}\n\n[scale_app_stats_body_act_row]  [mol_labeler_label]{\n\tpadding: 0;\n}\n\n[scale_stats_filter_form_foot] {\n\tdisplay: none;\n}\n\n[scale_stats_filter_form_body] [mol_form_field] {\n\theight: fit-content;\n\tflex:initial\n}\n\n._row_expanded {\n\twidth: 100%;\n\tflex-direction: column;\n}\n\n._row_expanded [scale_dash_control], ._row_expanded [scale_dash_camera_list] {\n\twidth: 100%;\n}\n\n._row_expanded [scale_dash_btn_row] {\n\tmargin-top: 0;\n}\n");
 })($ || ($ = {}));
 //scale/app/-css/app.view.css.ts
 ;
@@ -9733,6 +9957,17 @@ var $;
     (function ($$) {
         $mol_style_define($scale_app, {
             Dash: {
+                Menu: {
+                    display: "flex",
+                    flexDirection: "column",
+                    flexGrow: "1",
+                    flexBasis: "50rem",
+                    Body: {
+                        paddingTop: "0",
+                    },
+                },
+            },
+            Stats: {
                 Menu: {
                     display: "flex",
                     flexDirection: "column",

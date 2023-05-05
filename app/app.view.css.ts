@@ -6,6 +6,17 @@ namespace $.$$ {
         flexDirection: "column",
         flexGrow: "1",
         flexBasis: "50rem",
+        Body: {
+          paddingTop: "0",
+        },
+      },
+    },
+    Stats: {
+      Menu: {
+        display: "flex",
+        flexDirection: "column",
+        flexGrow: "1",
+        flexBasis: "50rem",
       },
     },
     Form_enter: {

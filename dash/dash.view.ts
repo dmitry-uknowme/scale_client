@@ -1,6 +1,24 @@
 namespace $.$$ {
   export class $scale_dash extends $.$scale_dash {
     @$mol_action
+    expand_controls() {
+      //   console.log(
+      //     "cccc",
+      //     this.Control().dom_node().classList.add("_row_expanded")
+      //   );
+      //   this.Control().style({ width: "100%" });
+      //  if (this.expanded_controls()) {
+      this.Top_row_body().dom_node().classList.toggle("_row_expanded");
+      //  this.expanded_controls(true);
+      //  }
+    }
+
+    @$mol_mem
+    expanded_controls(next?: boolean) {
+      return next;
+    }
+
+    @$mol_action
     open_enter_form() {
       $mol_state_arg.dict({ "": "dash", dash: "form_enter" });
     }
@@ -62,7 +80,7 @@ namespace $.$$ {
     }
 
     act_table_title() {
-      return `На территории (${this.count()})`;
+      return `Авто на территории (${this.count()})`;
     }
   }
 }

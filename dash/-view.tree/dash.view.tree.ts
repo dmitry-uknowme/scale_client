@@ -69,6 +69,95 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Top_row_pin_icon $mol_icon_pin_outline
+		 * ```
+		 */
+		@ $mol_mem
+		Top_row_pin_icon() {
+			const obj = new this.$.$mol_icon_pin_outline()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Top_row__pin $mol_button_minor sub / <= Top_row_pin_icon
+		 * ```
+		 */
+		@ $mol_mem
+		Top_row__pin() {
+			const obj = new this.$.$mol_button_minor()
+			
+			obj.sub = () => [
+				this.Top_row_pin_icon()
+			] as readonly any[]
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * expand_controls?val null
+		 * ```
+		 */
+		@ $mol_mem
+		expand_controls(val?: any) {
+			if ( val !== undefined ) return val as never
+			return null as any
+		}
+		
+		/**
+		 * ```tree
+		 * Top_row_expand_icon $mol_icon_arrow_expand
+		 * ```
+		 */
+		@ $mol_mem
+		Top_row_expand_icon() {
+			const obj = new this.$.$mol_icon_arrow_expand()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Top_row_expand $mol_button_minor
+		 * 	click?val <=> expand_controls?val
+		 * 	sub / <= Top_row_expand_icon
+		 * ```
+		 */
+		@ $mol_mem
+		Top_row_expand() {
+			const obj = new this.$.$mol_button_minor()
+			
+			obj.click = (val?: any) => this.expand_controls(val)
+			obj.sub = () => [
+				this.Top_row_expand_icon()
+			] as readonly any[]
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Top_row_tools $mol_view sub /
+		 * 	<= Top_row__pin
+		 * 	<= Top_row_expand
+		 * ```
+		 */
+		@ $mol_mem
+		Top_row_tools() {
+			const obj = new this.$.$mol_view()
+			
+			obj.sub = () => [
+				this.Top_row__pin(),
+				this.Top_row_expand()
+			] as readonly any[]
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * Gate_entry $scale_dash_gate
 		 * 	title \Шлагбаум №1
 		 * 	open_submit <= open_entry_gate
@@ -226,28 +315,37 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Camera_1 $mol_image uri \camera1
+		 * uri \
+		 * ```
+		 */
+		uri() {
+			return ""
+		}
+		
+		/**
+		 * ```tree
+		 * Camera_1 $mol_video_player uri <= uri
 		 * ```
 		 */
 		@ $mol_mem
 		Camera_1() {
-			const obj = new this.$.$mol_image()
+			const obj = new this.$.$mol_video_player()
 			
-			obj.uri = () => "camera1"
+			obj.uri = () => this.uri()
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * Camera_2 $mol_image uri \camera2
+		 * Camera_2 $mol_video_player uri <= uri
 		 * ```
 		 */
 		@ $mol_mem
 		Camera_2() {
-			const obj = new this.$.$mol_image()
+			const obj = new this.$.$mol_video_player()
 			
-			obj.uri = () => "camera2"
+			obj.uri = () => this.uri()
 			
 			return obj
 		}
@@ -292,18 +390,37 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Top_row $mol_row sub /
+		 * Top_row_body $mol_view sub /
 		 * 	<= Control
 		 * 	<= Camera_list
 		 * ```
 		 */
 		@ $mol_mem
-		Top_row() {
-			const obj = new this.$.$mol_row()
+		Top_row_body() {
+			const obj = new this.$.$mol_view()
 			
 			obj.sub = () => [
 				this.Control(),
 				this.Camera_list()
+			] as readonly any[]
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Top_row $mol_float sub /
+		 * 	<= Top_row_tools
+		 * 	<= Top_row_body
+		 * ```
+		 */
+		@ $mol_mem
+		Top_row() {
+			const obj = new this.$.$mol_float()
+			
+			obj.sub = () => [
+				this.Top_row_tools(),
+				this.Top_row_body()
 			] as readonly any[]
 			
 			return obj
