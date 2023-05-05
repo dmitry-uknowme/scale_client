@@ -8,7 +8,7 @@ $scale_dash_table_pick $mol_pick
 			<= Menu_item_copy* $mol_button_minor
 				click? <=> open_exit_form_current*? null
 				sub /
-					<= act_options_out \Создать запись на выезд для
+					<= act_exit_text \Создать запись на выезд для
 $scale_dash $mol_list
 	api $scale_api
 		gateOpenEntry => open_entry_gate
@@ -51,7 +51,7 @@ $scale_dash $mol_list
 					title \Камеры
 					content /
 						<= Camera_row $mol_row sub /
-							<= Camera_1 $mol_video_player
+							<= Camera_1 $scale_dash_camera
 								uri <= uri \
 							<= Camera_2 $mol_video_player
 								uri <= uri \
@@ -94,5 +94,6 @@ $scale_dash $mol_list
 										title <= act_enteredMoment*? \
 								<= Act_options_pop* $scale_dash_table_pick
 									open_exit_form_current? <=> open_exit_form_current*? null
+									act_exit_text? <= act_exit_text*? null
 									
 

@@ -75,9 +75,18 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * act_exit_text \Создать запись на выезд для
+		 * ```
+		 */
+		act_exit_text() {
+			return "Создать запись на выезд для"
+		}
+		
+		/**
+		 * ```tree
 		 * Menu_item_copy* $mol_button_minor
 		 * 	click? <=> open_exit_form_current*?
-		 * 	sub / <= act_options_out
+		 * 	sub / <= act_exit_text
 		 * ```
 		 */
 		@ $mol_mem_key
@@ -86,7 +95,7 @@ namespace $ {
 			
 			obj.click = (next?: any) => this.open_exit_form_current(id, next)
 			obj.sub = () => [
-				this.act_options_out()
+				this.act_exit_text()
 			] as readonly any[]
 			
 			return obj
@@ -434,12 +443,12 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Camera_1 $mol_video_player uri <= uri
+		 * Camera_1 $scale_dash_camera uri <= uri
 		 * ```
 		 */
 		@ $mol_mem
 		Camera_1() {
-			const obj = new this.$.$mol_video_player()
+			const obj = new this.$.$scale_dash_camera()
 			
 			obj.uri = () => this.uri()
 			
@@ -852,7 +861,20 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Act_options_pop* $scale_dash_table_pick open_exit_form_current? <=> open_exit_form_current*?
+		 * act_exit_text*? null
+		 * ```
+		 */
+		@ $mol_mem_key
+		act_exit_text(id: any, next?: any) {
+			if ( next !== undefined ) return next as never
+			return null as any
+		}
+		
+		/**
+		 * ```tree
+		 * Act_options_pop* $scale_dash_table_pick
+		 * 	open_exit_form_current? <=> open_exit_form_current*?
+		 * 	act_exit_text? <= act_exit_text*?
 		 * ```
 		 */
 		@ $mol_mem_key
@@ -860,6 +882,7 @@ namespace $ {
 			const obj = new this.$.$scale_dash_table_pick()
 			
 			obj.open_exit_form_current = (next?: any) => this.open_exit_form_current(id, next)
+			obj.act_exit_text = (next?: any) => this.act_exit_text(id)
 			
 			return obj
 		}

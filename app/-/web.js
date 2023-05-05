@@ -7689,6 +7689,104 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $scale_dash_camera extends $mol_video_player {
+        sub() {
+            return [];
+        }
+        attr() {
+            return {
+                ...super.attr(),
+                pc: this.pc()
+            };
+        }
+    }
+    $.$scale_dash_camera = $scale_dash_camera;
+})($ || ($ = {}));
+//scale/dash/camera/-view.tree/camera.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $scale_dash_camera extends $.$scale_dash_camera {
+            config() {
+                return {
+                    iceServers: [
+                        {
+                            urls: ["stun:stun.l.google.com:19302"],
+                        },
+                    ],
+                };
+            }
+            stream() {
+                return new MediaStream();
+            }
+            pc() {
+                return new RTCPeerConnection(this.config());
+            }
+            init_remote_sdp() {
+                const data = $mol_fetch.json(`http://localhost:8083/stream/receiver/H264_AAC`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        suuid: "H264_AAC",
+                        data: btoa(this?.pc()?.localDescription?.sdp),
+                    }),
+                });
+                this.pc().setRemoteDescription(new RTCSessionDescription({
+                    type: "answer",
+                    sdp: atob(data),
+                }));
+            }
+            init_codec_info() {
+                const data = $mol_fetch.json(`http://localhost:8083/stream/codec/H264_AAC`);
+                this.pc().addTransceiver("video", {
+                    direction: "sendrecv",
+                });
+            }
+            handle_negotiation_needed() {
+                const offer = this.pc().createOffer();
+                this.pc().setLocalDescription(offer);
+            }
+            auto() {
+                this.pc().onnegotiationneeded = this.handle_negotiation_needed;
+                this.pc().ontrack = function (event) {
+                    console.log("evvvv", event);
+                    this.stream().addTrack(event.track);
+                    console.log("ddd", this.dom_node());
+                    this.dom_node().srcObject = this.stream();
+                    console.log(event.streams.length + " track is delivered");
+                };
+                this.pc().oniceconnectionstatechange = (e) => console.log(this.pc().iceConnectionState);
+                this.init_codec_info();
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $scale_dash_camera.prototype, "config", null);
+        __decorate([
+            $mol_mem
+        ], $scale_dash_camera.prototype, "stream", null);
+        __decorate([
+            $mol_mem
+        ], $scale_dash_camera.prototype, "pc", null);
+        __decorate([
+            $mol_action
+        ], $scale_dash_camera.prototype, "init_remote_sdp", null);
+        __decorate([
+            $mol_action
+        ], $scale_dash_camera.prototype, "init_codec_info", null);
+        __decorate([
+            $mol_action
+        ], $scale_dash_camera.prototype, "handle_negotiation_needed", null);
+        $$.$scale_dash_camera = $scale_dash_camera;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//scale/dash/camera/camera.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_float extends $mol_view {
         style() {
             return {
@@ -7740,11 +7838,14 @@ var $;
                 return next;
             return null;
         }
+        act_exit_text() {
+            return "Создать запись на выезд для";
+        }
         Menu_item_copy(id) {
             const obj = new this.$.$mol_button_minor();
             obj.click = (next) => this.open_exit_form_current(id, next);
             obj.sub = () => [
-                this.act_options_out()
+                this.act_exit_text()
             ];
             return obj;
         }
@@ -7894,7 +7995,7 @@ var $;
             return "";
         }
         Camera_1() {
-            const obj = new this.$.$mol_video_player();
+            const obj = new this.$.$scale_dash_camera();
             obj.uri = () => this.uri();
             return obj;
         }
@@ -8055,9 +8156,15 @@ var $;
                 return next;
             return null;
         }
+        act_exit_text(id, next) {
+            if (next !== undefined)
+                return next;
+            return null;
+        }
         Act_options_pop(id) {
             const obj = new this.$.$scale_dash_table_pick();
             obj.open_exit_form_current = (next) => this.open_exit_form_current(id, next);
+            obj.act_exit_text = (next) => this.act_exit_text(id);
             return obj;
         }
         Act_row(id) {
@@ -8236,6 +8343,9 @@ var $;
     ], $scale_dash.prototype, "open_exit_form_current", null);
     __decorate([
         $mol_mem_key
+    ], $scale_dash.prototype, "act_exit_text", null);
+    __decorate([
+        $mol_mem_key
     ], $scale_dash.prototype, "Act_options_pop", null);
     __decorate([
         $mol_mem_key
@@ -8342,6 +8452,9 @@ var $;
             act_table_title() {
                 return `Авто на территории (${this.count()})`;
             }
+            act_exit_text(obj) {
+                return `Создать запись на выезд для ${obj.auto.number}`;
+            }
         }
         __decorate([
             $mol_action
@@ -8361,6 +8474,12 @@ var $;
         __decorate([
             $mol_mem
         ], $scale_dash.prototype, "act_list", null);
+        __decorate([
+            $mol_mem
+        ], $scale_dash.prototype, "act_table_title", null);
+        __decorate([
+            $mol_mem
+        ], $scale_dash.prototype, "act_exit_text", null);
         $$.$scale_dash = $scale_dash;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));

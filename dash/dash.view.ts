@@ -83,8 +83,14 @@ namespace $.$$ {
       return this.act_list().length;
     }
 
+    @$mol_mem
     act_table_title() {
       return `Авто на территории (${this.count()})`;
+    }
+
+    @$mol_mem
+    act_exit_text(obj: $scale_modelAct) {
+      return `Создать запись на выезд для ${obj.auto.number}`;
     }
   }
 }
