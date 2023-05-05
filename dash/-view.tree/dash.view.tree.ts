@@ -16,15 +16,38 @@ namespace $ {
 		/**
 		 * ```tree
 		 * rows /
+		 * 	<= Store
 		 * 	<= Top_row
 		 * 	<= Bottom_row
 		 * ```
 		 */
 		rows() {
 			return [
+				this.Store(),
 				this.Top_row(),
 				this.Bottom_row()
 			] as readonly any[]
+		}
+		
+		/**
+		 * ```tree
+		 * act_list_onTerritory
+		 * ```
+		 */
+		act_list_onTerritory() {
+			return this.Store().act_list_onTerritory()
+		}
+		
+		/**
+		 * ```tree
+		 * Store $scale_store act_list_onTerritory => act_list_onTerritory
+		 * ```
+		 */
+		@ $mol_mem
+		Store() {
+			const obj = new this.$.$scale_store()
+			
+			return obj
 		}
 		
 		/**

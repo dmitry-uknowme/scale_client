@@ -2,6 +2,8 @@ $scale_form_enter $mol_form
 	api $scale_api
 	dash $scale_dash
 	body /
+		<= Store $scale_store
+			act_list_onTerritory_update => act_list_onTerritory_update
 		<= Count_text $mol_paragraph
 			title \Количество: 
 		<= Count $mol_paragraph

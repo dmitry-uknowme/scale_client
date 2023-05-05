@@ -3,12 +3,15 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * menu_foot / <= Centrifuge
+		 * menu_foot /
+		 * 	<= Centrifuge
+		 * 	<= Store
 		 * ```
 		 */
 		menu_foot() {
 			return [
-				this.Centrifuge()
+				this.Centrifuge(),
+				this.Store()
 			] as readonly any[]
 		}
 		
@@ -32,7 +35,7 @@ namespace $ {
 			return {
 				dash: this.Dash(),
 				stats: this.Stats()
-			}
+			} as Record< string, any >
 		}
 		
 		/**
@@ -43,6 +46,18 @@ namespace $ {
 		@ $mol_mem
 		Centrifuge() {
 			const obj = new this.$.$scale_centrifuge()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Store $scale_store
+		 * ```
+		 */
+		@ $mol_mem
+		Store() {
+			const obj = new this.$.$scale_store()
 			
 			return obj
 		}
@@ -190,7 +205,7 @@ namespace $ {
 			obj.spreads = () => ({
 				form_enter: this.Form_enter(),
 				form_exit: this.Form_exit()
-			})
+			} as Record< string, any >)
 			
 			return obj
 		}

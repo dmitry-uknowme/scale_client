@@ -11,15 +11,8 @@ namespace $.$$ {
 
     @$mol_mem
     act_list(reset?: "reset") {
-      console.log(
-        "listttt",
-        this.api()
-          .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
-          .map((obj) => this.Act_row(obj))
-      );
-      return this.api()
-        .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
-        .map((obj) => this.Act_row(obj));
+      console.log("dd", this.act_list_onTerritory());
+      return this.act_list_onTerritory().map((obj) => this.Act_row(obj));
     }
 
     act_autoNumber(obj: $scale_modelAct) {

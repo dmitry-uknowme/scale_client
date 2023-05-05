@@ -62,7 +62,8 @@ namespace $.$$ {
         apiClientSecretKey: "123456",
       });
 
-      this.dash().act_list("reset");
+      this.act_list_onTerritory_update();
+
       //   this.dash().render()
 
       //   new $mol_after_timeout(1500, () => this.dash().act_list("reset"));

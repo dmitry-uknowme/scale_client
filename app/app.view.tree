@@ -1,6 +1,7 @@
 $scale_app $mol_book2_catalog
 	menu_foot /
 		<= Centrifuge $scale_centrifuge
+		<= Store $scale_store
 	menu_title \Scale Client 2.0
 	spreads *
 		dash <= Dash $mol_book2_catalog

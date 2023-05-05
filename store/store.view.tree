@@ -1,0 +1,8 @@
+$scale_store $mol_view
+	api $scale_api
+	sub /
+	attr *
+		^
+		act_list_all <= act_list_all
+		act_list_onTerritory <= act_list_onTerritory
+		act_list_completed <= act_list_completed

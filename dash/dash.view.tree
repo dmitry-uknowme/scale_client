@@ -1,6 +1,8 @@
 $scale_dash $mol_list
 	api $scale_api
 	rows /
+		<= Store $scale_store
+			act_list_onTerritory => act_list_onTerritory
 		<= Top_row $mol_row sub /
 			<= Control $mol_section
 				title \Управление
