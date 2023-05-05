@@ -3,11 +3,25 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * menu_foot / <= Centrifuge
+		 * plugins / <= Theme
+		 * ```
+		 */
+		plugins() {
+			return [
+				this.Theme()
+			] as readonly any[]
+		}
+		
+		/**
+		 * ```tree
+		 * menu_foot /
+		 * 	<= Lights
+		 * 	<= Centrifuge
 		 * ```
 		 */
 		menu_foot() {
 			return [
+				this.Lights(),
 				this.Centrifuge()
 			] as readonly any[]
 		}
@@ -33,6 +47,30 @@ namespace $ {
 				dash: this.Dash(),
 				stats: this.Stats()
 			}
+		}
+		
+		/**
+		 * ```tree
+		 * Theme $mol_theme_auto
+		 * ```
+		 */
+		@ $mol_mem
+		Theme() {
+			const obj = new this.$.$mol_theme_auto()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Lights $mol_lights_toggle
+		 * ```
+		 */
+		@ $mol_mem
+		Lights() {
+			const obj = new this.$.$mol_lights_toggle()
+			
+			return obj
 		}
 		
 		/**
