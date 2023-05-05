@@ -7,7 +7,7 @@ $scale_form_enter $mol_form
 		<= Count $mol_paragraph
 			title <= count
 		<= Centrifuge $scale_centrifuge
-			weight_channel? => weight?
+			weight_channel => weight
 		<= Names $mol_form_group sub /
 			<= Weight_field $mol_form_field
 				name \Текущий вес

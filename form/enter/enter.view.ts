@@ -63,9 +63,9 @@ namespace $.$$ {
       });
 
       this.dash().act_list("reset");
-      //   this.dash().render()
-
-      //   new $mol_after_timeout(1500, () => this.dash().act_list("reset"));
+      this.dash().render("reset");
+      $mol_state_arg.dict({ "": "dash" });
+      new $mol_after_timeout(200, () => window.location.reload());
     }
 
     count() {

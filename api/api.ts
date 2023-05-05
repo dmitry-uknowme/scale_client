@@ -41,6 +41,18 @@ namespace $ {
       return response.data;
     }
 
+    closeAct(payload: $scale_modelActClosePayload) {
+      const BASE_URL = $scale_env_BASE_URL;
+      const response = $mol_fetch.json(`${BASE_URL}/closeAct`, {
+        method: "POST",
+        body: JSON.stringify(payload),
+      }) as $scale_apiResponse<$scale_modelAct[]>;
+      if (response.status !== "success") {
+        throw new Error(`Response failed with status ${response.status}`);
+      }
+      return response.data;
+    }
+
     getOrganizations(
       filter: {
         status?: $scale_modelOrganizationStatus;

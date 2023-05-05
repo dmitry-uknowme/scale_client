@@ -32,7 +32,7 @@ namespace $ {
 			return {
 				dash: this.Dash(),
 				stats: this.Stats()
-			}
+			} as Record< string, any >
 		}
 		
 		/**
@@ -190,7 +190,7 @@ namespace $ {
 			obj.spreads = () => ({
 				form_enter: this.Form_enter(),
 				form_exit: this.Form_exit()
-			})
+			} as Record< string, any >)
 			
 			return obj
 		}

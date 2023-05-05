@@ -30,6 +30,13 @@ namespace $ {
     apiClientSecretKey: "123456";
   }
 
+  export interface $scale_modelActClosePayload {
+    publicId: string;
+    weight: number;
+    comment: string;
+    apiClientSecretKey: "123456";
+  }
+
   export interface $scale_modelOrganization {
     id: number;
     public_id: string;

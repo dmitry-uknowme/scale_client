@@ -3,4 +3,5 @@ $scale_centrifuge $mol_view
 	attr *
 		^
 		weight <= weight_channel
+		autoNumber <= autoNumber_channel
 		client_state <= state
