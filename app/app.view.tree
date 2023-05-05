@@ -27,8 +27,10 @@ $scale_app $mol_book2_catalog
 						<= Spread_close
 					Spread_close => Form_close_close
 		stats <= Stats $mol_book2_catalog
+			menu_body / <= Stats_body $scale_stats
 			param \stats
 			menu_title \Статистика
 			menu_tools /
 				<= Spread_close
 			Spread_close => Stats_close
+		

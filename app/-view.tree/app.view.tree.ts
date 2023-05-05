@@ -206,6 +206,18 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Stats_body $scale_stats
+		 * ```
+		 */
+		@ $mol_mem
+		Stats_body() {
+			const obj = new this.$.$scale_stats()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * Stats_close
 		 * ```
 		 */
@@ -216,6 +228,7 @@ namespace $ {
 		/**
 		 * ```tree
 		 * Stats $mol_book2_catalog
+		 * 	menu_body / <= Stats_body
 		 * 	param \stats
 		 * 	menu_title \Статистика
 		 * 	menu_tools / <= Spread_close
@@ -226,6 +239,9 @@ namespace $ {
 		Stats() {
 			const obj = new this.$.$mol_book2_catalog()
 			
+			obj.menu_body = () => [
+				this.Stats_body()
+			] as readonly any[]
 			obj.param = () => "stats"
 			obj.menu_title = () => "Статистика"
 			obj.menu_tools = () => [

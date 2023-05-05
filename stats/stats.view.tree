@@ -1,0 +1,71 @@
+$scale_stats $mol_list
+	api $scale_api
+	rows /
+		<= Filter $mol_section
+			title \Фильтры
+			content /
+				<= Filter_form $mol_form
+					body /
+						<= Names $mol_form_group sub /
+							<= Number_field $mol_form_field
+								bid <= number_bid \
+								Content <= Number_control $mol_string
+									value?val <=> auto_number?val \
+									hint \Введите гос. номер
+							<= Payer_field $mol_form_field
+								bid <= payer_bid \
+								Content <= Payer_control $mol_select
+									value?val <=> payer?val \Все операторы
+									dictionary <= payers_options *
+									hint \Выберите
+							<= Transporter_field $mol_form_field
+								bid <= transporter_bid \
+								Content <= Transporter_control $mol_select
+									value?val <=> transporter?val \Все перевозчики
+									dictionary <= transporters_options *
+							<= Cargo_type_field $mol_form_field
+								bid <= cargo_type_bid \
+								Content <= Cargo_type_control $mol_select
+									value?val <=> cargo_type?val \Все виды груза
+									dictionary <= cargoTypes_options *
+							<= Category_cargo_field $mol_form_field
+								bid <= cargo_category_bid \
+								Content <= Color $mol_select
+									value?val <=> cargo_category?val \Все категории груза
+									dictionary <= cargoCategories_options *
+		<= Acts $mol_section
+			title <= act_table_title \Список актов
+			content /
+				<= Act_list $mol_list rows <= act_list /
+					<= Act_row*0 $mol_row
+						minimal_height 100
+						minimal_width 200
+						sub /
+							<= Number_labeler* $mol_labeler
+								title \Гос. номер
+								Content <= Number_content* $mol_paragraph
+									title <= act_autoNumber*? \
+							<= Transporter_labeler* $mol_labeler
+								title \Перевозчик
+								Content <= Transporter_content* $mol_paragraph
+									title <= act_transporter*? \
+							<= Weight_gross_labeler* $mol_labeler
+								title \Брутто (кг)
+								Content <= Weight_gross_content* $mol_paragraph
+									title <= act_weightGross*? \
+							<= Cargo_type_labeler* $mol_labeler
+								title \Вид груза
+								Content <= Cargo_type_content* $mol_paragraph
+									title <= act_cargoType*? \
+							<= Cargo_category_labeler* $mol_labeler
+								title \Категория
+								Content <= Cargo_category_content* $mol_paragraph
+									title <= act_cargoCategory*? \
+							<= Date_enter_labeler* $mol_labeler
+								title \Дата и время въезда
+								Content <= Date_enter_content* $mol_paragraph
+									title <= act_enteredMoment*? \
+							<= Date_exit_labeler* $mol_labeler
+								title \Дата и время выезда
+								Content <= Date_exit_content* $mol_paragraph
+									title <= act_exitedMoment*? \

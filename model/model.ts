@@ -3,7 +3,7 @@ namespace $ {
     publicId: string;
     number: string;
     entryDateTime: string;
-    checkOutDateTime?: string;
+    checkOutDateTime: string;
     status: { value: $scale_modelActStatus; title: string };
     weight: { gross: number; container: number; net: number };
     auto: { number: string; publicId: string };

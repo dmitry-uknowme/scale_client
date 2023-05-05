@@ -7,3 +7,12 @@
 [scale_app_dash_body_act_row]  [mol_labeler_label]{
 	padding: 0;
 }
+
+[scale_app_stats_body_act_row]  [mol_labeler_label]{
+	padding: 0;
+}
+
+[scale_stats_filter_form_body] [mol_form_field] {
+	height: fit-content;
+	flex:initial
+}

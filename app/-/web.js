@@ -8329,8 +8329,6 @@ var $;
         }
         body() {
             return [
-                this.Count_text(),
-                this.Count(),
                 this.Centrifuge(),
                 this.Names()
             ];
@@ -8340,16 +8338,6 @@ var $;
                 this.Signup(),
                 this.Result()
             ];
-        }
-        Count_text() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => "Количество: ";
-            return obj;
-        }
-        Count() {
-            const obj = new this.$.$mol_paragraph();
-            obj.title = () => this.count();
-            return obj;
         }
         weight() {
             return this.Centrifuge().weight_channel();
@@ -8550,12 +8538,6 @@ var $;
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "dash", null);
-    __decorate([
-        $mol_mem
-    ], $scale_form_enter.prototype, "Count_text", null);
-    __decorate([
-        $mol_mem
-    ], $scale_form_enter.prototype, "Count", null);
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "Centrifuge", null);
@@ -8909,6 +8891,542 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $scale_stats extends $mol_list {
+        api() {
+            const obj = new this.$.$scale_api();
+            return obj;
+        }
+        rows() {
+            return [
+                this.Filter(),
+                this.Acts()
+            ];
+        }
+        number_bid() {
+            return "";
+        }
+        auto_number(val) {
+            if (val !== undefined)
+                return val;
+            return "";
+        }
+        Number_control() {
+            const obj = new this.$.$mol_string();
+            obj.value = (val) => this.auto_number(val);
+            obj.hint = () => "Введите гос. номер";
+            return obj;
+        }
+        Number_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.bid = () => this.number_bid();
+            obj.Content = () => this.Number_control();
+            return obj;
+        }
+        payer_bid() {
+            return "";
+        }
+        payer(val) {
+            if (val !== undefined)
+                return val;
+            return "Все операторы";
+        }
+        payers_options() {
+            return {};
+        }
+        Payer_control() {
+            const obj = new this.$.$mol_select();
+            obj.value = (val) => this.payer(val);
+            obj.dictionary = () => this.payers_options();
+            obj.hint = () => "Выберите";
+            return obj;
+        }
+        Payer_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.bid = () => this.payer_bid();
+            obj.Content = () => this.Payer_control();
+            return obj;
+        }
+        transporter_bid() {
+            return "";
+        }
+        transporter(val) {
+            if (val !== undefined)
+                return val;
+            return "Все перевозчики";
+        }
+        transporters_options() {
+            return {};
+        }
+        Transporter_control() {
+            const obj = new this.$.$mol_select();
+            obj.value = (val) => this.transporter(val);
+            obj.dictionary = () => this.transporters_options();
+            return obj;
+        }
+        Transporter_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.bid = () => this.transporter_bid();
+            obj.Content = () => this.Transporter_control();
+            return obj;
+        }
+        cargo_type_bid() {
+            return "";
+        }
+        cargo_type(val) {
+            if (val !== undefined)
+                return val;
+            return "Все виды груза";
+        }
+        cargoTypes_options() {
+            return {};
+        }
+        Cargo_type_control() {
+            const obj = new this.$.$mol_select();
+            obj.value = (val) => this.cargo_type(val);
+            obj.dictionary = () => this.cargoTypes_options();
+            return obj;
+        }
+        Cargo_type_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.bid = () => this.cargo_type_bid();
+            obj.Content = () => this.Cargo_type_control();
+            return obj;
+        }
+        cargo_category_bid() {
+            return "";
+        }
+        cargo_category(val) {
+            if (val !== undefined)
+                return val;
+            return "Все категории груза";
+        }
+        cargoCategories_options() {
+            return {};
+        }
+        Color() {
+            const obj = new this.$.$mol_select();
+            obj.value = (val) => this.cargo_category(val);
+            obj.dictionary = () => this.cargoCategories_options();
+            return obj;
+        }
+        Category_cargo_field() {
+            const obj = new this.$.$mol_form_field();
+            obj.bid = () => this.cargo_category_bid();
+            obj.Content = () => this.Color();
+            return obj;
+        }
+        Names() {
+            const obj = new this.$.$mol_form_group();
+            obj.sub = () => [
+                this.Number_field(),
+                this.Payer_field(),
+                this.Transporter_field(),
+                this.Cargo_type_field(),
+                this.Category_cargo_field()
+            ];
+            return obj;
+        }
+        Filter_form() {
+            const obj = new this.$.$mol_form();
+            obj.body = () => [
+                this.Names()
+            ];
+            return obj;
+        }
+        Filter() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => "Фильтры";
+            obj.content = () => [
+                this.Filter_form()
+            ];
+            return obj;
+        }
+        act_table_title() {
+            return "Список актов";
+        }
+        act_autoNumber(id, next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Number_content(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.act_autoNumber(id);
+            return obj;
+        }
+        Number_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Гос. номер";
+            obj.Content = () => this.Number_content(id);
+            return obj;
+        }
+        act_transporter(id, next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Transporter_content(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.act_transporter(id);
+            return obj;
+        }
+        Transporter_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Перевозчик";
+            obj.Content = () => this.Transporter_content(id);
+            return obj;
+        }
+        act_weightGross(id, next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Weight_gross_content(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.act_weightGross(id);
+            return obj;
+        }
+        Weight_gross_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Брутто (кг)";
+            obj.Content = () => this.Weight_gross_content(id);
+            return obj;
+        }
+        act_cargoType(id, next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Cargo_type_content(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.act_cargoType(id);
+            return obj;
+        }
+        Cargo_type_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Вид груза";
+            obj.Content = () => this.Cargo_type_content(id);
+            return obj;
+        }
+        act_cargoCategory(id, next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Cargo_category_content(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.act_cargoCategory(id);
+            return obj;
+        }
+        Cargo_category_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Категория";
+            obj.Content = () => this.Cargo_category_content(id);
+            return obj;
+        }
+        act_enteredMoment(id, next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Date_enter_content(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.act_enteredMoment(id);
+            return obj;
+        }
+        Date_enter_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Дата и время въезда";
+            obj.Content = () => this.Date_enter_content(id);
+            return obj;
+        }
+        act_exitedMoment(id, next) {
+            if (next !== undefined)
+                return next;
+            return "";
+        }
+        Date_exit_content(id) {
+            const obj = new this.$.$mol_paragraph();
+            obj.title = () => this.act_exitedMoment(id);
+            return obj;
+        }
+        Date_exit_labeler(id) {
+            const obj = new this.$.$mol_labeler();
+            obj.title = () => "Дата и время выезда";
+            obj.Content = () => this.Date_exit_content(id);
+            return obj;
+        }
+        Act_row(id) {
+            const obj = new this.$.$mol_row();
+            obj.minimal_height = () => 100;
+            obj.minimal_width = () => 200;
+            obj.sub = () => [
+                this.Number_labeler(id),
+                this.Transporter_labeler(id),
+                this.Weight_gross_labeler(id),
+                this.Cargo_type_labeler(id),
+                this.Cargo_category_labeler(id),
+                this.Date_enter_labeler(id),
+                this.Date_exit_labeler(id)
+            ];
+            return obj;
+        }
+        act_list() {
+            return [
+                this.Act_row("0")
+            ];
+        }
+        Act_list() {
+            const obj = new this.$.$mol_list();
+            obj.rows = () => this.act_list();
+            return obj;
+        }
+        Acts() {
+            const obj = new this.$.$mol_section();
+            obj.title = () => this.act_table_title();
+            obj.content = () => [
+                this.Act_list()
+            ];
+            return obj;
+        }
+    }
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "api", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "auto_number", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Number_control", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Number_field", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "payer", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Payer_control", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Payer_field", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "transporter", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Transporter_control", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Transporter_field", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "cargo_type", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Cargo_type_control", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Cargo_type_field", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "cargo_category", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Color", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Category_cargo_field", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Names", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Filter_form", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Filter", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "act_autoNumber", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Number_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Number_labeler", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "act_transporter", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Transporter_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Transporter_labeler", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "act_weightGross", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Weight_gross_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Weight_gross_labeler", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "act_cargoType", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Cargo_type_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Cargo_type_labeler", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "act_cargoCategory", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Cargo_category_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Cargo_category_labeler", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "act_enteredMoment", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Date_enter_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Date_enter_labeler", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "act_exitedMoment", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Date_exit_content", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Date_exit_labeler", null);
+    __decorate([
+        $mol_mem_key
+    ], $scale_stats.prototype, "Act_row", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Act_list", null);
+    __decorate([
+        $mol_mem
+    ], $scale_stats.prototype, "Acts", null);
+    $.$scale_stats = $scale_stats;
+})($ || ($ = {}));
+//scale/stats/-view.tree/stats.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        const {} = $mol_style_func;
+        $mol_style_define($scale_stats, {
+            Filter_form: { marginTop: "0.5rem" },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//scale/stats/stats.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $scale_stats extends $.$scale_stats {
+            act_list(reset) {
+                return this.api()
+                    .getActs({ status: $scale_modelActStatus.COMPLETED })
+                    .map((obj) => this.Act_row(obj));
+            }
+            act_id(obj) {
+                return obj.publicId;
+            }
+            act_autoNumber(obj) {
+                return obj.auto.number;
+            }
+            act_transporter(obj) {
+                return obj.transporter.title;
+            }
+            act_weightGross(obj) {
+                return obj.weight.gross.toString();
+            }
+            act_cargoType(obj) {
+                return obj.cargoType.title;
+            }
+            act_cargoCategory(obj) {
+                return obj.wasteCategory.title;
+            }
+            act_enteredMoment(obj) {
+                return obj.entryDateTime;
+            }
+            act_exitedMoment(obj) {
+                return obj.checkOutDateTime;
+            }
+            count() {
+                return this.act_list().length;
+            }
+            act_table_title() {
+                return `Список актов (${this.count()})`;
+            }
+            payers_options() {
+                const data = this.api().getOrganizations({
+                    status: $scale_modelOrganizationStatus.ACTIVE,
+                    role: $scale_modelOrganizationRole.PAYER,
+                });
+                const result = data.reduce((acc, curr) => ((acc[curr.public_id] = curr.title), acc), {});
+                return result;
+            }
+            transporters_options() {
+                const data = this.api().getOrganizations({
+                    status: $scale_modelOrganizationStatus.ACTIVE,
+                    role: $scale_modelOrganizationRole.TRANSPORTER,
+                });
+                const result = data.reduce((acc, curr) => ((acc[curr.public_id] = curr.title), acc), {});
+                return result;
+            }
+            cargoTypes_options() {
+                const data = this.api().getCargoTypes();
+                const result = data.reduce((acc, curr) => ((acc[curr.publicId] = curr.title), acc), {});
+                return result;
+            }
+            cargoCategories_options() {
+                const data = this.api().getCargoCategories();
+                const result = data.reduce((acc, curr) => ((acc[curr.publicId] = curr.title), acc), {});
+                return result;
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $scale_stats.prototype, "act_list", null);
+        __decorate([
+            $mol_mem
+        ], $scale_stats.prototype, "payers_options", null);
+        __decorate([
+            $mol_mem
+        ], $scale_stats.prototype, "transporters_options", null);
+        __decorate([
+            $mol_mem
+        ], $scale_stats.prototype, "cargoTypes_options", null);
+        __decorate([
+            $mol_mem
+        ], $scale_stats.prototype, "cargoCategories_options", null);
+        $$.$scale_stats = $scale_stats;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//scale/stats/stats.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $scale_app extends $mol_book2_catalog {
         menu_foot() {
             return [
@@ -8992,11 +9510,18 @@ var $;
             });
             return obj;
         }
+        Stats_body() {
+            const obj = new this.$.$scale_stats();
+            return obj;
+        }
         Stats_close() {
             return this.Stats().Spread_close();
         }
         Stats() {
             const obj = new this.$.$mol_book2_catalog();
+            obj.menu_body = () => [
+                this.Stats_body()
+            ];
             obj.param = () => "stats";
             obj.menu_title = () => "Статистика";
             obj.menu_tools = () => [
@@ -9028,6 +9553,9 @@ var $;
     ], $scale_app.prototype, "Dash", null);
     __decorate([
         $mol_mem
+    ], $scale_app.prototype, "Stats_body", null);
+    __decorate([
+        $mol_mem
     ], $scale_app.prototype, "Stats", null);
     $.$scale_app = $scale_app;
 })($ || ($ = {}));
@@ -9036,7 +9564,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    $mol_style_attach("scale/app/app.view.css", "[mol_form_field] {\n\tflex-direction: row;\n\talign-items: center;\n\tmin-height: auto !important;\n}\n\n[scale_app_dash_body_act_row]  [mol_labeler_label]{\n\tpadding: 0;\n}\n");
+    $mol_style_attach("scale/app/app.view.css", "[mol_form_field] {\n\tflex-direction: row;\n\talign-items: center;\n\tmin-height: auto !important;\n}\n\n[scale_app_dash_body_act_row]  [mol_labeler_label]{\n\tpadding: 0;\n}\n\n[scale_app_stats_body_act_row]  [mol_labeler_label]{\n\tpadding: 0;\n}\n\n[scale_stats_filter_form_body] [mol_form_field] {\n\theight: fit-content;\n\tflex:initial\n}\n");
 })($ || ($ = {}));
 //scale/app/-css/app.view.css.ts
 ;
