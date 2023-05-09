@@ -2,7 +2,7 @@ $scale_centrifuge $mol_view
 	sub /
 	attr *
 		^
-		weight <= weight_channel
-		autoNumber_IN <= autoNumber_channel_IN
-		autoNumber_OUT <= autoNumber_channel_OUT
-		client_state <= state
+		weight <= weight_channel null
+		autoNumber_IN <= autoNumber_channel_IN null
+		autoNumber_OUT <= autoNumber_channel_OUT null
+		client_state <= state null

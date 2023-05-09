@@ -31,7 +31,7 @@ namespace $.$$ {
     subscribe() {
       const weightChannel = this.client().newSubscription("channel");
       weightChannel.on("publication", (ctx) => {
-        this.weight_channel(ctx.data.value.toString() as string);
+        this.weight_channel(ctx.data.value as number);
       });
       weightChannel.subscribe();
       const autoNumberChannel = this.client().newSubscription("autoNumber");

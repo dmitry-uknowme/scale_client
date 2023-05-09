@@ -188,6 +188,17 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * pin_controls?val null
+		 * ```
+		 */
+		@ $mol_mem
+		pin_controls(val?: any) {
+			if ( val !== undefined ) return val as never
+			return null as any
+		}
+		
+		/**
+		 * ```tree
 		 * Top_row_pin_icon $mol_icon_pin_outline
 		 * ```
 		 */
@@ -200,13 +211,16 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Top_row__pin $mol_button_minor sub / <= Top_row_pin_icon
+		 * Top_row__pin $mol_button_minor
+		 * 	click?val <=> pin_controls?val
+		 * 	sub / <= Top_row_pin_icon
 		 * ```
 		 */
 		@ $mol_mem
 		Top_row__pin() {
 			const obj = new this.$.$mol_button_minor()
 			
+			obj.click = (val?: any) => this.pin_controls(val)
 			obj.sub = () => [
 				this.Top_row_pin_icon()
 			] as readonly any[]
@@ -528,16 +542,16 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Top_row $mol_float sub /
+		 * Top_row $mol_list rows /
 		 * 	<= Top_row_tools
 		 * 	<= Top_row_body
 		 * ```
 		 */
 		@ $mol_mem
 		Top_row() {
-			const obj = new this.$.$mol_float()
+			const obj = new this.$.$mol_list()
 			
-			obj.sub = () => [
+			obj.rows = () => [
 				this.Top_row_tools(),
 				this.Top_row_body()
 			] as readonly any[]

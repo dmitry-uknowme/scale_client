@@ -2,20 +2,17 @@ namespace $.$$ {
   export class $scale_dash extends $.$scale_dash {
     @$mol_action
     expand_controls() {
-      //   console.log(
-      //     "cccc",
-      //     this.Control().dom_node().classList.add("_row_expanded")
-      //   );
-      //   this.Control().style({ width: "100%" });
-      //  if (this.expanded_controls()) {
       this.Top_row_body().dom_node().classList.toggle("_row_expanded");
-      //  this.expanded_controls(true);
-      //  }
     }
 
     @$mol_mem
     expanded_controls(next?: boolean) {
       return next;
+    }
+
+    @$mol_action
+    pin_controls() {
+      this.Top_row().dom_node().classList.toggle("_pinned");
     }
 
     @$mol_action
@@ -41,7 +38,7 @@ namespace $.$$ {
     }
 
     @$mol_mem
-    act_list(reset?: "reset") {
+    act_list() {
       return this.api()
         .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
         .map((obj) => this.Act_row(obj));

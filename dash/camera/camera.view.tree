@@ -2,4 +2,5 @@ $scale_dash_camera $mol_video_player
 	sub /
 	attr *
 		^
-		pc <= pc
+		pc <= pc null
+		stream <= stream null

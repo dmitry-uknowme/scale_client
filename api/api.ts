@@ -57,7 +57,7 @@ namespace $ {
       const BASE_URL = $scale_env_BASE_URL;
       const response = $mol_fetch.json(`${BASE_URL}/openEntryGate`, {
         method: "GET",
-      }) as $scale_apiResponse;
+      }) as $scale_apiResponse<any>;
       if (response.status !== "success") {
         throw new Error(`Response failed with status ${response.status}`);
       }
@@ -68,7 +68,7 @@ namespace $ {
       const BASE_URL = $scale_env_BASE_URL;
       const response = $mol_fetch.json(`${BASE_URL}/closeEntryGate`, {
         method: "GET",
-      }) as $scale_apiResponse;
+      }) as $scale_apiResponse<any>;
       if (response.status !== "success") {
         throw new Error(`Response failed with status ${response.status}`);
       }
@@ -79,7 +79,7 @@ namespace $ {
       const BASE_URL = $scale_env_BASE_URL;
       const response = $mol_fetch.json(`${BASE_URL}/openExitGate`, {
         method: "GET",
-      }) as $scale_apiResponse;
+      }) as $scale_apiResponse<any>;
       if (response.status !== "success") {
         throw new Error(`Response failed with status ${response.status}`);
       }
@@ -90,7 +90,7 @@ namespace $ {
       const BASE_URL = $scale_env_BASE_URL;
       const response = $mol_fetch.json(`${BASE_URL}/closeExitGate`, {
         method: "GET",
-      }) as $scale_apiResponse;
+      }) as $scale_apiResponse<any>;
       if (response.status !== "success") {
         throw new Error(`Response failed with status ${response.status}`);
       }
