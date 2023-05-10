@@ -55,7 +55,7 @@ namespace $ {
 			return {
 				dash: this.Dash(),
 				stats: this.Stats()
-			} as Record< string, any >
+			}
 		}
 		
 		/**
@@ -176,10 +176,10 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Form_close_close
+		 * Form_exit_close
 		 * ```
 		 */
-		Form_close_close() {
+		Form_exit_close() {
 			return this.Form_exit().Spread_close()
 		}
 		
@@ -190,7 +190,7 @@ namespace $ {
 		 * 	param \form_exit
 		 * 	menu_title \Создать запись на выезд
 		 * 	menu_tools / <= Spread_close
-		 * 	Spread_close => Form_close_close
+		 * 	Spread_close => Form_exit_close
 		 * ```
 		 */
 		@ $mol_mem
@@ -211,10 +211,10 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Dash_close
+		 * Spread_close
 		 * ```
 		 */
-		Dash_close() {
+		Spread_close() {
 			return this.Dash().Spread_close()
 		}
 		
@@ -224,8 +224,7 @@ namespace $ {
 		 * 	menu_body / <= Dash_body
 		 * 	param \dash
 		 * 	menu_title \Панель управления
-		 * 	menu_tools / <= Spread_close
-		 * 	Spread_close => Dash_close
+		 * 	Spread_close => Spread_close
 		 * 	spreads *
 		 * 		form_enter <= Form_enter
 		 * 		form_exit <= Form_exit
@@ -240,13 +239,10 @@ namespace $ {
 			] as readonly any[]
 			obj.param = () => "dash"
 			obj.menu_title = () => "Панель управления"
-			obj.menu_tools = () => [
-				this.Spread_close()
-			] as readonly any[]
 			obj.spreads = () => ({
 				form_enter: this.Form_enter(),
 				form_exit: this.Form_exit()
-			} as Record< string, any >)
+			})
 			
 			return obj
 		}
@@ -265,21 +261,10 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Stats_close
-		 * ```
-		 */
-		Stats_close() {
-			return this.Stats().Spread_close()
-		}
-		
-		/**
-		 * ```tree
 		 * Stats $mol_book2_catalog
 		 * 	menu_body / <= Stats_body
 		 * 	param \stats
 		 * 	menu_title \Статистика
-		 * 	menu_tools / <= Spread_close
-		 * 	Spread_close => Stats_close
 		 * ```
 		 */
 		@ $mol_mem
@@ -291,9 +276,6 @@ namespace $ {
 			] as readonly any[]
 			obj.param = () => "stats"
 			obj.menu_title = () => "Статистика"
-			obj.menu_tools = () => [
-				this.Spread_close()
-			] as readonly any[]
 			
 			return obj
 		}

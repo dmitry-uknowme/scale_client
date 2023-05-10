@@ -29,6 +29,21 @@ namespace $ {
       return response.data;
     }
 
+    getAutoRelations(number: string) {
+      const BASE_URL = $scale_env_BASE_URL;
+      const response = $mol_fetch.json(`${BASE_URL}/getAutoRelations`, {
+        method: "POST",
+        body: JSON.stringify({ number }),
+      }) as $scale_apiResponse<{
+        payers: $scale_modelOrganization[];
+        transporters: $scale_modelOrganization[];
+      }>;
+      if (response.status !== "success") {
+        throw new Error(`Response failed with status ${response.status}`);
+      }
+      return response.data;
+    }
+
     createAct(payload: $scale_modelActCreatePayload) {
       const BASE_URL = $scale_env_BASE_URL;
       const response = $mol_fetch.json(`${BASE_URL}/createAct`, {

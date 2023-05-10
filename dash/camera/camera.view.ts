@@ -1,10 +1,6 @@
 namespace $.$$ {
   export class $scale_dash_camera extends $.$scale_dash_camera {
     @$mol_mem
-    id() {
-      return "CAMERA_1";
-    }
-    @$mol_mem
     config() {
       return {
         iceServers: [
@@ -22,96 +18,103 @@ namespace $.$$ {
 
     @$mol_action
     init_remote_sdp(pc: RTCPeerConnection) {
+      //   this.error({
+      //     text: "Ошибка при подключении к камере",
+      //     type: "Promise",
+      //   });
       const formData = new FormData();
       formData.append("suuid", this.id());
       formData.append("data", btoa(pc?.localDescription?.sdp));
-      try {
-        const data = $mol_fetch.json(
-          "http://localhost:8083/stream/receiver/CAMERA_1",
-          {
-            method: "POST",
-            body: formData,
-          }
-        );
-        console.log("rrrrr", data);
-        pc.setRemoteDescription(
-          new RTCSessionDescription({
-            type: "answer",
-            sdp: atob(data),
-          })
-        );
-      } catch (err) {
-        throw new Error("Response failed", err);
-      }
+
+      //   try {
+      //     const data = $mol_fetch.json(
+      //       `http://localhost:8083/stream/receiver/${this.id()}`,
+      //       {
+      //         method: "POST",
+      //         body: formData,
+      //       }
+      //     );
+      //     console.log("rrrrr", data);
+      //     pc.setRemoteDescription(
+      //       new RTCSessionDescription({
+      //         type: "answer",
+      //         sdp: atob(data),
+      //       })
+      //     );
+      //   } catch (err) {
+      //     this.error({
+      //       text: "Ошибка при подключении к камере",
+      //       type: "LogicError",
+      //     });
+
+      //     new $mol_after_timeout(2000, () => this.init_remote_sdp.call(this, pc));
+      //     throw new Error("Response failed", err);
+      //   }
     }
 
     @$mol_action
-    init_codec_info() {
-      //   const data = $mol_fetch.json(
-      //     `http://localhost:8083/stream/codec/H264_AAC`
-      //   );
-      this.pc().addTransceiver("video", {
+    init_codec_info(pc) {
+      pc.addTransceiver("video", {
         direction: "sendrecv",
       });
     }
 
-    /* Вот так должно работать  */
-    // async function handleNegotiationNeededEvent() {
-    //   let offer = await pc.createOffer();
-    //   await pc.setLocalDescription(offer);
-    //   getRemoteSdp();
-    // }
-
-    /* Вот так должно работать  */
-
     @$mol_action
-    handle_negotiation_needed(event) {
-      const pc = $mol_wire_sync(event.target) as RTCPeerConnection;
+    handle_negotiation_needed(event: Event) {
+      const pc = $mol_wire_sync(event.target as RTCPeerConnection);
+      //@ts-expect-error
       const offer = pc.createOffer();
       console.log("offer", offer);
+      //@ts-expect-error
       pc.setLocalDescription(offer);
       console.log("sdp", pc.localDescription);
       this.init_remote_sdp.call(this, pc);
     }
 
     @$mol_mem
+    error(next: { text: string; type: string } | null = null) {
+      return next;
+    }
+
+    @$mol_mem
+    error_text() {
+      return this.error()?.text ?? null;
+    }
+
+    @$mol_mem
+    error_type() {
+      return this.error()?.type ?? null;
+    }
+
+    @$mol_mem
+    controls_enabled(): boolean {
+      return this.error() === null;
+    }
+
+    @$mol_mem
+    dom_name(): string {
+      return this.controls_enabled() ? super.dom_name() : "div";
+    }
+
+    @$mol_mem
     pc() {
       const pc = new RTCPeerConnection(this.config());
-      pc.addTransceiver("video", {
-        direction: "sendrecv",
-      });
+
+      this.init_codec_info(pc);
 
       pc.onnegotiationneeded = (event) =>
         $mol_wire_async(this.handle_negotiation_needed).call(this, event);
 
-      pc.onconnectionstatechange = (state) => console.log("state", state);
+      pc.onconnectionstatechange = (state) =>
+        console.log("state changed", state);
       pc.ontrack = (event) => {
-        console.log("sss", event);
+        console.log("track event", event);
         this.stream().addTrack(event.track);
-        this.dom_node().srcObject = this.stream();
+        (this.dom_node() as HTMLVideoElement).srcObject = this.stream();
         console.log(event.streams.length + " track is delivered");
       };
       pc.oniceconnectionstatechange = (e) => console.log(pc.iceConnectionState);
       return pc;
     }
-
-    // auto() {
-    //   this.pc(new RTCPeerConnection(this.config()));
-    //   this.pc().addTransceiver("video", {
-    //     direction: "sendrecv",
-    //   });
-    //   this.pc().onnegotiationneeded = this.handle_negotiation_needed();
-
-    //   this.pc().onconnectionstatechange = (state) =>
-    //     console.log("state", state);
-    //   this.pc().ontrack = (event) => {
-    //     console.log("sss", event);
-    //     this.stream().addTrack(event.track);
-    //     this.dom_node().srcObject = this.stream();
-    //     console.log(event.streams.length + " track is delivered");
-    //   };
-    //   this.pc().oniceconnectionstatechange = (e) =>
-    //     console.log(this.pc().iceConnectionState);
-    // }
   }
 }

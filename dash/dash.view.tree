@@ -54,9 +54,9 @@ $scale_dash $mol_list
 						content /
 							<= Camera_row $mol_row sub /
 								<= Camera_1 $scale_dash_camera
-									uri <= uri \
-								<= Camera_2 $mol_video_player
-									uri <= uri \
+									id \CAMERA_1
+								<= Camera_2 $scale_dash_camera
+									id \CAMERA_1
 		<= Bottom_row $mol_row sub /
 			<= Auto_list $mol_section
 				title <= act_table_title \На территории

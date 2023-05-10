@@ -1,4 +1,8 @@
 $scale_form_enter $mol_form
+	attr *
+		^
+		auto_relations <= auto_relations null
+		auto_related <= auto_related
 	api $scale_api
 	dash $scale_dash
 	body /
@@ -11,11 +15,6 @@ $scale_form_enter $mol_form
 				bid <= weight_bid \
 				Content <= Weight_control $mol_paragraph
 					title <= weight_formatted
-			<= Number_channel_field $mol_form_field
-				name \Распознанный гос. номер
-				bid <= number_channel_bid \
-				Content <= Number_channel_control $mol_paragraph
-					title <= autoNumber_IN 
 			<= Number_field $mol_form_field
 				name \Гос. номер
 				bid <= number_bid \

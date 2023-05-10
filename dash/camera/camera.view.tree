@@ -1,6 +1,10 @@
 $scale_dash_camera $mol_video_player
 	sub /
+		<= error_text null
 	attr *
 		^
+		controls <= controls_enabled true
+		mol_view_error <= error_type null
+		id <= id null
 		pc <= pc null
 		stream <= stream null

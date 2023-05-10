@@ -448,37 +448,28 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * uri \
-		 * ```
-		 */
-		uri() {
-			return ""
-		}
-		
-		/**
-		 * ```tree
-		 * Camera_1 $scale_dash_camera uri <= uri
+		 * Camera_1 $scale_dash_camera id \CAMERA_1
 		 * ```
 		 */
 		@ $mol_mem
 		Camera_1() {
 			const obj = new this.$.$scale_dash_camera()
 			
-			obj.uri = () => this.uri()
+			obj.id = () => "CAMERA_1"
 			
 			return obj
 		}
 		
 		/**
 		 * ```tree
-		 * Camera_2 $mol_video_player uri <= uri
+		 * Camera_2 $scale_dash_camera id \CAMERA_1
 		 * ```
 		 */
 		@ $mol_mem
 		Camera_2() {
-			const obj = new this.$.$mol_video_player()
+			const obj = new this.$.$scale_dash_camera()
 			
-			obj.uri = () => this.uri()
+			obj.id = () => "CAMERA_1"
 			
 			return obj
 		}

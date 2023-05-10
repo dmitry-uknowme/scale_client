@@ -12,9 +12,7 @@ $scale_app $mol_book2_catalog
 			menu_body / <= Dash_body $scale_dash
 			param \dash
 			menu_title \Панель управления
-			menu_tools /
-				<= Spread_close
-			Spread_close => Dash_close
+			Spread_close => Spread_close
 			spreads *
 				form_enter <= Form_enter $mol_book2_catalog
 					menu_body / <= Form_enter_body $scale_form_enter
@@ -29,12 +27,9 @@ $scale_app $mol_book2_catalog
 					menu_title \Создать запись на выезд
 					menu_tools /
 						<= Spread_close
-					Spread_close => Form_close_close
+					Spread_close => Form_exit_close
 		stats <= Stats $mol_book2_catalog
 			menu_body / <= Stats_body $scale_stats
 			param \stats
 			menu_title \Статистика
-			menu_tools /
-				<= Spread_close
-			Spread_close => Stats_close
 		
