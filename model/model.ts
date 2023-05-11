@@ -40,6 +40,7 @@ namespace $ {
   export interface $scale_modelOrganization {
     id: number;
     public_id: string;
+    publicId: string;
     title: string;
     role: $scale_modelOrganizationRole;
     status: $scale_modelOrganizationStatus;

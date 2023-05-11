@@ -38,7 +38,7 @@ namespace $.$$ {
     }
 
     @$mol_mem
-    act_list() {
+    act_list(reset?: "reset") {
       return this.api()
         .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
         .map((obj) => this.Act_row(obj));
@@ -85,7 +85,7 @@ namespace $.$$ {
       return `Авто на территории (${this.count()})`;
     }
 
-    @$mol_mem
+    @$mol_mem_key
     act_exit_text(obj: $scale_modelAct) {
       return `Создать запись на выезд для ${obj.auto.number}`;
     }

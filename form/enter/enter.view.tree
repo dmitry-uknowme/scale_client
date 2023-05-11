@@ -2,7 +2,7 @@ $scale_form_enter $mol_form
 	attr *
 		^
 		auto_relations <= auto_relations null
-		auto_related <= auto_related
+		auto_related <= auto_related null
 	api $scale_api
 	dash $scale_dash
 	body /
@@ -14,7 +14,7 @@ $scale_form_enter $mol_form
 				name \Текущий вес
 				bid <= weight_bid \
 				Content <= Weight_control $mol_paragraph
-					title <= weight_formatted
+					title <= weight_formatted \
 			<= Number_field $mol_form_field
 				name \Гос. номер
 				bid <= number_bid \

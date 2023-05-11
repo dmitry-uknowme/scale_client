@@ -3,7 +3,7 @@ namespace $.$$ {
     @$mol_mem
     payers_options() {
       if (this.auto_related() === true && this.auto_relations()?.payers) {
-        return this.auto_relations()?.payers;
+        return this.auto_relations()?.payers as {};
       } else if (this.auto_related() === false) {
         const data = this.api().getOrganizations({
           status: $scale_modelOrganizationStatus.ACTIVE,
@@ -15,12 +15,13 @@ namespace $.$$ {
         );
         return result;
       }
+      return {};
     }
 
     @$mol_mem
     transporters_options() {
       if (this.auto_related() === true && this.auto_relations()?.transporters) {
-        return [this.auto_relations()?.transporters];
+        return this.auto_relations()?.transporters as {};
       } else if (this.auto_related() === false) {
         const data = this.api().getOrganizations({
           status: $scale_modelOrganizationStatus.ACTIVE,
@@ -32,6 +33,7 @@ namespace $.$$ {
         );
         return result;
       }
+      return {};
     }
 
     @$mol_mem
@@ -108,11 +110,11 @@ namespace $.$$ {
         cargoTypePublicId: this.cargo_type(),
         wasteCategoryPublicId: this.cargo_category(),
         comment: "",
-        weight: parseFloat(this.weight()),
+        weight: this.weight()!,
         apiClientSecretKey: "123456",
       });
       this.dash().act_list("reset");
-      this.dash().render("reset");
+      //   this.dash().render("reset");
       $mol_state_arg.dict({ "": "dash" });
       new $mol_after_timeout(200, () => window.location.reload());
     }
