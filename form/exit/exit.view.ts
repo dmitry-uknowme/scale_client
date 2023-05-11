@@ -20,7 +20,7 @@ namespace $.$$ {
       this.api().closeAct({
         publicId: this.act(),
         comment: "",
-        weight: parseFloat(this.weight()),
+        weight: this.weight()!,
         apiClientSecretKey: "123456",
       });
 
@@ -31,7 +31,11 @@ namespace $.$$ {
     }
 
     auto() {
-      const initialFormData = JSON.parse($mol_state_arg.value("form_data"));
+      const initialFormData = JSON.parse(
+        $mol_state_arg.value("form_data")!
+      ) as {
+        act_id: string;
+      };
       if (initialFormData?.act_id) {
         this.act(initialFormData?.act_id);
       }

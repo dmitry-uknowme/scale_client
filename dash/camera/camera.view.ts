@@ -68,6 +68,8 @@ namespace $.$$ {
       //@ts-expect-error
       pc.setLocalDescription(offer);
       console.log("sdp", pc.localDescription);
+
+      //@ts-expect-error
       this.init_remote_sdp.call(this, pc);
     }
 

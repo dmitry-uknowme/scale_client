@@ -8918,14 +8918,7 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $scale_form_enter extends $mol_form {
-        attr() {
-            return {
-                ...super.attr(),
-                auto_relations: this.auto_relations(),
-                auto_related: this.auto_related()
-            };
-        }
+    class $scale_form_enter extends $mol_list {
         api() {
             const obj = new this.$.$scale_api();
             return obj;
@@ -8934,16 +8927,16 @@ var $;
             const obj = new this.$.$scale_dash();
             return obj;
         }
-        body() {
-            return [
-                this.Centrifuge(),
-                this.Names()
-            ];
+        attr() {
+            return {
+                ...super.attr(),
+                auto_relations: this.auto_relations(),
+                auto_related: this.auto_related()
+            };
         }
-        buttons() {
+        rows() {
             return [
-                this.Signup(),
-                this.Result()
+                this.Form()
             ];
         }
         auto_relations() {
@@ -9131,6 +9124,18 @@ var $;
             obj.message = () => this.result();
             return obj;
         }
+        Form() {
+            const obj = new this.$.$mol_form();
+            obj.body = () => [
+                this.Centrifuge(),
+                this.Names()
+            ];
+            obj.buttons = () => [
+                this.Signup(),
+                this.Result()
+            ];
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
@@ -9207,6 +9212,9 @@ var $;
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "Result", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_enter.prototype, "Form", null);
     $.$scale_form_enter = $scale_form_enter;
 })($ || ($ = {}));
 //scale/form/enter/-view.tree/enter.view.tree.ts
@@ -9515,7 +9523,7 @@ var $;
                 this.api().closeAct({
                     publicId: this.act(),
                     comment: "",
-                    weight: parseFloat(this.weight()),
+                    weight: this.weight(),
                     apiClientSecretKey: "123456",
                 });
                 $mol_state_arg.dict({ "": "dash" });
