@@ -24,7 +24,7 @@ namespace $.$$ {
       //   });
       const formData = new FormData();
       formData.append("suuid", this.id());
-      formData.append("data", btoa(pc?.localDescription?.sdp));
+      formData.append("data", btoa(pc?.localDescription?.sdp!));
 
       //   try {
       //     const data = $mol_fetch.json(
@@ -53,7 +53,7 @@ namespace $.$$ {
     }
 
     @$mol_action
-    init_codec_info(pc) {
+    init_codec_info(pc: RTCPeerConnection) {
       pc.addTransceiver("video", {
         direction: "sendrecv",
       });

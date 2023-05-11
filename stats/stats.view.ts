@@ -67,7 +67,6 @@ namespace $.$$ {
         role: $scale_modelOrganizationRole.TRANSPORTER,
       });
       const result = data.reduce(
-        //@ts-expect-error
         (acc, curr) => ((acc[curr.public_id] = curr.title), acc),
         {}
       );
@@ -78,7 +77,6 @@ namespace $.$$ {
     cargoTypes_options() {
       const data = this.api().getCargoTypes();
       const result = data.reduce(
-        //@ts-expect-error
         (acc, curr) => ((acc[curr.publicId] = curr.title), acc),
         {}
       );
@@ -89,7 +87,6 @@ namespace $.$$ {
     cargoCategories_options() {
       const data = this.api().getCargoCategories();
       const result = data.reduce(
-        //@ts-expect-error
         (acc, curr) => ((acc[curr.publicId] = curr.title), acc),
         {}
       );
