@@ -1,26 +1,31 @@
-$scale_form_exit $mol_form
+$scale_form_exit $mol_list
+	default_values *
+		act \Выберите гос. номер
 	api $scale_api
-	body /
-		<= Centrifuge $scale_centrifuge
-			weight_channel => weight
-		<= Names $mol_form_group sub /
-			<= Weight_field $mol_form_field
-				name \Текущий вес
-				bid <= weight_bid \
-				Content <= Weight_control $mol_paragraph
-					title <= weight_formatted \0
-			<= Auto_number_field $mol_form_field
-				name \Гос. номер
-				bid <= auto_number_bid \
-				Content <= Auto_number_control $mol_select
-					value?val <=> act?val \Выберите гос. номер
-					dictionary <= acts_options *
-					hint \Выберите
-	submit?val <=> signup?val null
-	buttons /
-		<= Signup $mol_button_major
-			title \Создать запись на выезд
-			click?val <=> exit_submit?val null
-			enabled true
-		<= Result $mol_status
-			message <= result?val \
+	rows /
+		<= Form $mol_form
+			body /
+				<= Centrifuge $scale_centrifuge
+					weight_channel => weight
+				<= Names $mol_form_group sub /
+					<= Weight_field $mol_form_field
+						name \Текущий вес
+						bid <= weight_bid \
+						Content <= Weight_control $mol_paragraph
+							title <= weight_formatted \0
+					<= Auto_number_field $mol_form_field
+						name \Гос. номер
+						bid <= act_bid \
+						Content <= Act_control $mol_select
+							value?val <=> act?val \Выберите гос. номер
+							dictionary <= acts_options *
+							hint \Выберите
+			submit?val <=> exit_submit?val null
+			submit_allowed => submit_allowed
+			buttons /
+				<= Submit $mol_button_major
+					title \Создать запись на выезд
+					click?val <=> exit_submit?val null
+					enabled <= submit_allowed
+				<= Result $mol_status
+					message <= result?val \

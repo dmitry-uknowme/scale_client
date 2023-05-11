@@ -3,6 +3,7 @@ namespace $ {
     status: "success" | "error";
     data: TData & $scale_apiResponsePagination;
     errorMessage?: string;
+    errors?: string;
   }
   export interface $scale_apiResponsePagination {
     totalItemCount: number;
@@ -49,11 +50,12 @@ namespace $ {
       const response = $mol_fetch.json(`${BASE_URL}/createAct`, {
         method: "POST",
         body: JSON.stringify(payload),
-      }) as $scale_apiResponse<$scale_modelAct[]>;
-      if (response.status !== "success") {
-        throw new Error(`Response failed with status ${response.status}`);
-      }
-      return response.data;
+      });
+
+      //   if (response.status !== "success") {
+      //     throw new Error(`Response failed with status ${response.status}`);
+      //   }
+      return response;
     }
 
     closeAct(payload: $scale_modelActClosePayload) {

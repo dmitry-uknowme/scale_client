@@ -6864,10 +6864,7 @@ var $;
                 method: "POST",
                 body: JSON.stringify(payload),
             });
-            if (response.status !== "success") {
-                throw new Error(`Response failed with status ${response.status}`);
-            }
-            return response.data;
+            return response;
         }
         closeAct(payload) {
             const BASE_URL = $scale_env_BASE_URL;
@@ -8561,6 +8558,93 @@ var $;
 "use strict";
 var $;
 (function ($) {
+    class $mol_format extends $mol_string {
+        allow() {
+            return "0123456789";
+        }
+        hint() {
+            return this.mask("0");
+        }
+        keyboard() {
+            return "numeric";
+        }
+        mask(id) {
+            return "";
+        }
+    }
+    $.$mol_format = $mol_format;
+})($ || ($ = {}));
+//mol/format/-view.tree/format.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    $mol_style_attach("mol/format/format.view.css", "[mol_format] {\n\tfont-family: monospace;\n}\n");
+})($ || ($ = {}));
+//mol/format/-css/format.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $mol_format extends $.$mol_format {
+            selection([from, to] = [0, 0]) {
+                const prev = $mol_wire_probe(() => this.selection());
+                if (!prev)
+                    return [0, 100];
+                if (from !== to)
+                    return [from, to];
+                const allow = this.allow();
+                const value = this.value_changed();
+                const filtered = [...value].filter(letter => allow.includes(letter)).join('');
+                const mask = this.mask(filtered);
+                if ((prev?.[0] ?? 0) >= from)
+                    return [from, to];
+                const lastAllow = (value.length - [...value].reverse().findIndex(letter => allow.includes(letter))) % (value.length + 1);
+                if (lastAllow < from) {
+                    from = to = lastAllow;
+                }
+                while (mask[from] && mask[from] !== '_') {
+                    ++from;
+                    ++to;
+                }
+                return [from, to];
+            }
+            value_changed(next) {
+                const allow = this.allow();
+                const normalize = (val) => {
+                    val = [...val].filter(letter => allow.includes(letter)).join('');
+                    const letters = [...val].reverse();
+                    return this.mask(val).replace(/_/gu, () => letters.pop() ?? '_') + letters.reverse().join('');
+                };
+                if (next !== undefined) {
+                    next = normalize(next);
+                    if ([...next].filter(letter => allow.includes(letter)).join('')) {
+                        if (next.includes('_'))
+                            return next;
+                    }
+                    else {
+                        next = '';
+                    }
+                }
+                return normalize(this.value(next));
+            }
+        }
+        __decorate([
+            $mol_mem
+        ], $mol_format.prototype, "selection", null);
+        __decorate([
+            $mol_mem
+        ], $mol_format.prototype, "value_changed", null);
+        $$.$mol_format = $mol_format;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//mol/format/format.view.ts
+;
+"use strict";
+var $;
+(function ($) {
     class $mol_icon_dots_vertical extends $mol_icon {
         path() {
             return "M12,16C13.1,16 14,16.9 14,18C14,19.1 13.1,20 12,20C10.9,20 10,19.1 10,18C10,16.9 10.9,16 12,16M12,10C13.1,10 14,10.9 14,12C14,13.1 13.1,14 12,14C10.9,14 10,13.1 10,12C10,10.9 10.9,10 12,10M12,4C13.1,4 14,4.9 14,6C14,7.1 13.1,8 12,8C10.9,8 10,7.1 10,6C10,4.9 10.9,4 12,4Z";
@@ -8919,6 +9003,14 @@ var $;
 var $;
 (function ($) {
     class $scale_form_enter extends $mol_list {
+        default_values() {
+            return {
+                payer: "Выберите оператора",
+                transporter: "Выберите перевозчика",
+                cargo_type: "Выберите вид груза",
+                cargo_category: "Выберите категорию груза"
+            };
+        }
         api() {
             const obj = new this.$.$scale_api();
             return obj;
@@ -8973,25 +9065,21 @@ var $;
             obj.Content = () => this.Weight_control();
             return obj;
         }
-        number_bid() {
+        auto_number_bid() {
             return "";
         }
-        auto_number(val) {
-            if (val !== undefined)
-                return val;
-            return "";
-        }
-        Number_control() {
-            const obj = new this.$.$mol_string();
+        Auto_number_control() {
+            const obj = new this.$.$mol_format();
+            obj.allow = () => "авсденкмортхуАВСДЕНКМОРТХУ01234567890";
+            obj.mask = () => "|_|___|__|___|";
             obj.value = (val) => this.auto_number(val);
-            obj.hint = () => "Введите гос. номер";
             return obj;
         }
-        Number_field() {
+        Auto_number_field() {
             const obj = new this.$.$mol_form_field();
             obj.name = () => "Гос. номер";
-            obj.bid = () => this.number_bid();
-            obj.Content = () => this.Number_control();
+            obj.bid = () => this.auto_number_bid();
+            obj.Content = () => this.Auto_number_control();
             return obj;
         }
         payer_bid() {
@@ -9095,7 +9183,7 @@ var $;
             const obj = new this.$.$mol_form_group();
             obj.sub = () => [
                 this.Weight_field(),
-                this.Number_field(),
+                this.Auto_number_field(),
                 this.Payer_field(),
                 this.Transporter_field(),
                 this.Cargo_type_field(),
@@ -9108,10 +9196,11 @@ var $;
                 return val;
             return null;
         }
-        Signup() {
+        Submit() {
             const obj = new this.$.$mol_button_major();
             obj.title = () => "Создать запись на въезд";
             obj.click = (val) => this.enter_submit(val);
+            obj.enabled = () => this.submit_allowed();
             return obj;
         }
         result(val) {
@@ -9124,14 +9213,18 @@ var $;
             obj.message = () => this.result();
             return obj;
         }
+        submit_allowed() {
+            return this.Form().submit_allowed();
+        }
         Form() {
             const obj = new this.$.$mol_form();
             obj.body = () => [
                 this.Centrifuge(),
                 this.Names()
             ];
+            obj.submit = (val) => this.enter_submit(val);
             obj.buttons = () => [
-                this.Signup(),
+                this.Submit(),
                 this.Result()
             ];
             return obj;
@@ -9154,13 +9247,10 @@ var $;
     ], $scale_form_enter.prototype, "Weight_field", null);
     __decorate([
         $mol_mem
-    ], $scale_form_enter.prototype, "auto_number", null);
+    ], $scale_form_enter.prototype, "Auto_number_control", null);
     __decorate([
         $mol_mem
-    ], $scale_form_enter.prototype, "Number_control", null);
-    __decorate([
-        $mol_mem
-    ], $scale_form_enter.prototype, "Number_field", null);
+    ], $scale_form_enter.prototype, "Auto_number_field", null);
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "payer", null);
@@ -9205,7 +9295,7 @@ var $;
     ], $scale_form_enter.prototype, "enter_submit", null);
     __decorate([
         $mol_mem
-    ], $scale_form_enter.prototype, "Signup", null);
+    ], $scale_form_enter.prototype, "Submit", null);
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "result", null);
@@ -9218,6 +9308,23 @@ var $;
     $.$scale_form_enter = $scale_form_enter;
 })($ || ($ = {}));
 //scale/form/enter/-view.tree/enter.view.tree.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        $mol_style_define($scale_form_enter, {
+            Auto_number_control: {
+                textTransform: "uppercase",
+                "::placeholder": {
+                    textTransform: "initial",
+                },
+            },
+        });
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//scale/form/enter/enter.view.css.ts
 ;
 "use strict";
 var $;
@@ -9238,6 +9345,26 @@ var $;
                     return result;
                 }
                 return {};
+            }
+            payer(next) {
+                if (next)
+                    return next;
+                if (this.auto_related() &&
+                    this.auto_relations() &&
+                    Object.keys(this.auto_relations()?.payers).length) {
+                    return this?.auto_relations()?.payers[Object.keys(this.auto_relations()?.payers)[0]];
+                }
+                return "Выберите оператора";
+            }
+            transporter(next) {
+                if (next)
+                    return next;
+                if (this.auto_related() &&
+                    this.auto_relations() &&
+                    Object.keys(this.auto_relations()?.transporters).length) {
+                    return this?.auto_relations()?.transporters[Object.keys(this.auto_relations()?.transporters)[0]];
+                }
+                return "Выберите перевозчика";
             }
             transporters_options() {
                 if (this.auto_related() === true && this.auto_relations()?.transporters) {
@@ -9273,17 +9400,18 @@ var $;
                         const data = {
                             payers: relations.payers.map((p) => ({
                                 ...p,
-                                public_id: p.publicId,
                             })),
                             transporters: relations.transporters.map((t) => ({
                                 ...t,
                                 public_id: t.publicId,
                             })),
                         };
+                        console.log("dddd", data);
                         const result = {
-                            payers: data.payers.reduce((acc, curr) => ((acc[curr.publicId] = curr.title), acc), {}),
-                            transporters: data.transporters.reduce((acc, curr) => ((acc[curr.publicId] = curr.title), acc), {}),
+                            payers: data.payers.reduce((acc, curr) => ((acc[curr.public_id] = curr.title), acc), {}),
+                            transporters: data.transporters.reduce((acc, curr) => ((acc[curr.public_id] = curr.title), acc), {}),
                         };
+                        console.log("rrr", result);
                         return result;
                     }
                     catch (err) {
@@ -9297,26 +9425,78 @@ var $;
             weight_formatted() {
                 return `${this.weight() || 0} кг`;
             }
+            auto_number_bid(next) {
+                if (next !== undefined)
+                    return next;
+                if (!this.auto_number() || !this.auto_number().trim().length) {
+                    return "*";
+                }
+                else if (!/^[А-Я]{1}[0-9]{3}[А-Я]{2}[0-9]{2,3}$/.test(this.auto_number().trim().replaceAll("|", ""))) {
+                    return "Неверный формат номера";
+                }
+                return "";
+            }
+            payer_bid(next) {
+                if (next !== undefined)
+                    return next;
+                if (!this.payer() || this.payer() === this.default_values().payer) {
+                    return "*";
+                }
+                return "";
+            }
+            transporter_bid(next) {
+                if (next !== undefined)
+                    return next;
+                if (!this.transporter() ||
+                    this.transporter() === this.default_values().transporter) {
+                    return "*";
+                }
+                return "";
+            }
+            cargo_type_bid(next) {
+                if (next !== undefined)
+                    return next;
+                if (!this.cargo_type() ||
+                    this.cargo_type() === this.default_values().cargo_type) {
+                    return "*";
+                }
+                return "";
+            }
+            cargo_category_bid(next) {
+                if (next !== undefined)
+                    return next;
+                if (!this.cargo_category() ||
+                    this.cargo_category() === this.default_values().cargo_category) {
+                    return "*";
+                }
+                return "";
+            }
             enter_submit() {
-                this.api().createAct({
-                    autoNumber: this.auto_number(),
-                    payerPublicId: this.payer(),
-                    transporterPublicId: this.transporter(),
-                    cargoTypePublicId: this.cargo_type(),
-                    wasteCategoryPublicId: this.cargo_category(),
-                    comment: "",
-                    weight: this.weight(),
-                    apiClientSecretKey: "123456",
-                });
-                this.dash().act_list("reset");
-                $mol_state_arg.dict({ "": "dash" });
-                new $mol_after_timeout(200, () => window.location.reload());
+                try {
+                    const response = this.api().createAct({
+                        autoNumber: this.auto_number().trim().replaceAll("|", ""),
+                        payerPublicId: this.payer(),
+                        transporterPublicId: this.transporter(),
+                        cargoTypePublicId: this.cargo_type(),
+                        wasteCategoryPublicId: this.cargo_category(),
+                        comment: "",
+                        weight: this.weight(),
+                        apiClientSecretKey: "123456",
+                    });
+                    this.dash().act_list("reset");
+                    $mol_state_arg.dict({ "": "dash" });
+                    new $mol_after_timeout(200, () => window.location.reload());
+                }
+                catch (err) {
+                    this.result(`Ошибка при отправке акта. ${err}`);
+                }
             }
             count() {
                 return this.dash().act_list().length;
             }
             auto_number(next) {
-                return next || this.autoNumber_IN();
+                console.log("aaaa", next);
+                return next?.toUpperCase() ?? this.autoNumber_IN() ?? "";
             }
             auto() {
                 this.auto_number(this.autoNumber_IN());
@@ -9325,6 +9505,12 @@ var $;
         __decorate([
             $mol_mem
         ], $scale_form_enter.prototype, "payers_options", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "payer", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "transporter", null);
         __decorate([
             $mol_mem
         ], $scale_form_enter.prototype, "transporters_options", null);
@@ -9345,6 +9531,21 @@ var $;
         ], $scale_form_enter.prototype, "weight_formatted", null);
         __decorate([
             $mol_mem
+        ], $scale_form_enter.prototype, "auto_number_bid", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "payer_bid", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "transporter_bid", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "cargo_type_bid", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_enter.prototype, "cargo_category_bid", null);
+        __decorate([
+            $mol_mem
         ], $scale_form_enter.prototype, "auto_number", null);
         $$.$scale_form_enter = $scale_form_enter;
     })($$ = $.$$ || ($.$$ = {}));
@@ -9354,24 +9555,19 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $scale_form_exit extends $mol_form {
+    class $scale_form_exit extends $mol_list {
+        default_values() {
+            return {
+                act: "Выберите гос. номер"
+            };
+        }
         api() {
             const obj = new this.$.$scale_api();
             return obj;
         }
-        body() {
+        rows() {
             return [
-                this.Centrifuge(),
-                this.Names()
-            ];
-        }
-        submit(val) {
-            return this.signup(val);
-        }
-        buttons() {
-            return [
-                this.Signup(),
-                this.Result()
+                this.Form()
             ];
         }
         weight() {
@@ -9399,7 +9595,7 @@ var $;
             obj.Content = () => this.Weight_control();
             return obj;
         }
-        auto_number_bid() {
+        act_bid() {
             return "";
         }
         act(val) {
@@ -9410,7 +9606,7 @@ var $;
         acts_options() {
             return {};
         }
-        Auto_number_control() {
+        Act_control() {
             const obj = new this.$.$mol_select();
             obj.value = (val) => this.act(val);
             obj.dictionary = () => this.acts_options();
@@ -9420,8 +9616,8 @@ var $;
         Auto_number_field() {
             const obj = new this.$.$mol_form_field();
             obj.name = () => "Гос. номер";
-            obj.bid = () => this.auto_number_bid();
-            obj.Content = () => this.Auto_number_control();
+            obj.bid = () => this.act_bid();
+            obj.Content = () => this.Act_control();
             return obj;
         }
         Names() {
@@ -9432,21 +9628,16 @@ var $;
             ];
             return obj;
         }
-        signup(val) {
-            if (val !== undefined)
-                return val;
-            return null;
-        }
         exit_submit(val) {
             if (val !== undefined)
                 return val;
             return null;
         }
-        Signup() {
+        Submit() {
             const obj = new this.$.$mol_button_major();
             obj.title = () => "Создать запись на выезд";
             obj.click = (val) => this.exit_submit(val);
-            obj.enabled = () => true;
+            obj.enabled = () => this.submit_allowed();
             return obj;
         }
         result(val) {
@@ -9457,6 +9648,22 @@ var $;
         Result() {
             const obj = new this.$.$mol_status();
             obj.message = () => this.result();
+            return obj;
+        }
+        submit_allowed() {
+            return this.Form().submit_allowed();
+        }
+        Form() {
+            const obj = new this.$.$mol_form();
+            obj.body = () => [
+                this.Centrifuge(),
+                this.Names()
+            ];
+            obj.submit = (val) => this.exit_submit(val);
+            obj.buttons = () => [
+                this.Submit(),
+                this.Result()
+            ];
             return obj;
         }
     }
@@ -9477,7 +9684,7 @@ var $;
     ], $scale_form_exit.prototype, "act", null);
     __decorate([
         $mol_mem
-    ], $scale_form_exit.prototype, "Auto_number_control", null);
+    ], $scale_form_exit.prototype, "Act_control", null);
     __decorate([
         $mol_mem
     ], $scale_form_exit.prototype, "Auto_number_field", null);
@@ -9486,19 +9693,19 @@ var $;
     ], $scale_form_exit.prototype, "Names", null);
     __decorate([
         $mol_mem
-    ], $scale_form_exit.prototype, "signup", null);
-    __decorate([
-        $mol_mem
     ], $scale_form_exit.prototype, "exit_submit", null);
     __decorate([
         $mol_mem
-    ], $scale_form_exit.prototype, "Signup", null);
+    ], $scale_form_exit.prototype, "Submit", null);
     __decorate([
         $mol_mem
     ], $scale_form_exit.prototype, "result", null);
     __decorate([
         $mol_mem
     ], $scale_form_exit.prototype, "Result", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_exit.prototype, "Form", null);
     $.$scale_form_exit = $scale_form_exit;
 })($ || ($ = {}));
 //scale/form/exit/-view.tree/exit.view.tree.ts
@@ -9511,6 +9718,14 @@ var $;
         class $scale_form_exit extends $.$scale_form_exit {
             weight_formatted() {
                 return `${this.weight() || 0} кг`;
+            }
+            act_bid(next) {
+                if (next !== undefined)
+                    return next;
+                if (!this.act() || this.act() === this.default_values().act) {
+                    return "*";
+                }
+                return "";
             }
             acts_options() {
                 const data = this.api().getActs({
@@ -9539,6 +9754,9 @@ var $;
         __decorate([
             $mol_mem
         ], $scale_form_exit.prototype, "weight_formatted", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_exit.prototype, "act_bid", null);
         $$.$scale_form_exit = $scale_form_exit;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));

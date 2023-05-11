@@ -5,6 +5,15 @@ namespace $.$$ {
       return `${this.weight() || 0} кг`;
     }
 
+    @$mol_mem
+    act_bid(next?: string): string {
+      if (next !== undefined) return next;
+      if (!this.act() || this.act() === this.default_values().act) {
+        return "*";
+      }
+      return "";
+    }
+
     acts_options() {
       const data = this.api().getActs({
         status: $scale_modelActStatus.ON_TERRITORY,
