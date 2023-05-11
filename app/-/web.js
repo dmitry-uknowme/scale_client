@@ -9352,7 +9352,7 @@ var $;
                 if (this.auto_related() &&
                     this.auto_relations() &&
                     Object.keys(this.auto_relations()?.payers).length) {
-                    return this?.auto_relations()?.payers[Object.keys(this.auto_relations()?.payers)[0]];
+                    return Object.keys(this.auto_relations()?.payers)[0];
                 }
                 return "Выберите оператора";
             }
@@ -9362,7 +9362,7 @@ var $;
                 if (this.auto_related() &&
                     this.auto_relations() &&
                     Object.keys(this.auto_relations()?.transporters).length) {
-                    return this?.auto_relations()?.transporters[Object.keys(this.auto_relations()?.transporters)[0]];
+                    return Object.keys(this.auto_relations()?.transporters)[0];
                 }
                 return "Выберите перевозчика";
             }
@@ -9406,12 +9406,10 @@ var $;
                                 public_id: t.publicId,
                             })),
                         };
-                        console.log("dddd", data);
                         const result = {
                             payers: data.payers.reduce((acc, curr) => ((acc[curr.public_id] = curr.title), acc), {}),
                             transporters: data.transporters.reduce((acc, curr) => ((acc[curr.public_id] = curr.title), acc), {}),
                         };
-                        console.log("rrr", result);
                         return result;
                     }
                     catch (err) {

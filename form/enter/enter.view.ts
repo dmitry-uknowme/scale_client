@@ -26,9 +26,7 @@ namespace $.$$ {
         this.auto_relations() &&
         Object.keys(this.auto_relations()?.payers!).length
       ) {
-        return this?.auto_relations()?.payers![
-          Object.keys(this.auto_relations()?.payers!)[0]
-        ];
+        return Object.keys(this.auto_relations()?.payers!)[0];
       }
       return "Выберите оператора";
     }
@@ -41,9 +39,7 @@ namespace $.$$ {
         this.auto_relations() &&
         Object.keys(this.auto_relations()?.transporters!).length
       ) {
-        return this?.auto_relations()?.transporters![
-          Object.keys(this.auto_relations()?.transporters!)[0]
-        ];
+        return Object.keys(this.auto_relations()?.transporters!)[0];
       }
       return "Выберите перевозчика";
     }
@@ -107,7 +103,6 @@ namespace $.$$ {
               //   publicId: t.public_id as string,
             })) as $scale_modelOrganization[],
           };
-          console.log("dddd", data);
           const result = {
             payers: data.payers.reduce(
               (acc, curr) => ((acc[curr.public_id] = curr.title), acc),
@@ -118,7 +113,6 @@ namespace $.$$ {
               {}
             ),
           };
-          console.log("rrr", result);
           return result;
         } catch (err) {
           this.auto_related(false);
