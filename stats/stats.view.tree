@@ -1,4 +1,9 @@
 $scale_stats $mol_list
+	default_values *
+		payer \Все операторы
+		transporter \Все перевозчики
+		cargo_type \Все виды груза
+		cargo_category \Все категории груза
 	api $scale_api
 	rows /
 		<= Filter $mol_section

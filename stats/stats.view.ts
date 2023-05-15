@@ -3,7 +3,26 @@ namespace $.$$ {
     @$mol_mem
     act_list(reset?: "reset") {
       return this.api()
-        .getActs({ status: $scale_modelActStatus.COMPLETED })
+        .getActs({
+          status: $scale_modelActStatus.COMPLETED,
+          cargoType:
+            this.cargo_type() === this.default_values().cargo_type
+              ? null
+              : this.cargo_type(),
+          wasteCategory:
+            this.cargo_category() === this.default_values().cargo_category
+              ? null
+              : this.cargo_category(),
+          autoNumber: this.auto_number().trim().length
+            ? this.auto_number()
+            : null,
+          payerPublicId:
+            this.payer() === this.default_values().payer ? null : this.payer(),
+          transporterPublicId:
+            this.transporter() === this.default_values().transporter
+              ? null
+              : this.transporter(),
+        })
         .map((obj) => this.Act_row(obj));
     }
 

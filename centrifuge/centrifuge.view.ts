@@ -14,17 +14,20 @@ namespace $.$$ {
 
     @$mol_mem
     weight_channel(next?: number) {
-      return next;
+      return $mol_state_local.value("centrifuge_weight_data", next);
+      //   return next;
     }
 
     @$mol_mem
     autoNumber_channel_IN(next?: string) {
-      return next;
+      return $mol_state_local.value("centrifuge_autoNumber_IN_data", next);
+      //   return next;
     }
 
     @$mol_mem
     autoNumber_channel_OUT(next?: string) {
-      return next;
+      return $mol_state_local.value("centrifuge_autoNumber_OUT_data", next);
+      //   return next;
     }
 
     @$mol_action

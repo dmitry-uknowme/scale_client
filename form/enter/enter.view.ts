@@ -84,12 +84,13 @@ namespace $.$$ {
 
     @$mol_mem
     auto_relations() {
-      const number = this.autoNumber_IN();
+      const number = this.auto_number();
       //   const number = $mol_mem_cached(() => this.autoNumber_IN());
-      console.log("nnn", number);
-      if (number) {
+      if (number && this.auto_number_bid() === "") {
         try {
-          const relations = this.api().getAutoRelations(number);
+          const relations = this.api().getAutoRelations(
+            number.replaceAll("|", "")
+          );
           this.auto_related(true);
           const data = {
             payers: relations.payers.map((p) => ({
@@ -190,24 +191,26 @@ namespace $.$$ {
       return "";
     }
 
+    @$mol_action
     enter_submit() {
-      try {
-        const response = this.api().createAct({
-          autoNumber: this.auto_number().trim().replaceAll("|", ""),
-          payerPublicId: this.payer(),
-          transporterPublicId: this.transporter(),
-          cargoTypePublicId: this.cargo_type(),
-          wasteCategoryPublicId: this.cargo_category(),
-          comment: "",
-          weight: this.weight()!,
-          apiClientSecretKey: "123456",
-        });
-        this.dash().act_list("reset");
-        $mol_state_arg.dict({ "": "dash" });
-        new $mol_after_timeout(200, () => window.location.reload());
-      } catch (err) {
-        this.result(`Ошибка при отправке акта. ${err}`);
-      }
+      //   try {
+      const response = this.api().createAct({
+        autoNumber: this.auto_number().trim().replaceAll("|", ""),
+        payerPublicId: this.payer(),
+        transporterPublicId: this.transporter(),
+        cargoTypePublicId: this.cargo_type(),
+        wasteCategoryPublicId: this.cargo_category(),
+        comment: "",
+        weight: this.weight()!,
+        apiClientSecretKey: "123456",
+      });
+      this.dash().act_list("reset");
+      console.log("resss", response);
+      $mol_state_arg.dict({ "": "dash" });
+      new $mol_after_timeout(200, () => window.location.reload());
+      //   } catch (err) {
+      //     this.result(`Ошибка при отправке акта. ${err}`);
+      //   }
     }
 
     count() {
@@ -220,8 +223,16 @@ namespace $.$$ {
       return next?.toUpperCase() ?? this.autoNumber_IN() ?? "";
     }
 
-    auto() {
-      this.auto_number(this.autoNumber_IN());
+    weight(): number | null {
+      return $mol_state_local.value("centrifuge_weight_data");
     }
+
+    autoNumber_IN(): string | null {
+      return $mol_state_local.value("centrifuge_autoNumber_IN_data");
+    }
+
+    // auto() {
+    //   this.auto_number(this.autoNumber_IN());
+    // }
   }
 }

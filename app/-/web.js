@@ -6659,13 +6659,13 @@ var $;
                 return next;
             }
             weight_channel(next) {
-                return next;
+                return $mol_state_local.value("centrifuge_weight_data", next);
             }
             autoNumber_channel_IN(next) {
-                return next;
+                return $mol_state_local.value("centrifuge_autoNumber_IN_data", next);
             }
             autoNumber_channel_OUT(next) {
-                return next;
+                return $mol_state_local.value("centrifuge_autoNumber_OUT_data", next);
             }
             subscribe() {
                 const weightChannel = this.client().newSubscription("channel");
@@ -6834,12 +6834,22 @@ var $;
 "use strict";
 var $;
 (function ($) {
-    class $scale_api extends $mol_object2 {
+    class $scale_api extends $mol_object {
         getActs(filter = {
             status: $scale_modelActStatus.ACTIVE,
+            cargoType: null,
+            wasteCategory: null,
+            payerPublicId: null,
+            transporterPublicId: null,
+            autoNumber: null,
         }) {
             const BASE_URL = $scale_env_BASE_URL;
-            const response = $mol_fetch.json(`${BASE_URL}/getActs?status=${filter.status}`, {
+            const response = $mol_fetch.json(`${BASE_URL}/getActs${Object.keys(filter).length
+                ? `?${Object.keys(filter)
+                    .filter((key) => filter[key] !== null)
+                    .map((key) => `${key}=${filter[key]}`)
+                    .join("&")}`
+                : ""}`, {
                 method: "GET",
             });
             if (response.status !== "success") {
@@ -6860,7 +6870,7 @@ var $;
         }
         createAct(payload) {
             const BASE_URL = $scale_env_BASE_URL;
-            const response = $mol_fetch.json(`${BASE_URL}/createAct`, {
+            const response = $mol_fetch.request(`${BASE_URL}/createAct`, {
                 method: "POST",
                 body: JSON.stringify(payload),
             });
@@ -9391,11 +9401,10 @@ var $;
                 return result;
             }
             auto_relations() {
-                const number = this.autoNumber_IN();
-                console.log("nnn", number);
-                if (number) {
+                const number = this.auto_number();
+                if (number && this.auto_number_bid() === "") {
                     try {
-                        const relations = this.api().getAutoRelations(number);
+                        const relations = this.api().getAutoRelations(number.replaceAll("|", ""));
                         this.auto_related(true);
                         const data = {
                             payers: relations.payers.map((p) => ({
@@ -9470,24 +9479,20 @@ var $;
                 return "";
             }
             enter_submit() {
-                try {
-                    const response = this.api().createAct({
-                        autoNumber: this.auto_number().trim().replaceAll("|", ""),
-                        payerPublicId: this.payer(),
-                        transporterPublicId: this.transporter(),
-                        cargoTypePublicId: this.cargo_type(),
-                        wasteCategoryPublicId: this.cargo_category(),
-                        comment: "",
-                        weight: this.weight(),
-                        apiClientSecretKey: "123456",
-                    });
-                    this.dash().act_list("reset");
-                    $mol_state_arg.dict({ "": "dash" });
-                    new $mol_after_timeout(200, () => window.location.reload());
-                }
-                catch (err) {
-                    this.result(`Ошибка при отправке акта. ${err}`);
-                }
+                const response = this.api().createAct({
+                    autoNumber: this.auto_number().trim().replaceAll("|", ""),
+                    payerPublicId: this.payer(),
+                    transporterPublicId: this.transporter(),
+                    cargoTypePublicId: this.cargo_type(),
+                    wasteCategoryPublicId: this.cargo_category(),
+                    comment: "",
+                    weight: this.weight(),
+                    apiClientSecretKey: "123456",
+                });
+                this.dash().act_list("reset");
+                console.log("resss", response);
+                $mol_state_arg.dict({ "": "dash" });
+                new $mol_after_timeout(200, () => window.location.reload());
             }
             count() {
                 return this.dash().act_list().length;
@@ -9496,8 +9501,11 @@ var $;
                 console.log("aaaa", next);
                 return next?.toUpperCase() ?? this.autoNumber_IN() ?? "";
             }
-            auto() {
-                this.auto_number(this.autoNumber_IN());
+            weight() {
+                return $mol_state_local.value("centrifuge_weight_data");
+            }
+            autoNumber_IN() {
+                return $mol_state_local.value("centrifuge_autoNumber_IN_data");
             }
         }
         __decorate([
@@ -9542,6 +9550,9 @@ var $;
         __decorate([
             $mol_mem
         ], $scale_form_enter.prototype, "cargo_category_bid", null);
+        __decorate([
+            $mol_action
+        ], $scale_form_enter.prototype, "enter_submit", null);
         __decorate([
             $mol_mem
         ], $scale_form_enter.prototype, "auto_number", null);
@@ -9609,6 +9620,7 @@ var $;
             obj.value = (val) => this.act(val);
             obj.dictionary = () => this.acts_options();
             obj.hint = () => "Выберите";
+            obj.no_options_message = () => "Нет авто на территории";
             return obj;
         }
         Auto_number_field() {
@@ -9725,6 +9737,17 @@ var $;
                 }
                 return "";
             }
+            act(next) {
+                if (next)
+                    return next?.toUpperCase();
+                if (this.autoNumber_OUT()) {
+                    const index = Object.values(this.acts_options()).indexOf(this.autoNumber_OUT());
+                    if (index) {
+                        return Object.values(this.acts_options())[index];
+                    }
+                }
+                return "";
+            }
             acts_options() {
                 const data = this.api().getActs({
                     status: $scale_modelActStatus.ON_TERRITORY,
@@ -9742,6 +9765,9 @@ var $;
                 $mol_state_arg.dict({ "": "dash" });
                 new $mol_after_timeout(200, () => window.location.reload());
             }
+            autoNumber_OUT() {
+                return $mol_state_local.value("centrifuge_autoNumber_OUT_data");
+            }
             auto() {
                 const initialFormData = JSON.parse($mol_state_arg.value("form_data"));
                 if (initialFormData?.act_id) {
@@ -9755,6 +9781,9 @@ var $;
         __decorate([
             $mol_mem
         ], $scale_form_exit.prototype, "act_bid", null);
+        __decorate([
+            $mol_mem
+        ], $scale_form_exit.prototype, "act", null);
         $$.$scale_form_exit = $scale_form_exit;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
@@ -9764,6 +9793,14 @@ var $;
 var $;
 (function ($) {
     class $scale_stats extends $mol_list {
+        default_values() {
+            return {
+                payer: "Все операторы",
+                transporter: "Все перевозчики",
+                cargo_type: "Все виды груза",
+                cargo_category: "Все категории груза"
+            };
+        }
         api() {
             const obj = new this.$.$scale_api();
             return obj;
@@ -10216,7 +10253,22 @@ var $;
         class $scale_stats extends $.$scale_stats {
             act_list(reset) {
                 return this.api()
-                    .getActs({ status: $scale_modelActStatus.COMPLETED })
+                    .getActs({
+                    status: $scale_modelActStatus.COMPLETED,
+                    cargoType: this.cargo_type() === this.default_values().cargo_type
+                        ? null
+                        : this.cargo_type(),
+                    wasteCategory: this.cargo_category() === this.default_values().cargo_category
+                        ? null
+                        : this.cargo_category(),
+                    autoNumber: this.auto_number().trim().length
+                        ? this.auto_number()
+                        : null,
+                    payerPublicId: this.payer() === this.default_values().payer ? null : this.payer(),
+                    transporterPublicId: this.transporter() === this.default_values().transporter
+                        ? null
+                        : this.transporter(),
+                })
                     .map((obj) => this.Act_row(obj));
             }
             act_id(obj) {

@@ -20,6 +20,7 @@ $scale_form_exit $mol_list
 							value?val <=> act?val \Выберите гос. номер
 							dictionary <= acts_options *
 							hint \Выберите
+							no_options_message \Нет авто на территории
 			submit?val <=> exit_submit?val null
 			submit_allowed => submit_allowed
 			buttons /

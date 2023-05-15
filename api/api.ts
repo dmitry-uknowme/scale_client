@@ -11,19 +11,39 @@ namespace $ {
     limit: number;
   }
 
-  export class $scale_api extends $mol_object2 {
+  export class $scale_api extends $mol_object {
     getActs(
-      filter: { status: $scale_modelActStatus } = {
+      filter: {
+        status: $scale_modelActStatus | null;
+        cargoType: $scale_modelCargoType | null;
+        wasteCategory: $scale_modelCargoCategory | null;
+        payerPublicId: string | null;
+        transporterPublicId: string | null;
+        autoNumber: string | null;
+      } = {
         status: $scale_modelActStatus.ACTIVE,
+        cargoType: null,
+        wasteCategory: null,
+        payerPublicId: null,
+        transporterPublicId: null,
+        autoNumber: null,
       }
     ) {
       const BASE_URL = $scale_env_BASE_URL;
       const response = $mol_fetch.json(
-        `${BASE_URL}/getActs?status=${filter.status}`,
+        `${BASE_URL}/getActs${
+          Object.keys(filter).length
+            ? `?${Object.keys(filter)
+                .filter((key) => filter[key] !== null)
+                .map((key) => `${key}=${filter[key]}`)
+                .join("&")}`
+            : ""
+        }`,
         {
           method: "GET",
         }
       ) as $scale_apiResponse<$scale_modelAct[]>;
+
       if (response.status !== "success") {
         throw new Error(`Response failed with status ${response.status}`);
       }
@@ -47,7 +67,7 @@ namespace $ {
 
     createAct(payload: $scale_modelActCreatePayload) {
       const BASE_URL = $scale_env_BASE_URL;
-      const response = $mol_fetch.json(`${BASE_URL}/createAct`, {
+      const response = $mol_fetch.request(`${BASE_URL}/createAct`, {
         method: "POST",
         body: JSON.stringify(payload),
       });

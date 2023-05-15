@@ -14,6 +14,22 @@ namespace $.$$ {
       return "";
     }
 
+    @$mol_mem
+    act(next?: string) {
+      if (next) return next?.toUpperCase();
+
+      if (this.autoNumber_OUT()) {
+        const index = Object.values(this.acts_options()).indexOf(
+          this.autoNumber_OUT()
+        );
+        if (index) {
+          return Object.values(this.acts_options())[index] as string;
+        }
+      }
+
+      return "";
+    }
+
     acts_options() {
       const data = this.api().getActs({
         status: $scale_modelActStatus.ON_TERRITORY,
@@ -37,6 +53,10 @@ namespace $.$$ {
       //   this.dash().render("reset");
       $mol_state_arg.dict({ "": "dash" });
       new $mol_after_timeout(200, () => window.location.reload());
+    }
+
+    autoNumber_OUT(): string | null {
+      return $mol_state_local.value("centrifuge_autoNumber_OUT_data");
     }
 
     auto() {
