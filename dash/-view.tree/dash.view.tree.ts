@@ -462,23 +462,7 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Camera_2 $scale_dash_camera id \CAMERA_1
-		 * ```
-		 */
-		@ $mol_mem
-		Camera_2() {
-			const obj = new this.$.$scale_dash_camera()
-			
-			obj.id = () => "CAMERA_1"
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Camera_row $mol_row sub /
-		 * 	<= Camera_1
-		 * 	<= Camera_2
+		 * Camera_row $mol_row sub / <= Camera_1
 		 * ```
 		 */
 		@ $mol_mem
@@ -486,8 +470,7 @@ namespace $ {
 			const obj = new this.$.$mol_row()
 			
 			obj.sub = () => [
-				this.Camera_1(),
-				this.Camera_2()
+				this.Camera_1()
 			] as readonly any[]
 			
 			return obj

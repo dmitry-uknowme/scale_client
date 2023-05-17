@@ -7788,23 +7788,50 @@ var $;
             stream() {
                 return $mol_wire_sync(new MediaStream());
             }
-            init_remote_sdp(pc) {
-                const formData = new FormData();
-                formData.append("suuid", this.id());
-                formData.append("data", btoa(pc?.localDescription?.sdp));
+            async init_remote_sdp(pc) {
+                this.error({
+                    text: "Ошибка при подключении к камере",
+                    type: "Promise",
+                });
+                try {
+                    const formData = new FormData();
+                    formData.append("suuid", this.id());
+                    formData.append("data", btoa(pc?.localDescription?.sdp));
+                    const data = $mol_fetch.text(`http://localhost:8083/stream/receiver/${this.id()}`, {
+                        method: "POST",
+                        body: formData,
+                    });
+                    console.log("data", data);
+                    this.error(null);
+                    pc.setRemoteDescription(new RTCSessionDescription({
+                        type: "answer",
+                        sdp: atob(data),
+                    }));
+                }
+                catch (err) {
+                    if (err instanceof Error) {
+                        console.log("err", err);
+                        this.error({
+                            text: "Ошибка при подключении к камере",
+                            type: "LogicError",
+                        });
+                        new $mol_after_timeout(2000, () => this.init_remote_sdp.call(this, pc));
+                        throw new Error("Response failed", err);
+                    }
+                }
             }
             init_codec_info(pc) {
                 pc.addTransceiver("video", {
                     direction: "sendrecv",
                 });
             }
-            handle_negotiation_needed(event) {
+            async handle_negotiation_needed(event) {
                 const pc = $mol_wire_sync(event.target);
                 const offer = pc.createOffer();
                 console.log("offer", offer);
                 pc.setLocalDescription(offer);
                 console.log("sdp", pc.localDescription);
-                this.init_remote_sdp.call(this, pc);
+                await this.init_remote_sdp(pc);
             }
             error(next = null) {
                 return next;
@@ -7824,7 +7851,7 @@ var $;
             pc() {
                 const pc = new RTCPeerConnection(this.config());
                 this.init_codec_info(pc);
-                pc.onnegotiationneeded = (event) => $mol_wire_async(this.handle_negotiation_needed).call(this, event);
+                pc.onnegotiationneeded = $mol_wire_async(this).handle_negotiation_needed;
                 pc.onconnectionstatechange = (state) => console.log("state changed", state);
                 pc.ontrack = (event) => {
                     console.log("track event", event);
@@ -8070,16 +8097,10 @@ var $;
             obj.id = () => "CAMERA_1";
             return obj;
         }
-        Camera_2() {
-            const obj = new this.$.$scale_dash_camera();
-            obj.id = () => "CAMERA_1";
-            return obj;
-        }
         Camera_row() {
             const obj = new this.$.$mol_row();
             obj.sub = () => [
-                this.Camera_1(),
-                this.Camera_2()
+                this.Camera_1()
             ];
             return obj;
         }
@@ -8336,9 +8357,6 @@ var $;
     ], $scale_dash.prototype, "Camera_1", null);
     __decorate([
         $mol_mem
-    ], $scale_dash.prototype, "Camera_2", null);
-    __decorate([
-        $mol_mem
     ], $scale_dash.prototype, "Camera_row", null);
     __decorate([
         $mol_mem
@@ -8496,7 +8514,14 @@ var $;
             }
             act_list(reset) {
                 return this.api()
-                    .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
+                    .getActs({
+                    status: $scale_modelActStatus.ON_TERRITORY,
+                    cargoType: null,
+                    wasteCategory: null,
+                    autoNumber: null,
+                    payerPublicId: null,
+                    transporterPublicId: null,
+                })
                     .map((obj) => this.Act_row(obj));
             }
             act_id(obj) {

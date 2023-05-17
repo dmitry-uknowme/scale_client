@@ -17,39 +17,43 @@ namespace $.$$ {
     }
 
     @$mol_action
-    init_remote_sdp(pc: RTCPeerConnection) {
-      //   this.error({
-      //     text: "Ошибка при подключении к камере",
-      //     type: "Promise",
-      //   });
-      const formData = new FormData();
-      formData.append("suuid", this.id());
-      formData.append("data", btoa(pc?.localDescription?.sdp!));
-
-      //   try {
-      //     const data = $mol_fetch.json(
-      //       `http://localhost:8083/stream/receiver/${this.id()}`,
-      //       {
-      //         method: "POST",
-      //         body: formData,
-      //       }
-      //     );
-      //     console.log("rrrrr", data);
-      //     pc.setRemoteDescription(
-      //       new RTCSessionDescription({
-      //         type: "answer",
-      //         sdp: atob(data),
-      //       })
-      //     );
-      //   } catch (err) {
-      //     this.error({
-      //       text: "Ошибка при подключении к камере",
-      //       type: "LogicError",
-      //     });
-
-      //     new $mol_after_timeout(2000, () => this.init_remote_sdp.call(this, pc));
-      //     throw new Error("Response failed", err);
-      //   }
+    async init_remote_sdp(pc: RTCPeerConnection) {
+      this.error({
+        text: "Ошибка при подключении к камере",
+        type: "Promise",
+      });
+      try {
+        const formData = new FormData();
+        formData.append("suuid", this.id());
+        formData.append("data", btoa(pc?.localDescription?.sdp!));
+        const data = $mol_fetch.text(
+          `http://localhost:8083/stream/receiver/${this.id()}`,
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        console.log("data", data);
+        this.error(null);
+        pc.setRemoteDescription(
+          new RTCSessionDescription({
+            type: "answer",
+            sdp: atob(data),
+          })
+        );
+      } catch (err) {
+        if (err instanceof Error) {
+          console.log("err", err);
+          this.error({
+            text: "Ошибка при подключении к камере",
+            type: "LogicError",
+          });
+          new $mol_after_timeout(2000, () =>
+            this.init_remote_sdp.call(this, pc)
+          );
+          throw new Error("Response failed", err);
+        }
+      }
     }
 
     @$mol_action
@@ -60,7 +64,7 @@ namespace $.$$ {
     }
 
     @$mol_action
-    handle_negotiation_needed(event: Event) {
+    async handle_negotiation_needed(event: Event) {
       const pc = $mol_wire_sync(event.target as RTCPeerConnection);
       //@ts-expect-error
       const offer = pc.createOffer();
@@ -68,9 +72,8 @@ namespace $.$$ {
       //@ts-expect-error
       pc.setLocalDescription(offer);
       console.log("sdp", pc.localDescription);
-
-      //@ts-expect-error
-      this.init_remote_sdp.call(this, pc);
+      //   $mol_wire_sync(this).init_remote_sdp(pc);
+      await this.init_remote_sdp(pc);
     }
 
     @$mol_mem
@@ -104,8 +107,8 @@ namespace $.$$ {
 
       this.init_codec_info(pc);
 
-      pc.onnegotiationneeded = (event) =>
-        $mol_wire_async(this.handle_negotiation_needed).call(this, event);
+      pc.onnegotiationneeded = $mol_wire_async(this).handle_negotiation_needed;
+      // this.handle_negotiation_needed.call(this, event);
 
       pc.onconnectionstatechange = (state) =>
         console.log("state changed", state);

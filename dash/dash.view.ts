@@ -40,7 +40,14 @@ namespace $.$$ {
     @$mol_mem
     act_list(reset?: "reset") {
       return this.api()
-        .getActs({ status: $scale_modelActStatus.ON_TERRITORY })
+        .getActs({
+          status: $scale_modelActStatus.ON_TERRITORY,
+          cargoType: null,
+          wasteCategory: null,
+          autoNumber: null,
+          payerPublicId: null,
+          transporterPublicId: null,
+        })
         .map((obj) => this.Act_row(obj));
     }
 
