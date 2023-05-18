@@ -7786,38 +7786,49 @@ var $;
                 };
             }
             stream() {
-                return $mol_wire_sync(new MediaStream());
+                const stream = new MediaStream();
+                stream.onaddtrack = $mol_wire_async(this).handle_add_track;
+                return stream;
             }
-            async init_remote_sdp(pc) {
+            handle_add_track(event) {
+                console.log("event", event);
+                $mol_wire_async(() => this.init_track(event));
+            }
+            init_track(trackId) {
+                console.log("id", trackId);
+                try {
+                    const data = $mol_fetch.json(`/api/track/${trackId}`);
+                    console.log("data", data);
+                }
+                catch (error) {
+                    console.log("error");
+                    if (error instanceof Error) {
+                        console.log("error", error);
+                    }
+                }
+            }
+            init_remote_sdp(pc) {
                 this.error({
                     text: "Ошибка при подключении к камере",
                     type: "Promise",
                 });
+                console.log("start init");
                 try {
                     const formData = new FormData();
                     formData.append("suuid", this.id());
                     formData.append("data", btoa(pc?.localDescription?.sdp));
-                    const data = $mol_fetch.text(`http://localhost:8083/stream/receiver/${this.id()}`, {
-                        method: "POST",
-                        body: formData,
-                    });
-                    console.log("data", data);
-                    this.error(null);
-                    pc.setRemoteDescription(new RTCSessionDescription({
-                        type: "answer",
-                        sdp: atob(data),
-                    }));
+                    const response = $mol_wire_sync(window).fetch(`http://localhost:8083/stream/receiver/${this.id()}`, { method: "POST", body: formData });
+                    console.log("Response JSON:", response);
                 }
-                catch (err) {
-                    if (err instanceof Error) {
-                        console.log("err", err);
-                        this.error({
-                            text: "Ошибка при подключении к камере",
-                            type: "LogicError",
-                        });
-                        new $mol_after_timeout(2000, () => this.init_remote_sdp.call(this, pc));
-                        throw new Error("Response failed", err);
+                catch (error) {
+                    if (error instanceof Promise) {
+                        throw error;
                     }
+                    this.error({
+                        text: "Ошибка при подключении к камере",
+                        type: "LogicError",
+                    });
+                    console.log("errr", error);
                 }
             }
             init_codec_info(pc) {
@@ -7825,13 +7836,13 @@ var $;
                     direction: "sendrecv",
                 });
             }
-            async handle_negotiation_needed(event) {
+            handle_negotiation_needed(event) {
                 const pc = $mol_wire_sync(event.target);
                 const offer = pc.createOffer();
                 console.log("offer", offer);
                 pc.setLocalDescription(offer);
                 console.log("sdp", pc.localDescription);
-                await this.init_remote_sdp(pc);
+                $mol_wire_async(this).init_remote_sdp(pc);
             }
             error(next = null) {
                 return next;
@@ -7869,6 +7880,12 @@ var $;
         __decorate([
             $mol_mem
         ], $scale_dash_camera.prototype, "stream", null);
+        __decorate([
+            $mol_action
+        ], $scale_dash_camera.prototype, "handle_add_track", null);
+        __decorate([
+            $mol_action
+        ], $scale_dash_camera.prototype, "init_track", null);
         __decorate([
             $mol_action
         ], $scale_dash_camera.prototype, "init_remote_sdp", null);
@@ -8513,16 +8530,7 @@ var $;
                 });
             }
             act_list(reset) {
-                return this.api()
-                    .getActs({
-                    status: $scale_modelActStatus.ON_TERRITORY,
-                    cargoType: null,
-                    wasteCategory: null,
-                    autoNumber: null,
-                    payerPublicId: null,
-                    transporterPublicId: null,
-                })
-                    .map((obj) => this.Act_row(obj));
+                return [];
             }
             act_id(obj) {
                 return obj.publicId;

@@ -13,47 +13,107 @@ namespace $.$$ {
 
     @$mol_mem
     stream() {
-      return $mol_wire_sync(new MediaStream());
+      const stream = new MediaStream();
+      stream.onaddtrack = $mol_wire_async(this).handle_add_track;
+      return stream;
     }
 
     @$mol_action
-    async init_remote_sdp(pc: RTCPeerConnection) {
+    handle_add_track(event: MediaStreamTrackEvent) {
+      console.log("event", event);
+      $mol_wire_async(() => this.init_track(event));
+      //   $mol_wire_async(this).init_track(event.track.id);
+    }
+
+    @$mol_action
+    init_track(trackId: string) {
+      console.log("id", trackId);
+      try {
+        const data = $mol_fetch.json(`/api/track/${trackId}`);
+        console.log("data", data);
+      } catch (error) {
+        console.log("error");
+        if (error instanceof Error) {
+          console.log("error", error);
+        }
+      }
+    }
+
+    @$mol_action
+    init_remote_sdp(pc: RTCPeerConnection) {
       this.error({
         text: "Ошибка при подключении к камере",
         type: "Promise",
       });
+      console.log("start init");
       try {
         const formData = new FormData();
         formData.append("suuid", this.id());
         formData.append("data", btoa(pc?.localDescription?.sdp!));
-        const data = $mol_fetch.text(
+        // console.log("fff", formData.get("suuid"), formData.get("data"));
+        const response = $mol_wire_sync(window).fetch(
+          //   `https://jsonplaceholder.typicode.com/posts`,
           `http://localhost:8083/stream/receiver/${this.id()}`,
-          {
-            method: "POST",
-            body: formData,
-          }
+          { method: "POST", body: formData }
         );
-        console.log("data", data);
-        this.error(null);
-        pc.setRemoteDescription(
-          new RTCSessionDescription({
-            type: "answer",
-            sdp: atob(data),
-          })
-        );
-      } catch (err) {
-        if (err instanceof Error) {
-          console.log("err", err);
-          this.error({
-            text: "Ошибка при подключении к камере",
-            type: "LogicError",
-          });
-          new $mol_after_timeout(2000, () =>
-            this.init_remote_sdp.call(this, pc)
-          );
-          throw new Error("Response failed", err);
+        // const json = $mol_fetch.text(
+        //   `http://localhost:8083/stream/receiver/${this.id()}`,
+        //   { method: "POST", body: formData }
+        // );
+        console.log("Response JSON:", response);
+      } catch (error) {
+        if (error instanceof Promise) {
+          throw error;
         }
+        this.error({
+          text: "Ошибка при подключении к камере",
+          type: "LogicError",
+        });
+        // new $mol_after_timeout(5000, () => this.init_remote_sdp(pc));
+        console.log("errr", error);
       }
+      //   try {
+      //     // console.log(
+      //     //   "d",
+      //     //   Buffer.from(pc.localDescription?.sdp).toString("base64")
+      //     // );
+      //     // Buffer.toString('base64')
+      //     const formData = new FormData();
+      //     formData.append("suuid", this.id());
+      //     formData.append("data", btoa(pc?.localDescription?.sdp!));
+      //     const data = $mol_fetch.text(
+      //       `http://localhost:8083/stream/receiver/${this.id()}`,
+      //       {
+      //         method: "POST",
+      //         body: formData,
+      //       }
+      //     );
+      //     console.log("data", data);
+      //     this.error(null);
+      //     pc.setRemoteDescription(
+      //       new RTCSessionDescription({
+      //         type: "answer",
+      //         sdp: atob(data),
+      //       })
+      //     );
+      //     console.log("data", data);
+      //   } catch (err) {
+      //     if (err instanceof Error) {
+      //       console.log("err", err);
+      //       this.error({
+      //         text: "Ошибка при подключении к камере",
+      //         type: "LogicError",
+      //       });
+      //       new $mol_after_timeout(2000, () =>
+      //         this.init_remote_sdp.call(this, pc)
+      //       );
+      //       throw new Error("Response failed", err);
+      //     }
+      //     if (err instanceof Promise) {
+      //       throw new err();
+      //       //   console.log("err", err);
+      //     }
+      //   }
     }
 
     @$mol_action
@@ -64,7 +124,7 @@ namespace $.$$ {
     }
 
     @$mol_action
-    async handle_negotiation_needed(event: Event) {
+    handle_negotiation_needed(event: Event) {
       const pc = $mol_wire_sync(event.target as RTCPeerConnection);
       //@ts-expect-error
       const offer = pc.createOffer();
@@ -72,8 +132,7 @@ namespace $.$$ {
       //@ts-expect-error
       pc.setLocalDescription(offer);
       console.log("sdp", pc.localDescription);
-      //   $mol_wire_sync(this).init_remote_sdp(pc);
-      await this.init_remote_sdp(pc);
+      $mol_wire_async(this).init_remote_sdp(pc);
     }
 
     @$mol_mem
