@@ -45,17 +45,32 @@ namespace $.$$ {
         text: "Ошибка при подключении к камере",
         type: "Promise",
       });
+
       console.log("start init");
       try {
         const formData = new FormData();
         formData.append("suuid", this.id());
         formData.append("data", btoa(pc?.localDescription?.sdp!));
+        // console.log(globalThis.fetch, window.fetch);
         // console.log("fff", formData.get("suuid"), formData.get("data"));
-        const response = $mol_wire_sync(window).fetch(
+        const response = $mol_fetch.text(
           //   `https://jsonplaceholder.typicode.com/posts`,
           `http://localhost:8083/stream/receiver/${this.id()}`,
-          { method: "POST", body: formData }
+          {
+            method: "POST",
+            body: formData,
+            // body: JSON.stringify({
+            //   suuid: this.id(),
+            //   data: btoa(pc?.localDescription?.sdp!),
+            // }),
+            // body: new URLSearchParams({
+            //   suuid: this.id(),
+            //   data: pc?.localDescription?.sdp!,
+            // }),
+            // headers: { "Content-Type": "multipart/form-data" },
+          }
         );
+        // const json = $mol_wire_sync(response).text();
         // const json = $mol_fetch.text(
         //   `http://localhost:8083/stream/receiver/${this.id()}`,
         //   { method: "POST", body: formData }
@@ -63,12 +78,16 @@ namespace $.$$ {
         console.log("Response JSON:", response);
       } catch (error) {
         if (error instanceof Promise) {
+          this.error({
+            text: "Ошибка при подключении к камере",
+            type: "LogicError",
+          });
           throw error;
         }
-        this.error({
-          text: "Ошибка при подключении к камере",
-          type: "LogicError",
-        });
+        // this.error({
+        //   text: "Ошибка при подключении к камере",
+        //   type: "LogicError",
+        // });
         // new $mol_after_timeout(5000, () => this.init_remote_sdp(pc));
         console.log("errr", error);
       }
