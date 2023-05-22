@@ -7754,7 +7754,10 @@ var $;
         attr() {
             return {
                 ...super.attr(),
-                controls: this.controls_enabled(),
+                allow: "\"autoplay; fullscreen\"",
+                autoplay: "",
+                controls: "",
+                muted: this.muted(),
                 mol_view_error: this.error_type(),
                 id: this.id(),
                 pc: this.pc(),
@@ -7764,8 +7767,8 @@ var $;
         error_text() {
             return null;
         }
-        controls_enabled() {
-            return true;
+        muted() {
+            return "";
         }
         error_type() {
             return null;
@@ -7813,50 +7816,49 @@ var $;
             }
             stream() {
                 const stream = new MediaStream();
-                stream.onaddtrack = $mol_wire_async(this).handle_add_track;
                 return stream;
             }
-            handle_add_track(event) {
-                console.log("event", event);
-                $mol_wire_async(() => this.init_track(event));
-            }
-            init_track(trackId) {
-                console.log("id", trackId);
-                try {
-                    const data = $mol_fetch.json(`/api/track/${trackId}`);
-                    console.log("data", data);
-                }
-                catch (error) {
-                    console.log("error");
-                    if (error instanceof Error) {
-                        console.log("error", error);
-                    }
-                }
+            form_data() {
+                const formData = new FormData();
+                formData.append("suuid", this.id());
+                formData.append("data", btoa(this.pc()?.localDescription?.sdp));
+                return formData;
             }
             init_remote_sdp(pc) {
                 this.error({
                     text: "Ошибка при подключении к камере",
                     type: "Promise",
                 });
-                console.log("start init");
                 try {
-                    const formData = new FormData();
-                    formData.append("suuid", this.id());
-                    formData.append("data", btoa(pc?.localDescription?.sdp));
-                    const response = $mol_fetch.text(`http://localhost:8081/stream/receiver/${this.id()}`, {
+                    const formData = this.form_data();
+                    const response = $mol_fetch.text(`http://localhost:8083/stream/receiver/${this.id()}`, {
                         method: "POST",
                         body: formData,
                     });
                     console.log("Response JSON:", response);
+                    this.pc().setRemoteDescription(new RTCSessionDescription({
+                        type: "answer",
+                        sdp: atob(response),
+                    }));
+                    this.error(null);
+                    const playPromise = this.play() || Promise.reject("");
+                    playPromise
+                        .then(() => {
+                    })
+                        .catch((err) => {
+                        this.muted();
+                        this.play();
+                    });
                 }
                 catch (error) {
                     if (error instanceof Promise) {
-                        this.error({
-                            text: "Ошибка при подключении к камере",
-                            type: "LogicError",
-                        });
                         throw error;
                     }
+                    this.error({
+                        text: "Ошибка при подключении к камере",
+                        type: "LogicError",
+                    });
+                    new $mol_after_timeout(2000, () => this.init_remote_sdp(pc));
                     console.log("errr", error);
                 }
             }
@@ -7910,11 +7912,8 @@ var $;
             $mol_mem
         ], $scale_dash_camera.prototype, "stream", null);
         __decorate([
-            $mol_action
-        ], $scale_dash_camera.prototype, "handle_add_track", null);
-        __decorate([
-            $mol_action
-        ], $scale_dash_camera.prototype, "init_track", null);
+            $mol_mem
+        ], $scale_dash_camera.prototype, "form_data", null);
         __decorate([
             $mol_action
         ], $scale_dash_camera.prototype, "init_remote_sdp", null);
@@ -8143,10 +8142,16 @@ var $;
             obj.id = () => "CAMERA_1";
             return obj;
         }
+        Camera_2() {
+            const obj = new this.$.$scale_dash_camera();
+            obj.id = () => "CAMERA_1";
+            return obj;
+        }
         Camera_row() {
             const obj = new this.$.$mol_row();
             obj.sub = () => [
-                this.Camera_1()
+                this.Camera_1(),
+                this.Camera_2()
             ];
             return obj;
         }
@@ -8401,6 +8406,9 @@ var $;
     __decorate([
         $mol_mem
     ], $scale_dash.prototype, "Camera_1", null);
+    __decorate([
+        $mol_mem
+    ], $scale_dash.prototype, "Camera_2", null);
     __decorate([
         $mol_mem
     ], $scale_dash.prototype, "Camera_row", null);
