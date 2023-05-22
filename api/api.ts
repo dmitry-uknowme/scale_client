@@ -12,6 +12,11 @@ namespace $ {
   }
 
   export class $scale_api extends $mol_object {
+    @$mol_mem
+    base_url() {
+      return $mol_state_local.value("settings")?.API_URL;
+    }
+
     getActs(
       filter: {
         status: $scale_modelActStatus | null;
@@ -29,7 +34,7 @@ namespace $ {
         autoNumber: null,
       }
     ) {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(
         `${BASE_URL}/getActs${
           Object.keys(filter).length
@@ -51,7 +56,7 @@ namespace $ {
     }
 
     getAutoRelations(number: string) {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${BASE_URL}/getAutoRelations`, {
         method: "POST",
         body: JSON.stringify({ number }),
@@ -66,7 +71,7 @@ namespace $ {
     }
 
     createAct(payload: $scale_modelActCreatePayload) {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.request(`${BASE_URL}/createAct`, {
         method: "POST",
         body: JSON.stringify(payload),
@@ -79,7 +84,7 @@ namespace $ {
     }
 
     closeAct(payload: $scale_modelActClosePayload) {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${BASE_URL}/closeAct`, {
         method: "POST",
         body: JSON.stringify(payload),
@@ -91,7 +96,7 @@ namespace $ {
     }
 
     gateOpenEntry() {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${BASE_URL}/openEntryGate`, {
         method: "GET",
       }) as $scale_apiResponse<any>;
@@ -102,7 +107,7 @@ namespace $ {
     }
 
     gateCloseEntry() {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${BASE_URL}/closeEntryGate`, {
         method: "GET",
       }) as $scale_apiResponse<any>;
@@ -113,7 +118,7 @@ namespace $ {
     }
 
     gateOpenExit() {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${BASE_URL}/openExitGate`, {
         method: "GET",
       }) as $scale_apiResponse<any>;
@@ -124,7 +129,7 @@ namespace $ {
     }
 
     gateCloseExit() {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${BASE_URL}/closeExitGate`, {
         method: "GET",
       }) as $scale_apiResponse<any>;
@@ -142,7 +147,7 @@ namespace $ {
         status: $scale_modelOrganizationStatus.ACTIVE,
       }
     ) {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(
         `${BASE_URL}/getUsers?status=${filter.status}${
           filter.role ? `&role=${filter.role}` : ""
@@ -158,7 +163,7 @@ namespace $ {
     }
 
     getCargoTypes() {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${BASE_URL}/getCargoTypes`, {
         method: "GET",
       }) as $scale_apiResponse<$scale_modelCargoType[]>;
@@ -169,7 +174,7 @@ namespace $ {
     }
 
     getCargoCategories() {
-      const BASE_URL = $scale_env_BASE_URL;
+      const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${BASE_URL}/getWasteCategories`, {
         method: "GET",
       }) as $scale_apiResponse<$scale_modelCargoCategory[]>;

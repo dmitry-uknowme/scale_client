@@ -49,12 +49,14 @@ namespace $ {
 		 * spreads *
 		 * 	dash <= Dash
 		 * 	stats <= Stats
+		 * 	settings <= Settings
 		 * ```
 		 */
 		spreads() {
 			return {
 				dash: this.Dash(),
-				stats: this.Stats()
+				stats: this.Stats(),
+				settings: this.Settings()
 			}
 		}
 		
@@ -276,6 +278,39 @@ namespace $ {
 			] as readonly any[]
 			obj.param = () => "stats"
 			obj.menu_title = () => "Статистика"
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Settings_body $scale_settings
+		 * ```
+		 */
+		@ $mol_mem
+		Settings_body() {
+			const obj = new this.$.$scale_settings()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Settings $mol_book2_catalog
+		 * 	menu_body / <= Settings_body
+		 * 	param \settings
+		 * 	menu_title \Настройки
+		 * ```
+		 */
+		@ $mol_mem
+		Settings() {
+			const obj = new this.$.$mol_book2_catalog()
+			
+			obj.menu_body = () => [
+				this.Settings_body()
+			] as readonly any[]
+			obj.param = () => "settings"
+			obj.menu_title = () => "Настройки"
 			
 			return obj
 		}

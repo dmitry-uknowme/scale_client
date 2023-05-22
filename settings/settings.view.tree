@@ -1,0 +1,29 @@
+$scale_settings $mol_list rows /
+	<= Section $mol_section
+		title \
+		content /
+			<= Form $mol_form
+				body /
+					<= Names $mol_form_group sub /
+						<= Polygon_name_field $mol_form_field
+							name \Наименование полигона
+							bid <= polygon_name_bid \
+							Content <= Polygon_name_control $mol_string
+								hint \ООО "Тест"
+								value?val <=> polygon_name?val \
+						<= Address_local_field $mol_form_field
+							name \Адрес локального сервера
+							bid <= address_local_bid \
+							Content <= Address_local_control $mol_string
+								hint \http://192.168.88.67:888
+								value?val <=> api_url?val \
+						<= Address_websocket_field $mol_form_field
+							name \Адрес вебсокет сервера
+							bid <= address_websocket_bid \
+							Content <= Address_websocket_control $mol_string
+								hint \ws://192.168.88.67:8877/connection/websocket
+								value?val <=> websocket_url?val \
+				submit?val <=> signup?val null
+				submit_allowed => signup_allowed
+			<= Camera_list $mol_list rows /
+				<= Camera_row $scale_settings_camera

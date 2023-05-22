@@ -4,6 +4,17 @@
 	min-height: auto !important;
 }
 
+[scale_settings_names] [mol_form_field] {
+	flex:initial
+}
+
+/* [scale_settings_list] [mol_form_field_label] {
+	flex-grow: 3;
+}
+[scale_settings_list] input {
+	flex-grow: 9;
+} */
+
 [scale_app_dash_body_act_row]  [mol_labeler_label]{
 	padding: 0;
 }
@@ -35,6 +46,7 @@
 }
 
 ._pinned {
+	max-height: 50%;
 	position: sticky;
     top: 0;
     left: 0;

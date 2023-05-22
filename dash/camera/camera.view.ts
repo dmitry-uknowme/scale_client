@@ -28,7 +28,7 @@ namespace $.$$ {
     @$mol_action
     init_remote_sdp(pc: RTCPeerConnection) {
       this.error({
-        text: "Ошибка при подключении к камере",
+        text: "Идет подключение к камере...",
         type: "Promise",
       });
 

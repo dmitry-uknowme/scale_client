@@ -32,4 +32,8 @@ $scale_app $mol_book2_catalog
 			menu_body / <= Stats_body $scale_stats
 			param \stats
 			menu_title \Статистика
+		settings <= Settings $mol_book2_catalog
+			menu_body / <= Settings_body $scale_settings
+			param \settings
+			menu_title \Настройки
 		

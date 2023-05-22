@@ -9,8 +9,8 @@ namespace $.$$ {
     // Table_rows: {r},
     Number_labeler: { padding: 0 },
     // Table_row_content: { padding: $mol_gap.text },
-    Control: { width: "50%" },
-    Camera_list: { width: "50%" },
+    Control: { width: "45%" },
+    Camera_list: { width: "55%" },
     Top_row_tools: {
       display: "flex",
       justifyContent: "flex-end",

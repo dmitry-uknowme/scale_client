@@ -448,11 +448,11 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Camera_1 $scale_dash_camera id \CAMERA_1
+		 * Camera $scale_dash_camera id \CAMERA_1
 		 * ```
 		 */
 		@ $mol_mem
-		Camera_1() {
+		Camera() {
 			const obj = new this.$.$scale_dash_camera()
 			
 			obj.id = () => "CAMERA_1"
@@ -462,32 +462,15 @@ namespace $ {
 		
 		/**
 		 * ```tree
-		 * Camera_2 $scale_dash_camera id \CAMERA_1
+		 * Camera_row*0_0 $mol_row sub / <= Camera
 		 * ```
 		 */
-		@ $mol_mem
-		Camera_2() {
-			const obj = new this.$.$scale_dash_camera()
-			
-			obj.id = () => "CAMERA_1"
-			
-			return obj
-		}
-		
-		/**
-		 * ```tree
-		 * Camera_row $mol_row sub /
-		 * 	<= Camera_1
-		 * 	<= Camera_2
-		 * ```
-		 */
-		@ $mol_mem
-		Camera_row() {
+		@ $mol_mem_key
+		Camera_row(id: any) {
 			const obj = new this.$.$mol_row()
 			
 			obj.sub = () => [
-				this.Camera_1(),
-				this.Camera_2()
+				this.Camera()
 			] as readonly any[]
 			
 			return obj
@@ -497,7 +480,9 @@ namespace $ {
 		 * ```tree
 		 * Camera_list $mol_section
 		 * 	title \Камеры
-		 * 	content / <= Camera_row
+		 * 	content /
+		 * 		<= Camera_row*0_0
+		 * 		<= Camera_row*1_1
 		 * ```
 		 */
 		@ $mol_mem
@@ -506,7 +491,8 @@ namespace $ {
 			
 			obj.title = () => "Камеры"
 			obj.content = () => [
-				this.Camera_row()
+				this.Camera_row("0_0"),
+				this.Camera_row("1_1")
 			] as readonly any[]
 			
 			return obj

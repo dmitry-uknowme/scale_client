@@ -52,10 +52,11 @@ $scale_dash $mol_list
 					<= Camera_list $mol_section
 						title \Камеры
 						content /
-							<= Camera_row $mol_row sub /
-								<= Camera_1 $scale_dash_camera
+							<= Camera_row*0_0 $mol_row sub /
+								<= Camera $scale_dash_camera
 									id \CAMERA_1
-								<= Camera_2 $scale_dash_camera
+							<= Camera_row*1_1 $mol_row sub /
+								<= Camera $scale_dash_camera
 									id \CAMERA_1
 		<= Bottom_row $mol_row sub /
 			<= Auto_list $mol_section

@@ -19,6 +19,14 @@ namespace $.$$ {
         flexBasis: "50rem",
       },
     },
+    Settings: {
+      Menu: {
+        display: "flex",
+        flexDirection: "column",
+        flexGrow: "1",
+        flexBasis: "50rem",
+      },
+    },
     Form_enter: {
       Menu: {
         display: "flex",
