@@ -8522,9 +8522,17 @@ var $;
                 return $mol_state_local.value("centrifuge_weight_data", next);
             }
             autoNumber_channel_IN(next) {
+                $mol_state_arg.dict({
+                    "": "dash",
+                    dash: "form_enter",
+                });
                 return $mol_state_local.value("centrifuge_autoNumber_IN_data", next);
             }
             autoNumber_channel_OUT(next) {
+                $mol_state_arg.dict({
+                    "": "dash",
+                    dash: "form_exit",
+                });
                 return $mol_state_local.value("centrifuge_autoNumber_OUT_data", next);
             }
             subscribe() {
