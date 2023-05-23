@@ -219,7 +219,6 @@ namespace $.$$ {
 
     @$mol_mem
     auto_number(next?: string): string {
-      console.log("aaaa", next);
       return next?.toUpperCase() ?? this.autoNumber_IN() ?? "";
     }
 

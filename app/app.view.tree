@@ -1,4 +1,9 @@
 $scale_app $mol_book2_catalog
+	settings $scale_settings
+		settings => app_settings
+	attr *
+		^
+		settings <= app_settings
 	Placeholder null
 	plugins /
 		<= Theme $mol_theme_auto

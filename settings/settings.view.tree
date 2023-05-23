@@ -25,5 +25,12 @@ $scale_settings $mol_list rows /
 								value?val <=> websocket_url?val \
 				submit?val <=> signup?val null
 				submit_allowed => signup_allowed
+			<= Camera_form $mol_button_minor
+				hint \Добавить камеру
+				sub / 
+					<= Add_button $mol_button_minor sub /
+						<= Add_label \Добавить камеру
+						<= Add_icon $mol_icon_video_plus
+				click? <=> add? null
 			<= Camera_list $mol_list rows /
 				<= Camera_row $scale_settings_camera

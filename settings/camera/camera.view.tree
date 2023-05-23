@@ -1,15 +1,15 @@
 $scale_settings_camera $mol_row sub /
-	<= Add $mol_button_minor
-		hint \Добавить камеру
-		sub / <= Icon_add_list $mol_icon_video_plus
-		click? <=> add? null
 	<= Name $mol_textarea
 		hint \Наименование
 		value? <=> name? \
 	<= Url $mol_textarea
 		hint \RTSP URL
-		value? <=> name? \
+		value? <=> rtsp_url? \
+	<= Save $mol_button_minor
+		sub / <= Save_icon $mol_icon_check
+		hint \Сохранить
+		click? <=> delete? null
 	<= Delete $mol_button_minor
-		sub / <= Icon_delete_agent $mol_icon_delete
+		sub / <= Delete_icon $mol_icon_delete
 		hint \Удалить камеру
 		click? <=> delete? null

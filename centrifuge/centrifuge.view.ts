@@ -7,10 +7,12 @@ namespace $.$$ {
 
     @$mol_mem
     client() {
-      return new $scale_centrifuge_lib(
-        this.websocket_url()
-        // "ws://192.168.88.67:8877/connection/websocket"
-      );
+      if (this.websocket_url()) {
+        return new $scale_centrifuge_lib(
+          this.websocket_url()
+          // "ws://192.168.88.67:8877/connection/websocket"
+        );
+      }
     }
 
     @$mol_mem

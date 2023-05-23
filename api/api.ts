@@ -14,6 +14,7 @@ namespace $ {
   export class $scale_api extends $mol_object {
     @$mol_mem
     base_url() {
+      console.log("uu", $mol_state_local.value("settings"));
       return $mol_state_local.value("settings")?.API_URL;
     }
 
@@ -34,9 +35,9 @@ namespace $ {
         autoNumber: null,
       }
     ) {
-      const BASE_URL = this.base_url();
+      //   const BASE_URL = this.base_url();
       const response = $mol_fetch.json(
-        `${BASE_URL}/getActs${
+        `${this.base_url()}/getActs${
           Object.keys(filter).length
             ? `?${Object.keys(filter)
                 .filter((key) => filter[key] !== null)
@@ -57,7 +58,7 @@ namespace $ {
 
     getAutoRelations(number: string) {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.json(`${BASE_URL}/getAutoRelations`, {
+      const response = $mol_fetch.json(`${this.base_url()}/getAutoRelations`, {
         method: "POST",
         body: JSON.stringify({ number }),
       }) as $scale_apiResponse<{
@@ -72,7 +73,7 @@ namespace $ {
 
     createAct(payload: $scale_modelActCreatePayload) {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.request(`${BASE_URL}/createAct`, {
+      const response = $mol_fetch.request(`${this.base_url()}/createAct`, {
         method: "POST",
         body: JSON.stringify(payload),
       });
@@ -85,7 +86,7 @@ namespace $ {
 
     closeAct(payload: $scale_modelActClosePayload) {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.json(`${BASE_URL}/closeAct`, {
+      const response = $mol_fetch.json(`${this.base_url()}/closeAct`, {
         method: "POST",
         body: JSON.stringify(payload),
       }) as $scale_apiResponse<$scale_modelAct[]>;
@@ -97,7 +98,7 @@ namespace $ {
 
     gateOpenEntry() {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.json(`${BASE_URL}/openEntryGate`, {
+      const response = $mol_fetch.json(`${this.base_url()}/openEntryGate`, {
         method: "GET",
       }) as $scale_apiResponse<any>;
       if (response.status !== "success") {
@@ -108,7 +109,7 @@ namespace $ {
 
     gateCloseEntry() {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.json(`${BASE_URL}/closeEntryGate`, {
+      const response = $mol_fetch.json(`${this.base_url()}/closeEntryGate`, {
         method: "GET",
       }) as $scale_apiResponse<any>;
       if (response.status !== "success") {
@@ -119,7 +120,7 @@ namespace $ {
 
     gateOpenExit() {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.json(`${BASE_URL}/openExitGate`, {
+      const response = $mol_fetch.json(`${this.base_url()}/openExitGate`, {
         method: "GET",
       }) as $scale_apiResponse<any>;
       if (response.status !== "success") {
@@ -130,7 +131,7 @@ namespace $ {
 
     gateCloseExit() {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.json(`${BASE_URL}/closeExitGate`, {
+      const response = $mol_fetch.json(`${this.base_url()}/closeExitGate`, {
         method: "GET",
       }) as $scale_apiResponse<any>;
       if (response.status !== "success") {
@@ -149,7 +150,7 @@ namespace $ {
     ) {
       const BASE_URL = this.base_url();
       const response = $mol_fetch.json(
-        `${BASE_URL}/getUsers?status=${filter.status}${
+        `${this.base_url()}/getUsers?status=${filter.status}${
           filter.role ? `&role=${filter.role}` : ""
         }`,
         {
@@ -164,7 +165,7 @@ namespace $ {
 
     getCargoTypes() {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.json(`${BASE_URL}/getCargoTypes`, {
+      const response = $mol_fetch.json(`${this.base_url()}/getCargoTypes`, {
         method: "GET",
       }) as $scale_apiResponse<$scale_modelCargoType[]>;
       if (response.status !== "success") {
@@ -175,9 +176,12 @@ namespace $ {
 
     getCargoCategories() {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.json(`${BASE_URL}/getWasteCategories`, {
-        method: "GET",
-      }) as $scale_apiResponse<$scale_modelCargoCategory[]>;
+      const response = $mol_fetch.json(
+        `${this.base_url()}/getWasteCategories`,
+        {
+          method: "GET",
+        }
+      ) as $scale_apiResponse<$scale_modelCargoCategory[]>;
       if (response.status !== "success") {
         throw new Error(`Response failed with status ${response.status}`);
       }

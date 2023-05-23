@@ -16,7 +16,7 @@ namespace $.$$ {
 
     @$mol_mem
     act(next?: string) {
-      if (next) return next?.toUpperCase();
+      if (next) return next;
 
       if (this.autoNumber_OUT()) {
         const index = Object.values(this.acts_options()).indexOf(
@@ -30,6 +30,7 @@ namespace $.$$ {
       return "";
     }
 
+    @$mol_mem
     acts_options() {
       const data = this.api().getActs({
         status: $scale_modelActStatus.ON_TERRITORY,

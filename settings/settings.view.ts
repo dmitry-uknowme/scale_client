@@ -1,4 +1,5 @@
 namespace $.$$ {
+  export interface $scale_settingsModel {}
   export class $scale_settings extends $.$scale_settings {
     @$mol_mem
     default_settings() {
@@ -11,12 +12,12 @@ namespace $.$$ {
     @$mol_mem
     settings(next?: any) {
       if (next !== undefined) {
-        return $mol_state_local.value(
-          "settings",
-          next ?? this.default_settings()
-        );
+        return $mol_state_local.value("settings", next);
       }
-      return $mol_state_local.value("settings");
+      if ($mol_state_local.value("settings")) {
+        return $mol_state_local.value("settings");
+      }
+      return $mol_state_local.value("settings", this.default_settings());
     }
 
     @$mol_mem

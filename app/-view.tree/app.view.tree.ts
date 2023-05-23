@@ -3,6 +3,41 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * app_settings
+		 * ```
+		 */
+		app_settings() {
+			return this.settings().settings()
+		}
+		
+		/**
+		 * ```tree
+		 * settings $scale_settings settings => app_settings
+		 * ```
+		 */
+		@ $mol_mem
+		settings() {
+			const obj = new this.$.$scale_settings()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * attr *
+		 * 	^
+		 * 	settings <= app_settings
+		 * ```
+		 */
+		attr() {
+			return {
+				...super.attr(),
+				settings: this.app_settings()
+			}
+		}
+		
+		/**
+		 * ```tree
 		 * Placeholder null
 		 * ```
 		 */
