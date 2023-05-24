@@ -9,7 +9,7 @@ $scale_settings $mol_list rows /
 							name \Наименование полигона
 							bid <= polygon_name_bid \
 							Content <= Polygon_name_control $mol_string
-								hint \ООО "Тест"
+								hint \
 								value?val <=> polygon_name?val \
 						<= Address_local_field $mol_form_field
 							name \Адрес локального сервера

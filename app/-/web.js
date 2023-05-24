@@ -7939,7 +7939,7 @@ var $;
         }
         Polygon_name_control() {
             const obj = new this.$.$mol_string();
-            obj.hint = () => "ООО \"Тест\"";
+            obj.hint = () => "";
             obj.value = (val) => this.polygon_name(val);
             return obj;
         }
