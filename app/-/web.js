@@ -1171,6 +1171,8 @@ var $;
                 result = compare_map(left, right);
             else if (ArrayBuffer.isView(left))
                 result = compare_buffer(left, right);
+            else if (Symbol.iterator in left)
+                result = compare_iterator(left[Symbol.iterator](), right[Symbol.iterator]());
             else if (Symbol.toPrimitive in left)
                 result = compare_primitive(left, right);
             else
@@ -8522,17 +8524,21 @@ var $;
                 return $mol_state_local.value("centrifuge_weight_data", next);
             }
             autoNumber_channel_IN(next) {
-                $mol_state_arg.dict({
-                    "": "dash",
-                    dash: "form_enter",
-                });
+                if (next !== undefined) {
+                    $mol_state_arg.dict({
+                        "": "dash",
+                        dash: "form_enter",
+                    });
+                }
                 return $mol_state_local.value("centrifuge_autoNumber_IN_data", next);
             }
             autoNumber_channel_OUT(next) {
-                $mol_state_arg.dict({
-                    "": "dash",
-                    dash: "form_exit",
-                });
+                if (next !== undefined) {
+                    $mol_state_arg.dict({
+                        "": "dash",
+                        dash: "form_exit",
+                    });
+                }
                 return $mol_state_local.value("centrifuge_autoNumber_OUT_data", next);
             }
             subscribe() {
@@ -9349,7 +9355,6 @@ var $;
                 return formData;
             }
             init_remote_sdp(pc) {
-                return;
                 this.error({
                     text: "Идет подключение к камере...",
                     type: "Promise",
@@ -11994,6 +11999,25 @@ var $;
             const obj = new this.$.$scale_form_enter();
             return obj;
         }
+        Form_exit2_body() {
+            const obj = new this.$.$scale_form_exit();
+            return obj;
+        }
+        Form_exit2_close() {
+            return this.Form_exit2().Spread_close();
+        }
+        Form_exit2() {
+            const obj = new this.$.$mol_book2_catalog();
+            obj.menu_body = () => [
+                this.Form_exit2_body()
+            ];
+            obj.param = () => "form_exit";
+            obj.menu_title = () => "Создать запись на выезд";
+            obj.menu_tools = () => [
+                this.Spread_close()
+            ];
+            return obj;
+        }
         Form_enter_close() {
             return this.Form_enter().Spread_close();
         }
@@ -12007,6 +12031,9 @@ var $;
             obj.menu_tools = () => [
                 this.Spread_close()
             ];
+            obj.spreads = () => ({
+                form_exit: this.Form_exit2()
+            });
             return obj;
         }
         Form_exit_body() {
@@ -12089,6 +12116,12 @@ var $;
     __decorate([
         $mol_mem
     ], $scale_app.prototype, "Form_enter_body", null);
+    __decorate([
+        $mol_mem
+    ], $scale_app.prototype, "Form_exit2_body", null);
+    __decorate([
+        $mol_mem
+    ], $scale_app.prototype, "Form_exit2", null);
     __decorate([
         $mol_mem
     ], $scale_app.prototype, "Form_enter", null);
@@ -12177,5 +12210,22 @@ var $;
     })($$ = $.$$ || ($.$$ = {}));
 })($ || ($ = {}));
 //scale/app/app.view.css.ts
+;
+"use strict";
+var $;
+(function ($) {
+    var $$;
+    (function ($$) {
+        class $scale_app extends $.$scale_app {
+            auto() {
+                if (!Object.keys($mol_state_arg.dict()).length) {
+                    $mol_state_arg.value("", "dash");
+                }
+            }
+        }
+        $$.$scale_app = $scale_app;
+    })($$ = $.$$ || ($.$$ = {}));
+})($ || ($ = {}));
+//scale/app/app.view.ts
 
 //# sourceMappingURL=web.js.map

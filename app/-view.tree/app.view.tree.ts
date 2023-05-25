@@ -166,6 +166,53 @@ namespace $ {
 		
 		/**
 		 * ```tree
+		 * Form_exit2_body $scale_form_exit
+		 * ```
+		 */
+		@ $mol_mem
+		Form_exit2_body() {
+			const obj = new this.$.$scale_form_exit()
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
+		 * Form_exit2_close
+		 * ```
+		 */
+		Form_exit2_close() {
+			return this.Form_exit2().Spread_close()
+		}
+		
+		/**
+		 * ```tree
+		 * Form_exit2 $mol_book2_catalog
+		 * 	menu_body / <= Form_exit2_body
+		 * 	param \form_exit
+		 * 	menu_title \Создать запись на выезд
+		 * 	menu_tools / <= Spread_close
+		 * 	Spread_close => Form_exit2_close
+		 * ```
+		 */
+		@ $mol_mem
+		Form_exit2() {
+			const obj = new this.$.$mol_book2_catalog()
+			
+			obj.menu_body = () => [
+				this.Form_exit2_body()
+			] as readonly any[]
+			obj.param = () => "form_exit"
+			obj.menu_title = () => "Создать запись на выезд"
+			obj.menu_tools = () => [
+				this.Spread_close()
+			] as readonly any[]
+			
+			return obj
+		}
+		
+		/**
+		 * ```tree
 		 * Form_enter_close
 		 * ```
 		 */
@@ -181,6 +228,7 @@ namespace $ {
 		 * 	menu_title \Создать запись на въезд
 		 * 	menu_tools / <= Spread_close
 		 * 	Spread_close => Form_enter_close
+		 * 	spreads * form_exit <= Form_exit2
 		 * ```
 		 */
 		@ $mol_mem
@@ -195,6 +243,9 @@ namespace $ {
 			obj.menu_tools = () => [
 				this.Spread_close()
 			] as readonly any[]
+			obj.spreads = () => ({
+				form_exit: this.Form_exit2()
+			})
 			
 			return obj
 		}
