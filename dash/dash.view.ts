@@ -21,7 +21,7 @@ namespace $.$$ {
     }
 
     @$mol_action
-    open_exit_form(obj: $scale_modelAct) {
+    open_exit_form() {
       $mol_state_arg.dict({
         "": "dash",
         dash: "form_exit",

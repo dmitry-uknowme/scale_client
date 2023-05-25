@@ -9349,6 +9349,7 @@ var $;
                 return formData;
             }
             init_remote_sdp(pc) {
+                return;
                 this.error({
                     text: "Идет подключение к камере...",
                     type: "Promise",
@@ -10069,7 +10070,7 @@ var $;
             open_enter_form() {
                 $mol_state_arg.dict({ "": "dash", dash: "form_enter" });
             }
-            open_exit_form(obj) {
+            open_exit_form() {
                 $mol_state_arg.dict({
                     "": "dash",
                     dash: "form_exit",

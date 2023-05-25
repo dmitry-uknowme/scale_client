@@ -27,19 +27,23 @@ namespace $.$$ {
 
     @$mol_mem
     autoNumber_channel_IN(next?: string) {
-      $mol_state_arg.dict({
-        "": "dash",
-        dash: "form_enter",
-      });
+      if (next !== undefined) {
+        $mol_state_arg.dict({
+          "": "dash",
+          dash: "form_enter",
+        });
+      }
       return $mol_state_local.value("centrifuge_autoNumber_IN_data", next);
     }
 
     @$mol_mem
     autoNumber_channel_OUT(next?: string) {
-      $mol_state_arg.dict({
-        "": "dash",
-        dash: "form_exit",
-      });
+      if (next !== undefined) {
+        $mol_state_arg.dict({
+          "": "dash",
+          dash: "form_exit",
+        });
+      }
       return $mol_state_local.value("centrifuge_autoNumber_OUT_data", next);
     }
 
