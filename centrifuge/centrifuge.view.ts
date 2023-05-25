@@ -26,12 +26,24 @@ namespace $.$$ {
     }
 
     @$mol_mem
+    autoNumber_stack(next?: { direction: "IN" | "OUT"; number: string }[]) {
+      return $mol_state_local.value("centrifuge_autoNumber_stack", next);
+    }
+
+    @$mol_mem
+    autoNumber_stack_add(data?: { direction: "IN" | "OUT"; number: string }) {
+      const prev = $mol_mem_cached(() => this.autoNumber_stack()) ?? [];
+      this.autoNumber_stack([...prev, data]);
+    }
+
+    @$mol_mem
     autoNumber_channel_IN(next?: string) {
       if (next !== undefined) {
         $mol_state_arg.dict({
           "": "dash",
           dash: "form_enter",
         });
+        this.autoNumber_stack_add({ direction: "IN", number: next });
       }
       return $mol_state_local.value("centrifuge_autoNumber_IN_data", next);
     }
@@ -43,6 +55,7 @@ namespace $.$$ {
           "": "dash",
           dash: "form_exit",
         });
+        this.autoNumber_stack_add({ direction: "OUT", number: next });
       }
       return $mol_state_local.value("centrifuge_autoNumber_OUT_data", next);
     }

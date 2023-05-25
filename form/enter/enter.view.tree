@@ -63,3 +63,6 @@ $scale_form_enter $mol_list
 					enabled <= submit_allowed
 				<= Result $mol_status
 					message <= result?val \
+		<= Detected_stack $mol_list rows / 
+			$mol_paragraph
+				text <= detected_number \

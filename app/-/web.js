@@ -8523,12 +8523,20 @@ var $;
             weight_channel(next) {
                 return $mol_state_local.value("centrifuge_weight_data", next);
             }
+            autoNumber_stack(next) {
+                return $mol_state_local.value("centrifuge_autoNumber_stack", next);
+            }
+            autoNumber_stack_add(data) {
+                const prev = $mol_mem_cached(() => this.autoNumber_stack()) ?? [];
+                this.autoNumber_stack([...prev, data]);
+            }
             autoNumber_channel_IN(next) {
                 if (next !== undefined) {
                     $mol_state_arg.dict({
                         "": "dash",
                         dash: "form_enter",
                     });
+                    this.autoNumber_stack_add({ direction: "IN", number: next });
                 }
                 return $mol_state_local.value("centrifuge_autoNumber_IN_data", next);
             }
@@ -8538,6 +8546,7 @@ var $;
                         "": "dash",
                         dash: "form_exit",
                     });
+                    this.autoNumber_stack_add({ direction: "OUT", number: next });
                 }
                 return $mol_state_local.value("centrifuge_autoNumber_OUT_data", next);
             }
@@ -8580,6 +8589,12 @@ var $;
         __decorate([
             $mol_mem
         ], $scale_centrifuge.prototype, "weight_channel", null);
+        __decorate([
+            $mol_mem
+        ], $scale_centrifuge.prototype, "autoNumber_stack", null);
+        __decorate([
+            $mol_mem
+        ], $scale_centrifuge.prototype, "autoNumber_stack_add", null);
         __decorate([
             $mol_mem
         ], $scale_centrifuge.prototype, "autoNumber_channel_IN", null);
@@ -10623,7 +10638,8 @@ var $;
         }
         rows() {
             return [
-                this.Form()
+                this.Form(),
+                this.Detected_stack()
             ];
         }
         auto_relations() {
@@ -10824,6 +10840,11 @@ var $;
             ];
             return obj;
         }
+        Detected_stack() {
+            const obj = new this.$.$mol_view();
+            obj.sub = () => "dada";
+            return obj;
+        }
     }
     __decorate([
         $mol_mem
@@ -10900,6 +10921,9 @@ var $;
     __decorate([
         $mol_mem
     ], $scale_form_enter.prototype, "Form", null);
+    __decorate([
+        $mol_mem
+    ], $scale_form_enter.prototype, "Detected_stack", null);
     $.$scale_form_enter = $scale_form_enter;
 })($ || ($ = {}));
 //scale/form/enter/-view.tree/enter.view.tree.ts
