@@ -27,14 +27,14 @@ namespace $ {
     wasteCategoryPublicId: string;
     weight: number;
     comment: string;
-    apiClientSecretKey: "123456";
+    apiClientSecretKey: "234150c8-925b-4c8e-bf66-ded87d8f6aae";
   }
 
   export interface $scale_modelActClosePayload {
     publicId: string;
     weight: number;
     comment: string;
-    apiClientSecretKey: "123456";
+    apiClientSecretKey: "234150c8-925b-4c8e-bf66-ded87d8f6aae";
   }
 
   export interface $scale_modelOrganization {
@@ -60,4 +60,11 @@ namespace $ {
   }
 
   export interface $scale_modelCargoCategory extends $scale_modelCargoType {}
+
+  export interface $scale_modelDetectedAuto {
+    id?: string;
+    stack_order?: number;
+    number: string;
+    direction: "IN" | "OUT";
+  }
 }

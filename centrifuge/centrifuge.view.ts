@@ -26,23 +26,35 @@ namespace $.$$ {
     }
 
     @$mol_mem
-    autoNumber_stack(next?: { direction: "IN" | "OUT"; number: string }[]) {
+    autoNumber_stack(next?: $scale_modelDetectedAuto[]) {
       return $mol_state_local.value("centrifuge_autoNumber_stack", next);
     }
 
-    @$mol_mem
-    autoNumber_stack_add(data?: { direction: "IN" | "OUT"; number: string }) {
-      const prev = $mol_mem_cached(() => this.autoNumber_stack()) ?? [];
-      this.autoNumber_stack([...prev, data]);
+    @$mol_action
+    autoNumber_stack_add(data: $scale_modelDetectedAuto) {
+      //   const prev = $mol_state_local.value("centrifuge_autoNumber_stack") ?? [];
+      const prev = this.autoNumber_stack() ?? [];
+      //   const prev = $mol_mem_cached(() => this.autoNumber_stack()) ?? [];
+      console.log("prevvv", prev);
+      this.autoNumber_stack([
+        ...prev,
+        { ...data, stack_order: prev.length + 1 },
+      ]);
     }
 
     @$mol_mem
     autoNumber_channel_IN(next?: string) {
       if (next !== undefined) {
-        $mol_state_arg.dict({
-          "": "dash",
-          dash: "form_enter",
-        });
+        if (
+          $mol_state_arg.value("dash") !== "form_enter" &&
+          $mol_state_arg.value("dash") !== "form_exit"
+        ) {
+          $mol_state_arg.dict({
+            "": "dash",
+            dash: "form_enter",
+          });
+        }
+
         this.autoNumber_stack_add({ direction: "IN", number: next });
       }
       return $mol_state_local.value("centrifuge_autoNumber_IN_data", next);
@@ -51,10 +63,16 @@ namespace $.$$ {
     @$mol_mem
     autoNumber_channel_OUT(next?: string) {
       if (next !== undefined) {
-        $mol_state_arg.dict({
-          "": "dash",
-          dash: "form_exit",
-        });
+        if (
+          $mol_state_arg.value("dash") !== "form_enter" &&
+          $mol_state_arg.value("dash") !== "form_exit"
+        ) {
+          $mol_state_arg.dict({
+            "": "dash",
+            dash: "form_exit",
+          });
+        }
+
         this.autoNumber_stack_add({ direction: "OUT", number: next });
       }
       return $mol_state_local.value("centrifuge_autoNumber_OUT_data", next);

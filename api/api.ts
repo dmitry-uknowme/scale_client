@@ -14,7 +14,6 @@ namespace $ {
   export class $scale_api extends $mol_object {
     @$mol_mem
     base_url() {
-      console.log("uu", $mol_state_local.value("settings"));
       return $mol_state_local.value("settings")?.API_URL;
     }
 
@@ -73,10 +72,12 @@ namespace $ {
 
     createAct(payload: $scale_modelActCreatePayload) {
       const BASE_URL = this.base_url();
-      const response = $mol_fetch.request(`${this.base_url()}/createAct`, {
+      const response = $mol_fetch.json(`${this.base_url()}/createAct`, {
         method: "POST",
         body: JSON.stringify(payload),
       });
+
+      console.log("crete ac", response);
 
       //   if (response.status !== "success") {
       //     throw new Error(`Response failed with status ${response.status}`);

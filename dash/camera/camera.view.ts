@@ -74,7 +74,6 @@ namespace $.$$ {
         //   type: "LogicError",
         // });
         new $mol_after_timeout(2000, () => this.init_remote_sdp(pc));
-        console.log("errr", error);
       }
     }
 

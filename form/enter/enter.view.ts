@@ -192,25 +192,55 @@ namespace $.$$ {
     }
 
     @$mol_action
-    enter_submit() {
-      //   try {
-      const response = this.api().createAct({
-        autoNumber: this.auto_number().trim().replaceAll("|", ""),
-        payerPublicId: this.payer(),
-        transporterPublicId: this.transporter(),
-        cargoTypePublicId: this.cargo_type(),
-        wasteCategoryPublicId: this.cargo_category(),
-        comment: "",
-        weight: this.weight()!,
-        apiClientSecretKey: "123456",
+    open_enter_form() {
+      $mol_state_arg.dict({ "": "dash", dash: "form_enter" });
+    }
+
+    @$mol_action
+    open_exit_form() {
+      $mol_state_arg.dict({
+        "": "dash",
+        dash: "form_exit",
       });
-      this.dash().act_list("reset");
-      console.log("resss", response);
-      $mol_state_arg.dict({ "": "dash" });
-      new $mol_after_timeout(200, () => window.location.reload());
-      //   } catch (err) {
-      //     this.result(`Ошибка при отправке акта. ${err}`);
-      //   }
+    }
+
+    @$mol_action
+    enter_submit() {
+      try {
+        const response = this.api().createAct({
+          autoNumber: this.auto_number().trim().replaceAll("|", ""),
+          payerPublicId: this.payer(),
+          transporterPublicId: this.transporter(),
+          cargoTypePublicId: this.cargo_type(),
+          wasteCategoryPublicId: this.cargo_category(),
+          comment: "",
+          weight: this.weight()!,
+          apiClientSecretKey: "234150c8-925b-4c8e-bf66-ded87d8f6aae",
+        });
+        // this.dash().act_list("reset");
+        console.log("resss", response);
+        // $mol_state_arg.dict({ "": "dash" });
+        const autoStack = this.detected_auto_stack_list();
+        const currentAutoNumber = this.auto_number().replaceAll("|", "").trim();
+        console.log("stack", autoStack, currentAutoNumber);
+        if (
+          autoStack[0].number === currentAutoNumber &&
+          autoStack[0].direction === "IN"
+        ) {
+          const prev = this.detected_auto_stack_list();
+
+          this.detected_auto_stack_list(prev.slice(1, prev.length));
+
+          console.log("after", this.detected_auto_stack_list());
+          this.detetcted_auto_stack_next();
+        }
+      } catch (error) {
+        if (error instanceof Promise) {
+          throw error;
+        }
+        console.log("eer", error);
+        this.result(`Ошибка при отправке акта. ${error}`);
+      }
     }
 
     count() {
@@ -219,7 +249,13 @@ namespace $.$$ {
 
     @$mol_mem
     auto_number(next?: string): string {
-      return next?.toUpperCase() ?? this.autoNumber_IN() ?? "";
+      return (
+        next?.toUpperCase() ??
+        this.detected_auto_stack_list()?.find((auto) => auto.direction === "IN")
+          ?.number ??
+        this.autoNumber_IN() ??
+        ""
+      );
     }
 
     weight(): number | null {
@@ -230,8 +266,24 @@ namespace $.$$ {
       return $mol_state_local.value("centrifuge_autoNumber_IN_data");
     }
 
-    // auto() {
-    //   this.auto_number(this.autoNumber_IN());
-    // }
+    @$mol_action
+    detetcted_auto_stack_next() {
+      const stack = this.detected_auto_stack_list();
+      if (stack[0].direction === "IN") {
+        this.open_enter_form();
+      } else if (stack[0].direction === "OUT") {
+        this.open_exit_form();
+      }
+    }
+
+    @$mol_mem
+    detected_auto_stack_list(next?: $scale_modelDetectedAuto[]) {
+      return (
+        ($mol_state_local.value(
+          "centrifuge_autoNumber_stack",
+          next
+        ) as $scale_modelDetectedAuto[]) ?? []
+      );
+    }
   }
 }

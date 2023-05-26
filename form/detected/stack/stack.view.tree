@@ -1,0 +1,30 @@
+$scale_form_detected_stack $mol_section
+	title \Очередь
+	level 3
+	content /
+		<= Detected_auto_stack $mol_list rows <= detected_auto_stack /
+			<= Detected_auto_stack_row*0 $mol_drag
+				transfer *
+					text/plain <= detected_auto_number*? \
+					text/html <= detected_auto_html* \
+					text/uri-list <= detected_auto_uri* \
+				Sub <= Detected_auto_drop* $mol_drop
+					adopt?transfer <=> transfer_adopt?transfer null
+					receive?obj <=> receive_before*?obj null
+					Sub <= Detected_auto_link* $mol_link
+						uri <= detected_auto_uri* \
+						sub / 
+							<= Detected_number* $mol_paragraph
+								title <= detected_auto_number*? \
+							<= Detected_direction* $mol_paragraph
+								title <= detected_auto_direction*? \
+		<= List_drop $mol_drop
+			adopt?transfer <=> transfer_adopt?transfer null
+			receive?obj <=> receive?obj null
+			Sub <= Scroll $mol_scroll sub /
+				<= Trash_drop $mol_drop
+					adopt?transfer <=> transfer_adopt?transfer null
+					receive?obj <=> receive_trash?obj null
+					Sub <= Trash $mol_float sub /
+						<= Trash_icon $mol_icon_trash_can_outline
+						\ Удалить
