@@ -287,5 +287,15 @@ namespace $.$$ {
         ) as $scale_modelDetectedAuto[]) ?? []
       );
     }
+
+    // auto() {
+    //   console.log(
+    //     "this.detected_auto_stack_list()[0].direction",
+    //     this.detected_auto_stack_list()[0].direction
+    //   );
+    //   if (this.detected_auto_stack_list()[0].direction === "OUT") {
+    //     this.open_exit_form();
+    //   }
+    // }
   }
 }

@@ -16,7 +16,7 @@ namespace $.$$ {
 
     @$mol_mem
     act(next?: string) {
-      if (next) return next;
+      if (next !== undefined) return next;
 
       //   if (
       //     $mol_state_arg.value("form_data") &&
@@ -31,7 +31,9 @@ namespace $.$$ {
       //       this.act(initialFormData?.act_id);
       //     }
       //   }
-
+      if ($mol_state_arg.value("form_data")) {
+        return;
+      }
       if (
         this.detected_auto_stack_list()?.find(
           (auto) => auto.direction === "OUT"

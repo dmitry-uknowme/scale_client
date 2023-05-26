@@ -8153,9 +8153,9 @@ var $;
         class $scale_settings extends $.$scale_settings {
             default_settings() {
                 return {
-                    POLYGON_NAME: "ООО Спецэкотранс",
-                    API_URL: "http://192.168.88.67:888/api/v1",
-                    WEBSOCKET_URL: "ws://192.168.88.67:8877/connection/websocket",
+                    POLYGON_NAME: "ООО Тест",
+                    API_URL: "http://localhost:888/api/v1",
+                    WEBSOCKET_URL: "ws://localhost:8877/connection/websocket",
                 };
             }
             settings(next) {
@@ -11281,6 +11281,14 @@ var $;
                 }
             }
             detected_auto_stack_list(next) {
+                if (next !== undefined) {
+                    if (next[0]?.direction === "OUT") {
+                        this.open_exit_form();
+                    }
+                    if (next[0]?.direction === "IN") {
+                        this.open_enter_form();
+                    }
+                }
                 return ($mol_state_local.value("centrifuge_autoNumber_stack", next) ?? []);
             }
             detected_auto_stack(next) {
@@ -12159,8 +12167,11 @@ var $;
                 return "";
             }
             act(next) {
-                if (next)
+                if (next !== undefined)
                     return next;
+                if ($mol_state_arg.value("form_data")) {
+                    return;
+                }
                 if (this.detected_auto_stack_list()?.find((auto) => auto.direction === "OUT")?.number) {
                     const index = Object.values(this.acts_options()).indexOf(this.detected_auto_stack_list()?.find((auto) => auto.direction === "OUT")?.number);
                     if (index) {

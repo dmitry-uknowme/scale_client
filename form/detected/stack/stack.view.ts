@@ -25,6 +25,14 @@ namespace $.$$ {
 
     @$mol_mem
     detected_auto_stack_list(next?: $scale_modelDetectedAuto[]) {
+      if (next !== undefined) {
+        if (next[0]?.direction === "OUT") {
+          this.open_exit_form();
+        }
+        if (next[0]?.direction === "IN") {
+          this.open_enter_form();
+        }
+      }
       return (
         ($mol_state_local.value(
           "centrifuge_autoNumber_stack",
