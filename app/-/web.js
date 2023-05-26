@@ -12169,7 +12169,7 @@ var $;
                     }
                 }
                 if (this.detected_auto_stack_list()?.find((auto) => auto.direction === "OUT")?.number) {
-                    const index = Object.values(this.acts_options()).indexOf(this.autoNumber_OUT());
+                    const index = Object.values(this.acts_options()).indexOf(this.detected_auto_stack_list()?.find((auto) => auto.direction === "OUT")?.number);
                     if (index) {
                         return Object.values(this.acts_options())[index];
                     }
