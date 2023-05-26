@@ -4,10 +4,15 @@ namespace $.$$ {
     @$mol_mem
     default_settings() {
       return {
-        POLYGON_NAME: "ООО Спецэкотранс",
-        API_URL: "http://192.168.88.67:888/api/v1",
-        WEBSOCKET_URL: "ws://192.168.88.67:8877/connection/websocket",
+        POLYGON_NAME: "ООО Тест",
+        API_URL: "http://localhost:888/api/v1",
+        WEBSOCKET_URL: "ws://localhost:8877/connection/websocket",
       };
+      //   return {
+      //     POLYGON_NAME: "ООО Спецэкотранс",
+      //     API_URL: "http://192.168.88.67:888/api/v1",
+      //     WEBSOCKET_URL: "ws://192.168.88.67:8877/connection/websocket",
+      //   };
     }
     @$mol_mem
     settings(next?: any) {

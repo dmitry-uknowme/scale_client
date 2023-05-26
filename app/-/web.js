@@ -12161,23 +12161,16 @@ var $;
             act(next) {
                 if (next)
                     return next;
-                if ($mol_state_arg.value("form_data") &&
-                    JSON.parse($mol_state_arg.value("form_data"))) {
-                    const initialFormData = JSON.parse($mol_state_arg.value("form_data"));
-                    if (initialFormData?.act_id) {
-                        this.act(initialFormData?.act_id);
-                    }
-                }
                 if (this.detected_auto_stack_list()?.find((auto) => auto.direction === "OUT")?.number) {
                     const index = Object.values(this.acts_options()).indexOf(this.detected_auto_stack_list()?.find((auto) => auto.direction === "OUT")?.number);
                     if (index) {
-                        return Object.values(this.acts_options())[index];
+                        return Object.keys(this.acts_options())[index];
                     }
                 }
                 if (this.autoNumber_OUT()) {
                     const index = Object.values(this.acts_options()).indexOf(this.autoNumber_OUT());
                     if (index) {
-                        return Object.values(this.acts_options())[index];
+                        return Object.keys(this.acts_options())[index];
                     }
                 }
                 return "";
@@ -12200,6 +12193,7 @@ var $;
             }
             exit_submit() {
                 try {
+                    console.log("actt", this.act());
                     this.api().closeAct({
                         publicId: this.act(),
                         comment: "",
@@ -12207,7 +12201,7 @@ var $;
                         apiClientSecretKey: "234150c8-925b-4c8e-bf66-ded87d8f6aae",
                     });
                     const autoStack = this.detected_auto_stack_list();
-                    const currentAutoNumber = this.acts_options()[act].replaceAll("|", "")
+                    const currentAutoNumber = this.acts_options()[this.act()].replaceAll("|", "")
                         .trim();
                     console.log("stack", autoStack, currentAutoNumber);
                     if (autoStack[0].number === currentAutoNumber &&
@@ -12239,6 +12233,12 @@ var $;
             }
             detected_auto_stack_list(next) {
                 return ($mol_state_local.value("centrifuge_autoNumber_stack", next) ?? []);
+            }
+            auto() {
+                const initialFormData = JSON.parse($mol_state_arg.value("form_data"));
+                if (initialFormData?.act_id) {
+                    this.act(initialFormData?.act_id);
+                }
             }
         }
         __decorate([

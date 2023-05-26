@@ -223,6 +223,8 @@ namespace $.$$ {
         const autoStack = this.detected_auto_stack_list();
         const currentAutoNumber = this.auto_number().replaceAll("|", "").trim();
         console.log("stack", autoStack, currentAutoNumber);
+        // const findAuto = autoStack.find()
+        // const index = autoStack.indexOf(autoStack.find(auto=>auto.number === currentAutoNumber && auto.direction ==='IN')||null);
         if (
           autoStack[0].number === currentAutoNumber &&
           autoStack[0].direction === "IN"

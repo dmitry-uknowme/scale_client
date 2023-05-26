@@ -18,19 +18,19 @@ namespace $.$$ {
     act(next?: string) {
       if (next) return next;
 
-      if (
-        $mol_state_arg.value("form_data") &&
-        JSON.parse($mol_state_arg.value("form_data")!)
-      ) {
-        const initialFormData = JSON.parse(
-          $mol_state_arg.value("form_data")!
-        ) as {
-          act_id: string;
-        };
-        if (initialFormData?.act_id) {
-          this.act(initialFormData?.act_id);
-        }
-      }
+      //   if (
+      //     $mol_state_arg.value("form_data") &&
+      //     JSON.parse($mol_state_arg.value("form_data")!)
+      //   ) {
+      //     const initialFormData = JSON.parse(
+      //       $mol_state_arg.value("form_data")!
+      //     ) as {
+      //       act_id: string;
+      //     };
+      //     if (initialFormData?.act_id) {
+      //       this.act(initialFormData?.act_id);
+      //     }
+      //   }
 
       if (
         this.detected_auto_stack_list()?.find(
@@ -44,7 +44,7 @@ namespace $.$$ {
         );
 
         if (index) {
-          return Object.values(this.acts_options())[index] as string;
+          return Object.keys(this.acts_options())[index] as string;
         }
       }
       if (this.autoNumber_OUT()) {
@@ -52,7 +52,7 @@ namespace $.$$ {
           this.autoNumber_OUT()
         );
         if (index) {
-          return Object.values(this.acts_options())[index] as string;
+          return Object.keys(this.acts_options())[index] as string;
         }
       }
 
@@ -86,6 +86,7 @@ namespace $.$$ {
 
     exit_submit() {
       try {
+        console.log("actt", this.act());
         this.api().closeAct({
           publicId: this.act(),
           comment: "",
@@ -98,7 +99,7 @@ namespace $.$$ {
         //   $mol_state_arg.dict({ "": "dash" });
         const autoStack = this.detected_auto_stack_list();
         const currentAutoNumber = this.acts_options()
-          [act].replaceAll("|", "")
+          [this.act()].replaceAll("|", "")
           .trim();
         console.log("stack", autoStack, currentAutoNumber);
         if (
@@ -125,17 +126,6 @@ namespace $.$$ {
       return $mol_state_local.value("centrifuge_autoNumber_OUT_data");
     }
 
-    // auto() {
-    //   const initialFormData = JSON.parse(
-    //     $mol_state_arg.value("form_data")!
-    //   ) as {
-    //     act_id: string;
-    //   };
-    //   if (initialFormData?.act_id) {
-    //     this.act(initialFormData?.act_id);
-    //   }
-    // }
-
     @$mol_action
     detetcted_auto_stack_next() {
       const stack = this.detected_auto_stack_list();
@@ -154,6 +144,17 @@ namespace $.$$ {
           next
         ) as $scale_modelDetectedAuto[]) ?? []
       );
+    }
+
+    auto() {
+      const initialFormData = JSON.parse(
+        $mol_state_arg.value("form_data")!
+      ) as {
+        act_id: string;
+      };
+      if (initialFormData?.act_id) {
+        this.act(initialFormData?.act_id);
+      }
     }
   }
 }
