@@ -11878,6 +11878,7 @@ var $;
                         this.detected_auto_stack_list(prev.slice(1, prev.length));
                         console.log("after", this.detected_auto_stack_list());
                         this.detetcted_auto_stack_next();
+                        new $mol_after_timeout(200, () => window.location.reload());
                     }
                 }
                 catch (error) {
@@ -12221,6 +12222,7 @@ var $;
                         this.detected_auto_stack_list(prev.slice(1, prev.length));
                         console.log("after", this.detected_auto_stack_list());
                         this.detetcted_auto_stack_next();
+                        new $mol_after_timeout(200, () => window.location.reload());
                     }
                 }
                 catch (error) {

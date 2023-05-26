@@ -235,6 +235,7 @@ namespace $.$$ {
 
           console.log("after", this.detected_auto_stack_list());
           this.detetcted_auto_stack_next();
+          new $mol_after_timeout(200, () => window.location.reload());
         }
       } catch (error) {
         if (error instanceof Promise) {
