@@ -33,7 +33,11 @@ namespace $.$$ {
     @$mol_action
     autoNumber_stack_add(data: $scale_modelDetectedAuto) {
       //   const prev = $mol_state_local.value("centrifuge_autoNumber_stack") ?? [];
-      const prev = this.autoNumber_stack() ?? [];
+      const prev =
+        this.autoNumber_stack()?.filter(
+          (auto) =>
+            !(auto.number === data.number && auto.direction === data.direction)
+        ) ?? [];
       //   const prev = $mol_mem_cached(() => this.autoNumber_stack()) ?? [];
       console.log("prevvv", prev);
       this.autoNumber_stack([

@@ -226,6 +226,7 @@ namespace $.$$ {
         // const findAuto = autoStack.find()
         // const index = autoStack.indexOf(autoStack.find(auto=>auto.number === currentAutoNumber && auto.direction ==='IN')||null);
         if (
+          autoStack.length &&
           autoStack[0].number === currentAutoNumber &&
           autoStack[0].direction === "IN"
         ) {
@@ -235,8 +236,8 @@ namespace $.$$ {
 
           console.log("after", this.detected_auto_stack_list());
           this.detetcted_auto_stack_next();
-          new $mol_after_timeout(200, () => window.location.reload());
         }
+        new $mol_after_timeout(200, () => window.location.reload());
       } catch (error) {
         if (error instanceof Promise) {
           throw error;

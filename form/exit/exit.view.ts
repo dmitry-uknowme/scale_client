@@ -45,7 +45,7 @@ namespace $.$$ {
           )?.number
         );
 
-        if (index) {
+        if (index > -1) {
           return Object.keys(this.acts_options())[index] as string;
         }
       }
@@ -105,6 +105,7 @@ namespace $.$$ {
           .trim();
         console.log("stack", autoStack, currentAutoNumber);
         if (
+          autoStack.length &&
           autoStack[0].number === currentAutoNumber &&
           autoStack[0].direction === "OUT"
         ) {
@@ -114,8 +115,9 @@ namespace $.$$ {
 
           console.log("after", this.detected_auto_stack_list());
           this.detetcted_auto_stack_next();
-          new $mol_after_timeout(200, () => window.location.reload());
         }
+        $mol_state_arg.value("form_data", null);
+        new $mol_after_timeout(200, () => window.location.reload());
       } catch (error) {
         if (error instanceof Promise) {
           throw error;
