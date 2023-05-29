@@ -271,6 +271,8 @@ namespace $.$$ {
     @$mol_action
     detetcted_auto_stack_next() {
       const stack = this.detected_auto_stack_list();
+      if (!stack.length) return;
+
       if (stack[0].direction === "IN") {
         this.open_enter_form();
       } else if (stack[0].direction === "OUT") {
