@@ -33,7 +33,7 @@ namespace $ {
 			return {
 				...super.attr(),
 				settings: this.app_settings()
-			} as Record< string, any >
+			}
 		}
 		
 		/**
@@ -92,7 +92,7 @@ namespace $ {
 				dash: this.Dash(),
 				stats: this.Stats(),
 				settings: this.Settings()
-			} as Record< string, any >
+			}
 		}
 		
 		/**
@@ -245,7 +245,7 @@ namespace $ {
 			] as readonly any[]
 			obj.spreads = () => ({
 				form_exit: this.Form_exit2()
-			} as Record< string, any >)
+			})
 			
 			return obj
 		}
@@ -330,7 +330,7 @@ namespace $ {
 			obj.spreads = () => ({
 				form_enter: this.Form_enter(),
 				form_exit: this.Form_exit()
-			} as Record< string, any >)
+			})
 			
 			return obj
 		}

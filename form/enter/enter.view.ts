@@ -223,18 +223,16 @@ namespace $.$$ {
         const autoStack = this.detected_auto_stack_list();
         const currentAutoNumber = this.auto_number().replaceAll("|", "").trim();
         console.log("stack", autoStack, currentAutoNumber);
-        // const findAuto = autoStack.find()
-        // const index = autoStack.indexOf(autoStack.find(auto=>auto.number === currentAutoNumber && auto.direction ==='IN')||null);
         if (
           autoStack.length &&
           autoStack[0].number === currentAutoNumber &&
           autoStack[0].direction === "IN"
         ) {
-          const prev = this.detected_auto_stack_list();
+          const prevStack = this.detected_auto_stack_list();
 
-          this.detected_auto_stack_list(prev.slice(1, prev.length));
-
-          console.log("after", this.detected_auto_stack_list());
+          this.detected_auto_stack_list(prevStack.slice(1, prevStack.length));
+          const resultStack = this.detected_auto_stack_list();
+          console.log("after", resultStack);
           this.detetcted_auto_stack_next();
         }
         new $mol_after_timeout(200, () => window.location.reload());

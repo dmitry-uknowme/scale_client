@@ -109,11 +109,11 @@ namespace $.$$ {
           autoStack[0].number === currentAutoNumber &&
           autoStack[0].direction === "OUT"
         ) {
-          const prev = this.detected_auto_stack_list();
+          const prevStack = this.detected_auto_stack_list();
 
-          this.detected_auto_stack_list(prev.slice(1, prev.length));
-
-          console.log("after", this.detected_auto_stack_list());
+          this.detected_auto_stack_list(prevStack.slice(1, prevStack.length));
+          const resultStack = this.detected_auto_stack_list();
+          console.log("after", resultStack);
           this.detetcted_auto_stack_next();
         }
         $mol_state_arg.value("form_data", null);
@@ -134,6 +134,8 @@ namespace $.$$ {
     @$mol_action
     detetcted_auto_stack_next() {
       const stack = this.detected_auto_stack_list();
+      if (!stack.length) return;
+
       if (stack[0].direction === "IN") {
         this.open_enter_form();
       } else if (stack[0].direction === "OUT") {
