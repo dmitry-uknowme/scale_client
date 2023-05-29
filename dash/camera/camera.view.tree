@@ -3,11 +3,8 @@ $scale_dash_camera $mol_video_player
 		<= error_text null
 	attr *
 		^
-		allow \autoplay; fullscreen
-		playsinline \
-		loop \
 		autoplay \
-		controls \
+		controls <= controls_enabled true
 		muted <= muted \
 		mol_view_error <= error_type null
 		id <= id null

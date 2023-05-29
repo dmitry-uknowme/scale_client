@@ -116,6 +116,11 @@ namespace $.$$ {
       return this.error() === null;
     }
 
+    // @$mol_mem
+    // controls(): string | null {
+    //   return this.controls_enabled() ? "" : null;
+    // }
+
     @$mol_mem
     dom_name(): string {
       return this.controls_enabled() ? super.dom_name() : "div";

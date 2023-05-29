@@ -77,8 +77,6 @@ namespace $ {
         body: JSON.stringify(payload),
       });
 
-      console.log("crete ac", response);
-
       //   if (response.status !== "success") {
       //     throw new Error(`Response failed with status ${response.status}`);
       //   }
