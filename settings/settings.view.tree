@@ -23,6 +23,12 @@ $scale_settings $mol_list rows /
 							Content <= Address_websocket_control $mol_string
 								hint \ws://192.168.88.67:8877/connection/websocket
 								value?val <=> websocket_url?val \
+						<= Secret_key_field $mol_form_field
+							name \Ключ приложения
+							bid <= secret_key_bid \
+							Content <= Secret_key_control $mol_string
+								hint \
+								value?val <=> secret_key?val \
 				submit?val <=> signup?val null
 				submit_allowed => signup_allowed
 			<= Camera_form $mol_button_minor

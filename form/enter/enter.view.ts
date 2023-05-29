@@ -141,7 +141,7 @@ namespace $.$$ {
           this.auto_number().trim().replaceAll("|", "")
         )
       ) {
-        return "Неверный формат номера";
+        return "Неверный формат";
       }
       return "";
     }
@@ -215,7 +215,6 @@ namespace $.$$ {
           wasteCategoryPublicId: this.cargo_category(),
           comment: "",
           weight: this.weight()!,
-          apiClientSecretKey: "234150c8-925b-4c8e-bf66-ded87d8f6aae",
         });
         // this.dash().act_list("reset");
         console.log("resss", response);
@@ -288,6 +287,15 @@ namespace $.$$ {
           next
         ) as $scale_modelDetectedAuto[]) ?? []
       );
+    }
+
+    submit_allowed() {
+      console.log("fff", this.Form().form_fields());
+      //   return true;
+      return this.Form()
+        .form_fields()
+        .filter((field) => field.name() !== "Гос. номер")
+        .every((field) => !field.bid());
     }
 
     // auto() {

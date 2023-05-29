@@ -90,10 +90,9 @@ namespace $.$$ {
       try {
         console.log("actt", this.act());
         this.api().closeAct({
-          publicId: this.act(),
+          publicId: this.act()!,
           comment: "",
           weight: this.weight()!,
-          apiClientSecretKey: "234150c8-925b-4c8e-bf66-ded87d8f6aae",
         });
 
         //   this.dash().act_list("reset");

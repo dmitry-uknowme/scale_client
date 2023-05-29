@@ -7,6 +7,7 @@ namespace $.$$ {
         POLYGON_NAME: "ООО Тест",
         API_URL: "http://localhost:888/api/v1",
         WEBSOCKET_URL: "ws://localhost:8877/connection/websocket",
+        SECRET_KEY: "c38f3b55-a207-47f5-8e87-9d6681f68613",
       };
       //   return {
       //     POLYGON_NAME: "ООО Спецэкотранс",
@@ -61,6 +62,17 @@ namespace $.$$ {
       //     $mol_state_local.value("settings")
       //   );
       this.settings({ ...prevSettings, WEBSOCKET_URL: next });
+      return next;
+    }
+
+    @$mol_mem
+    secret_key(next?: string) {
+      if (next === undefined) {
+        return this.settings()?.SECRET_KEY ?? "";
+      }
+      const prevSettings = $mol_state_local.value("settings");
+
+      this.settings({ ...prevSettings, SECRET_KEY: next });
       return next;
     }
   }

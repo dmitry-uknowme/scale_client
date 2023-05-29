@@ -27,14 +27,12 @@ namespace $ {
     wasteCategoryPublicId: string;
     weight: number;
     comment: string;
-    apiClientSecretKey: "234150c8-925b-4c8e-bf66-ded87d8f6aae";
   }
 
   export interface $scale_modelActClosePayload {
     publicId: string;
     weight: number;
     comment: string;
-    apiClientSecretKey: "234150c8-925b-4c8e-bf66-ded87d8f6aae";
   }
 
   export interface $scale_modelOrganization {

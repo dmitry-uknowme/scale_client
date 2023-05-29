@@ -17,6 +17,11 @@ namespace $ {
       return $mol_state_local.value("settings")?.API_URL;
     }
 
+    @$mol_mem
+    secret_key() {
+      return $mol_state_local.value("settings")?.SECRET_KEY;
+    }
+
     getActs(
       filter: {
         status: $scale_modelActStatus | null;
@@ -74,12 +79,23 @@ namespace $ {
       const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${this.base_url()}/createAct`, {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...payload,
+          apiClientSecretKey: this.secret_key(),
+        }),
       });
 
-      //   if (response.status !== "success") {
-      //     throw new Error(`Response failed with status ${response.status}`);
-      //   }
+      if (response.status !== "success") {
+        if (response?.errors) {
+          throw new Error(
+            typeof response.errors === "object"
+              ? JSON.stringify(response.errors)
+              : response.errors
+          );
+        }
+
+        throw new Error(`Response failed with status ${response?.status}`);
+      }
       return response;
     }
 
@@ -87,12 +103,23 @@ namespace $ {
       const BASE_URL = this.base_url();
       const response = $mol_fetch.json(`${this.base_url()}/closeAct`, {
         method: "POST",
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          ...payload,
+          apiClientSecretKey: this.secret_key(),
+        }),
       }) as $scale_apiResponse<$scale_modelAct[]>;
       if (response.status !== "success") {
-        throw new Error(`Response failed with status ${response.status}`);
+        if (response?.errors) {
+          throw new Error(
+            typeof response.errors === "object"
+              ? JSON.stringify(response.errors)
+              : response.errors
+          );
+        }
+
+        throw new Error(`Response failed with status ${response?.status}`);
       }
-      return response.data;
+      return response;
     }
 
     gateOpenEntry() {
