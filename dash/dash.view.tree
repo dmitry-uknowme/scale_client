@@ -15,6 +15,12 @@ $scale_dash $mol_list
 		gateCloseEntry => close_entry_gate
 		gateOpenExit => open_exit_gate
 		gateCloseExit => close_exit_gate
+	settings $scale_settings
+		settings => app_settings
+	attr *
+		^
+		settings <= app_settings
+		cameras <= cameras
 	rows /
 		<= Top_row $mol_list
 			rows /
@@ -49,15 +55,12 @@ $scale_dash $mol_list
 										<= Exit_button $mol_button_major
 											title \Создать запись на выезд
 											click?val <=> open_exit_form?val null
-					<= Camera_list $mol_section
+					<= Cameras_section $mol_section
 						title \Камеры
 						content /
-							<= Camera_row*0_0 $mol_row sub /
-								<= Camera $scale_dash_camera
-									id \CAMERA_1
-							<= Camera_row*1_1 $mol_row sub /
-								<= Camera $scale_dash_camera
-									id \CAMERA_1
+							<= Camera_list $mol_list rows <= camera_list /
+								<= Camera_row*0 $scale_dash_camera
+									id? <= camera_id*? null
 		<= Bottom_row $mol_row sub /
 			<= Auto_list $mol_section
 				title <= act_table_title \На территории

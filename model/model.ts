@@ -65,4 +65,12 @@ namespace $ {
     number: string;
     direction: "IN" | "OUT";
   }
+
+  export interface $scale_modelSettings {
+    POLYGON_NAME: string;
+    API_URL: string;
+    WEBSOCKET_URL: string;
+    SECRET_KEY: string;
+    CAMERA_STREAMS: { id: number; name: string }[];
+  }
 }

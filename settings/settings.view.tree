@@ -31,12 +31,14 @@ $scale_settings $mol_list rows /
 								value?val <=> secret_key?val \
 				submit?val <=> signup?val null
 				submit_allowed => signup_allowed
-			<= Camera_form $mol_button_minor
+			<= Camera_ $mol_button_minor
 				hint \Добавить камеру
 				sub / 
-					<= Add_button $mol_button_minor sub /
-						<= Add_label \Добавить камеру
-						<= Add_icon $mol_icon_video_plus
-				click? <=> add? null
-			<= Camera_list $mol_list rows /
-				<= Camera_row $scale_settings_camera
+					<= Camera_add $mol_button_minor sub /
+						<= Carmera_add_label \Добавить камеру
+						<= Camera_add_icon $mol_icon_video_plus
+				click? <=> camera_add? null
+			<= Camera_list $mol_list rows <= camera_list /
+				<= Camera_row*0 $scale_settings_camera
+					name?val <=> camera_name*?val \
+					remove? <=> camera_remove*? null
