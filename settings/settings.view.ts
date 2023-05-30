@@ -2,12 +2,13 @@ namespace $.$$ {
   export interface $scale_settingsModel {}
   export class $scale_settings extends $.$scale_settings {
     @$mol_mem
-    default_settings() {
+    default_settings(): $scale_modelSettings {
       return {
         POLYGON_NAME: "ООО Тест",
         API_URL: "http://localhost:888/api/v1",
         WEBSOCKET_URL: "ws://localhost:8877/connection/websocket",
         SECRET_KEY: "c38f3b55-a207-47f5-8e87-9d6681f68613",
+        CAMERA_STREAMS: [{ id: 1, name: "CAMERA_1" }],
       };
       //   return {
       //     POLYGON_NAME: "ООО Спецэкотранс",
@@ -73,6 +74,60 @@ namespace $.$$ {
       const prevSettings = $mol_state_local.value("settings");
 
       this.settings({ ...prevSettings, SECRET_KEY: next });
+      return next;
+    }
+
+    @$mol_mem
+    cameras(next?: $scale_modelSettings["CAMERA_STREAMS"]) {
+      if (next === undefined) {
+        return this.settings()?.CAMERA_STREAMS ?? "";
+      }
+      const prevSettings = $mol_state_local.value("settings");
+
+      this.settings({ ...prevSettings, CAMERA_STREAMS: next });
+      return next;
+    }
+
+    @$mol_mem
+    camera_list() {
+      return this.cameras().map((camera) => this.Camera_row(camera));
+    }
+
+    @$mol_action
+    camera_add() {
+      const prevCameras = this.cameras();
+      return this.cameras([
+        ...prevCameras,
+        { id: prevCameras.length + 1, name: "" },
+      ]);
+    }
+
+    @$mol_action
+    camera_remove(obj: { id: number; name: string }) {
+      return this.cameras(
+        this.cameras().filter((camera) => camera.id !== obj.id)
+      );
+    }
+
+    @$mol_mem_key
+    camera_name(obj: { id: number; name: string }, next?: string) {
+      if (next === undefined) {
+        return this.settings()?.CAMERA_STREAMS?.find(
+          (camera) => camera.id === obj.id
+        )?.name;
+      }
+      const prevSettings = $mol_state_local.value("settings");
+      //   const prevSettings = this.settings();
+      const prevCameras = prevSettings?.CAMERA_STREAMS ?? [];
+      console.log("prev cameras", prevCameras);
+      const index = obj.id - 1;
+      //   console.log("prevvv", prevCameras.splice(index, 0, next));
+      this.settings({
+        ...prevSettings,
+        CAMERA_STREAMS: prevCameras.map((camera) =>
+          camera.id === obj.id ? { ...camera, name: next } : camera
+        ),
+      });
       return next;
     }
   }

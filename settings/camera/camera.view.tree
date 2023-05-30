@@ -1,15 +1,9 @@
 $scale_settings_camera $mol_row sub /
-	<= Name $mol_textarea
+	<= Name $mol_string
 		hint \Наименование
-		value? <=> name? \
-	<= Url $mol_textarea
-		hint \RTSP URL
-		value? <=> rtsp_url? \
-	<= Save $mol_button_minor
-		sub / <= Save_icon $mol_icon_check
-		hint \Сохранить
-		click? <=> delete? null
+		value?val <=> name?val \
 	<= Delete $mol_button_minor
-		sub / <= Delete_icon $mol_icon_delete
 		hint \Удалить камеру
-		click? <=> delete? null
+		click? <=> remove? null
+		sub / 
+			<= Delete_icon $mol_icon_delete
