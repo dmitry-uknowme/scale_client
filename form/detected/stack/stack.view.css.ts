@@ -44,5 +44,7 @@ namespace $.$$ {
         },
       },
     },
+    Detected_number: { pointerEvents: "none" },
+    Detected_direction: { pointerEvents: "none" },
   });
 }

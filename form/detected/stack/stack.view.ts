@@ -61,12 +61,16 @@ namespace $.$$ {
     }
 
     @$mol_mem_key
-    detected_auto_number(obj: $scale_modelDetectedAuto): string {
+    detected_auto_number(obj: $scale_modelDetectedAuto) {
       return obj.number;
     }
 
     @$mol_mem_key
-    detected_auto_direction(obj: $scale_modelDetectedAuto): string {
+    detected_auto_direction(obj: $scale_modelDetectedAuto) {
+      return obj.direction;
+    }
+
+    detected_auto_direction_pretty(obj: $scale_modelDetectedAuto) {
       return obj.direction === "IN"
         ? "=>"
         : obj.direction === "OUT"
@@ -109,6 +113,21 @@ namespace $.$$ {
       this.detected_auto_stack_list(
         this.detected_auto_stack_list().filter((p) => p !== task)
       );
+    }
+
+    @$mol_action
+    stack_on_click(event: MouseEvent) {
+      console.log("clickkk", event.target);
+      event.preventDefault();
+      const target = event.target as HTMLDivElement;
+      const autoNumber = target.getAttribute("number")!;
+      const autoDirection = target.getAttribute("direction")! as "IN" | "OUT";
+
+      const stack = this.detected_auto_stack_list().filter(
+        (auto) => auto !== { number: autoNumber, direction: autoDirection }
+      );
+      stack.splice(0, 0, { number: autoNumber, direction: autoDirection });
+      this.detected_auto_stack_list(stack);
     }
   }
 }
