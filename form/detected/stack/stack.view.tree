@@ -8,8 +8,6 @@ $scale_form_detected_stack $mol_section
 					text/plain <= detected_auto_number*? \
 					text/html <= detected_auto_html* \
 					text/uri-list <= detected_auto_uri* \
-				event *
-					click?val <=> stack_on_click?val null
 				Sub <= Detected_auto_drop* $mol_drop
 					adopt?transfer <=> transfer_adopt?transfer null
 					receive?obj <=> receive_before*?obj null
