@@ -10,7 +10,8 @@ namespace $.$$ {
     Number_labeler: { padding: 0 },
     // Table_row_content: { padding: $mol_gap.text },
     Control: { width: "45%" },
-    Camera_list: { width: "55%" },
+    Cameras_section: { width: "55%" },
+    Camera_list: { flexDirection: "row" },
     Top_row_tools: {
       display: "flex",
       justifyContent: "flex-end",
