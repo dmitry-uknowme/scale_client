@@ -11,7 +11,7 @@ namespace $.$$ {
     // Table_row_content: { padding: $mol_gap.text },
     Control: { width: "45%" },
     Cameras_section: { width: "55%" },
-    Camera_list: { flexDirection: "row" },
+    Camera_list: { flexDirection: "row", flexWrap: "wrap" },
     Top_row_tools: {
       display: "flex",
       justifyContent: "flex-end",

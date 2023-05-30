@@ -3,5 +3,6 @@ namespace $.$$ {
     Names: {
       flexDirection: "column",
     },
+    Camera_add: { width: "fit-content" },
   });
 }
