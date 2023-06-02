@@ -129,5 +129,10 @@ namespace $.$$ {
       stack.splice(0, 0, { number: autoNumber, direction: autoDirection });
       this.detected_auto_stack_list(stack);
     }
+
+    @$mol_action
+    stack_clear() {
+      this.detected_auto_stack_list([]);
+    }
   }
 }

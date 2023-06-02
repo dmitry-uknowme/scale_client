@@ -34,17 +34,20 @@ namespace $.$$ {
     },
 
     Trash_drop: {
+      opacity: 0.2,
       "@": {
         mol_drop_status: {
           drag: {
             background: {
               color: $mol_theme.hover,
             },
+            opacity: 1,
           },
         },
       },
     },
     Detected_number: { pointerEvents: "none" },
     Detected_direction: { pointerEvents: "none" },
+    Tools: { display: "flex" },
   });
 }

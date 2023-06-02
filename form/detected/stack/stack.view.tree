@@ -21,13 +21,20 @@ $scale_form_detected_stack $mol_section
 								title <= detected_auto_number*? \
 							<= Detected_direction* $mol_paragraph
 								title <= detected_auto_direction_pretty*? \
-		<= List_drop $mol_drop
-			adopt?transfer <=> transfer_adopt?transfer null
-			receive?obj <=> receive?obj null
-			Sub <= Scroll $mol_scroll sub /
-				<= Trash_drop $mol_drop
+		<= Tools $mol_float
+			sub /
+				<= List_drop $mol_drop
 					adopt?transfer <=> transfer_adopt?transfer null
-					receive?obj <=> receive_trash?obj null
-					Sub <= Trash $mol_float sub /
-						<= Trash_icon $mol_icon_trash_can_outline
-						\ Удалить
+					receive?obj <=> receive?obj null
+					Sub <= Scroll $mol_scroll sub /
+						<= Trash_drop $mol_drop
+							adopt?transfer <=> transfer_adopt?transfer null
+							receive?obj <=> receive_trash?obj null
+							Sub <= Trash $mol_float sub /
+								<= Trash_icon $mol_icon_trash_can_outline
+								\ Удалить
+				<= Clear $mol_button_minor
+					click?event <=> stack_clear?event null
+					sub /
+						<= Clear_icon $mol_icon_trash_can_outline
+						\ Очистить очередь
