@@ -40,10 +40,49 @@ namespace $.$$ {
         ) ?? [];
       //   const prev = $mol_mem_cached(() => this.autoNumber_stack()) ?? [];
       console.log("prevvv", prev);
-      this.autoNumber_stack([
-        ...prev,
-        { ...data, stack_order: prev.length + 1 },
-      ]);
+      const prevAutoDetect = this.autoNumber_stack()?.find(
+        (auto) => auto.number === data.number
+      );
+      const stackDetectTimeout =
+        $mol_state_local.value("settings")?.STACK_DETECT_TIMEOUT;
+
+      if (prevAutoDetect) {
+        if (stackDetectTimeout) {
+          const prevAutoDetectDate = new Date(prevAutoDetect.detected_date);
+          const now = new Date();
+          if ((now - prevAutoDetectDate) / 1000 / 60 >= stackDetectTimeout) {
+            console.log(
+              "add detect",
+              data,
+              (now - prevAutoDetectDate) / 1000 / 60
+            );
+            this.autoNumber_stack([
+              ...prev,
+              {
+                ...data,
+                stack_order: prev.length + 1,
+                detected_date: new Date().toUTCString(),
+              },
+            ]);
+          } else {
+            console.log(
+              "skip detect",
+              data,
+              (now - prevAutoDetectDate) / 1000 / 60
+            );
+          }
+        }
+      } else {
+        console.log("add detect", data);
+        this.autoNumber_stack([
+          ...prev,
+          {
+            ...data,
+            stack_order: prev.length + 1,
+            detected_date: new Date().toUTCString(),
+          },
+        ]);
+      }
     }
 
     @$mol_mem

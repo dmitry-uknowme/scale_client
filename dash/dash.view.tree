@@ -46,8 +46,8 @@ $scale_dash $mol_list
 										close_submit <= close_entry_gate
 									<= Gate_exit $scale_dash_gate
 										title \Шлагбаум №2
-										open_submit <= open_entry_gate
-										close_submit <= close_entry_gate
+										open_submit <= open_exit_gate
+										close_submit <= close_exit_gate
 									<= Btn_row $mol_row sub /
 										<= Enter_button $mol_button_major
 											title \Создать запись на въезд

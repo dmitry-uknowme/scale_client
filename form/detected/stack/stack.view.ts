@@ -70,12 +70,26 @@ namespace $.$$ {
       return obj.direction;
     }
 
+    // Detected_direction(obj: $scale_modelDetectedAuto) {
+    //   console.log("objj", obj);
+    //   return obj.direction === "IN"
+    //     ? this.Right_arrow()
+    //     : obj.direction === "OUT"
+    //     ? this.Left_arrow()
+    //     : "da";
+    // }
+
     detected_auto_direction_pretty(obj: $scale_modelDetectedAuto) {
       return obj.direction === "IN"
-        ? "=>"
+        ? this.Right_arrow(obj)
         : obj.direction === "OUT"
-        ? "<="
+        ? this.Left_arrow(obj)
         : "";
+      //   return obj.direction === "IN"
+      //     ? "=>"
+      //     : obj.direction === "OUT"
+      //     ? "<="
+      //     : "";
     }
 
     transfer_adopt(transfer: DataTransfer) {
@@ -135,8 +149,13 @@ namespace $.$$ {
       this.detected_auto_stack_list([]);
     }
 
-    override Clear(): $mol_button_minor | null {
-      return this.detected_auto_stack_list().length ? super.Clear() : null;
-    }
+    // auto() {
+    //   const stack = this.detected_auto_stack_list();
+    //   if (stack[0].direction === "IN") {
+    //     this.open_enter_form();
+    //   } else if (stack[0].direction === "OUT") {
+    //     this.open_exit_form();
+    //   }
+    // }
   }
 }

@@ -23,6 +23,12 @@ $scale_settings $mol_list rows /
 							Content <= Address_websocket_control $mol_string
 								hint \ws://192.168.88.67:8877/connection/websocket
 								value?val <=> websocket_url?val \
+						<= Stack_detect_timeout_field $mol_form_field
+							name \Очередь. Разница со временем последнего детекта (мин)
+							bid <= stack_detect_timeout_bid \
+							Content <= Stack_detect_timeout_control $mol_string
+								hint \5
+								value?val <=> stack_detect_timeout?val \
 						<= Secret_key_field $mol_form_field
 							name \Ключ приложения
 							bid <= secret_key_bid \

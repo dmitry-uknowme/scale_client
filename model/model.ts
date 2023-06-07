@@ -64,6 +64,7 @@ namespace $ {
     stack_order?: number;
     number: string;
     direction: "IN" | "OUT";
+    detected_date: string;
   }
 
   export interface $scale_modelSettings {
@@ -72,5 +73,6 @@ namespace $ {
     WEBSOCKET_URL: string;
     SECRET_KEY: string;
     CAMERA_STREAMS: { id: number; name: string }[];
+    STACK_DETECT_TIMEOUT: number;
   }
 }

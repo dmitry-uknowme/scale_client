@@ -1,4 +1,6 @@
 $scale_form_detected_stack $mol_section
+	Left_arrow* $mol_icon_arrow_left_box
+	Right_arrow* $mol_icon_arrow_right_box
 	title \Очередь
 	level 3
 	content /
