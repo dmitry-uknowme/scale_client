@@ -99,19 +99,21 @@ namespace $.$$ {
 
     @$mol_mem
     cameras() {
-      console.log("cc", this.settings().cameras());
       return this.settings().cameras();
-      // return this.
     }
 
     @$mol_mem
     camera_list() {
-      return this.cameras().map((camera) => this.Camera_row(camera));
+      return this.cameras().map((camera: { id: number; name: string }) =>
+        this.Camera_row(camera)
+      );
     }
 
     @$mol_mem_key
     camera_id(obj: { id: number; name: string }) {
-      return this.cameras().find((camera) => camera.id === obj.id)?.name;
+      return this.cameras().find(
+        (camera: { id: number; name: string }) => camera.id === obj.id
+      )?.name;
     }
   }
 }

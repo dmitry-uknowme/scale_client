@@ -290,8 +290,6 @@ namespace $.$$ {
     }
 
     submit_allowed() {
-      console.log("fff", this.Form().form_fields());
-      //   return true;
       return this.Form()
         .form_fields()
         .filter((field) => field.name() !== "Гос. номер")

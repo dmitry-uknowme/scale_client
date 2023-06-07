@@ -42,7 +42,7 @@ namespace $.$$ {
     }
 
     @$mol_mem
-    detected_auto_stack(next?: $scale_modelDetectedAuto[]) {
+    detected_auto_stack() {
       const list = this.detected_auto_stack_list();
       return list.map((item) => this.Detected_auto_stack_row(item));
     }
@@ -133,6 +133,10 @@ namespace $.$$ {
     @$mol_action
     stack_clear() {
       this.detected_auto_stack_list([]);
+    }
+
+    override Clear(): $mol_button_minor | null {
+      return this.detected_auto_stack_list().length ? super.Clear() : null;
     }
   }
 }

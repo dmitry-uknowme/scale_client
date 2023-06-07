@@ -71,7 +71,9 @@ namespace $.$$ {
       if (next === undefined) {
         return this.settings()?.SECRET_KEY ?? "";
       }
-      const prevSettings = $mol_state_local.value("settings");
+      const prevSettings = $mol_state_local.value(
+        "settings"
+      ) as $scale_modelSettings;
 
       this.settings({ ...prevSettings, SECRET_KEY: next });
       return next;
@@ -82,7 +84,9 @@ namespace $.$$ {
       if (next === undefined) {
         return this.settings()?.CAMERA_STREAMS ?? "";
       }
-      const prevSettings = $mol_state_local.value("settings");
+      const prevSettings = $mol_state_local.value(
+        "settings"
+      ) as $scale_modelSettings;
 
       this.settings({ ...prevSettings, CAMERA_STREAMS: next });
       return next;
@@ -90,7 +94,9 @@ namespace $.$$ {
 
     @$mol_mem
     camera_list() {
-      return this.cameras().map((camera) => this.Camera_row(camera));
+      return this.cameras().map((camera: { id: number; number: string }) =>
+        this.Camera_row(camera)
+      );
     }
 
     @$mol_action
@@ -116,12 +122,11 @@ namespace $.$$ {
           (camera) => camera.id === obj.id
         )?.name;
       }
-      const prevSettings = $mol_state_local.value("settings");
-      //   const prevSettings = this.settings();
+      const prevSettings = $mol_state_local.value(
+        "settings"
+      ) as $scale_modelSettings;
       const prevCameras = prevSettings?.CAMERA_STREAMS ?? [];
-      console.log("prev cameras", prevCameras);
       const index = obj.id - 1;
-      //   console.log("prevvv", prevCameras.splice(index, 0, next));
       this.settings({
         ...prevSettings,
         CAMERA_STREAMS: prevCameras.map((camera) =>
