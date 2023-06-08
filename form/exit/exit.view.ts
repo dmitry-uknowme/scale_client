@@ -65,7 +65,7 @@ namespace $.$$ {
     acts_options() {
       const data = this.api().getActs({
         status: $scale_modelActStatus.ON_TERRITORY,
-      });
+      }).data;
       const result = data.reduce(
         (acc, curr) => ((acc[curr.publicId] = curr.auto.number), acc),
         {}
@@ -160,6 +160,11 @@ namespace $.$$ {
       };
       if (initialFormData?.act_id) {
         this.act(initialFormData?.act_id);
+      } else {
+        console.log("innn check", this.detected_auto_stack_list());
+        if (this.detected_auto_stack_list()[0].direction === "IN") {
+          this.open_enter_form();
+        }
       }
     }
   }

@@ -58,12 +58,12 @@ namespace $.$$ {
               (now - prevAutoDetectDate) / 1000 / 60
             );
             this.autoNumber_stack([
-              ...prev,
               {
                 ...data,
                 stack_order: prev.length + 1,
                 detected_date: new Date().toUTCString(),
               },
+              ...prev,
             ]);
           } else {
             console.log(
