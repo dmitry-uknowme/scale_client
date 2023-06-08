@@ -30,6 +30,7 @@ namespace $ {
         payerPublicId: string | null;
         transporterPublicId: string | null;
         autoNumber: string | null;
+        page: number;
       } = {
         status: $scale_modelActStatus.ACTIVE,
         cargoType: null,
@@ -37,9 +38,9 @@ namespace $ {
         payerPublicId: null,
         transporterPublicId: null,
         autoNumber: null,
+        page: 1,
       }
     ) {
-      //   const BASE_URL = this.base_url();
       const response = $mol_fetch.json(
         `${this.base_url()}/getActs${
           Object.keys(filter).length
@@ -57,7 +58,7 @@ namespace $ {
       if (response.status !== "success") {
         throw new Error(`Response failed with status ${response.status}`);
       }
-      return response.data;
+      return response;
     }
 
     getAutoRelations(number: string) {

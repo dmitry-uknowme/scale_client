@@ -75,4 +75,11 @@ namespace $ {
     CAMERA_STREAMS: { id: number; name: string }[];
     STACK_DETECT_TIMEOUT: number;
   }
+
+  export interface $scale_modelLog {
+    type: "INFO";
+    date: string;
+    message: string;
+    auto_number?: string;
+  }
 }

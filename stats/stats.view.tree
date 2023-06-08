@@ -58,6 +58,14 @@ $scale_stats $mol_list
 								title \Брутто (кг)
 								Content <= Weight_gross_content* $mol_paragraph
 									title <= act_weightGross*? \
+							<= Weight_container_labeler* $mol_labeler
+								title \Тара (кг)
+								Content <= Weight_container_content* $mol_paragraph
+									title <= act_weightContainer*? \
+							<= Weight_net_labeler* $mol_labeler
+								title \Нетто (кг)
+								Content <= Weight_net_content* $mol_paragraph
+									title <= act_weightNet*? \
 							<= Cargo_type_labeler* $mol_labeler
 								title \Вид груза
 								Content <= Cargo_type_content* $mol_paragraph
@@ -74,3 +82,7 @@ $scale_stats $mol_list
 								title \Дата и время выезда
 								Content <= Date_exit_content* $mol_paragraph
 									title <= act_exitedMoment*? \
+				<= Act_paginator $mol_paginator
+					value <= current_page
+					forward?event <=> page_next?event null
+					backward?event <=> page_back?event null

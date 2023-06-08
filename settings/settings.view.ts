@@ -9,7 +9,7 @@ namespace $.$$ {
         WEBSOCKET_URL: "ws://localhost:8877/connection/websocket",
         SECRET_KEY: "c38f3b55-a207-47f5-8e87-9d6681f68613",
         CAMERA_STREAMS: [{ id: 1, name: "CAMERA_1" }],
-        STACK_DETECT_TIMEOUT: 5,
+        STACK_DETECT_TIMEOUT: 2,
       };
       //   return {
       //     POLYGON_NAME: "ООО Спецэкотранс",
@@ -148,6 +148,11 @@ namespace $.$$ {
         ),
       });
       return next;
+    }
+
+    @$mol_mem
+    logs(next?: any): string {
+      return $mol_state_local.value("logs", next);
     }
   }
 }

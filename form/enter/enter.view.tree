@@ -63,4 +63,3 @@ $scale_form_enter $mol_list
 					enabled <= submit_allowed
 				<= Result $mol_status
 					message <= result?val \
-		<= Detected_stack $scale_form_detected_stack

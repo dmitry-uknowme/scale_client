@@ -43,6 +43,7 @@ namespace $.$$ {
       const prevAutoDetect = this.autoNumber_stack()?.find(
         (auto) => auto.number === data.number
       );
+
       const stackDetectTimeout =
         $mol_state_local.value("settings")?.STACK_DETECT_TIMEOUT;
 
@@ -75,13 +76,22 @@ namespace $.$$ {
       } else {
         console.log("add detect", data);
         this.autoNumber_stack([
-          ...prev,
           {
             ...data,
             stack_order: prev.length + 1,
             detected_date: new Date().toUTCString(),
           },
+          ...prev,
         ]);
+        const firstAuto = this.autoNumber_stack()?.length
+          ? this.autoNumber_stack()![0]
+          : null;
+
+        if (firstAuto?.direction === "IN") {
+          this.open_enter_form();
+        } else if (firstAuto?.direction === "OUT") {
+          this.open_exit_form();
+        }
       }
     }
 
@@ -147,6 +157,19 @@ namespace $.$$ {
       this.subscribe();
       this.client().on("connected", (ctx) => {
         this.state(JSON.stringify(ctx.data));
+      });
+    }
+
+    @$mol_action
+    open_enter_form() {
+      $mol_state_arg.dict({ "": "dash", dash: "form_enter" });
+    }
+
+    @$mol_action
+    open_exit_form() {
+      $mol_state_arg.dict({
+        "": "dash",
+        dash: "form_exit",
       });
     }
   }

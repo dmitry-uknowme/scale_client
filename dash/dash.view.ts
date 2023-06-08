@@ -47,8 +47,9 @@ namespace $.$$ {
           autoNumber: null,
           payerPublicId: null,
           transporterPublicId: null,
+          page: 1,
         })
-        .map((obj) => this.Act_row(obj));
+        .data.map((obj) => this.Act_row(obj));
     }
 
     act_id(obj: $scale_modelAct) {
