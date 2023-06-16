@@ -81,7 +81,9 @@ namespace $.$$ {
     }
 
     act_enteredMoment(obj: $scale_modelAct) {
-      return obj.entryDateTime;
+      return new $mol_time_moment(obj.entryDateTime).toString(
+        "DD.MM.YYYY hh:mm:ss"
+      );
     }
 
     count() {

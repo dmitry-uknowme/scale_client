@@ -6,3 +6,4 @@ $scale_centrifuge $mol_view
 		autoNumber_IN <= autoNumber_channel_IN null
 		autoNumber_OUT <= autoNumber_channel_OUT null
 		client_state <= state null
+		client <= client null

@@ -73,11 +73,15 @@ namespace $.$$ {
     }
 
     act_enteredMoment(obj: $scale_modelAct) {
-      return obj.entryDateTime;
+      return new $mol_time_moment(obj.entryDateTime).toString(
+        "DD.MM.YYYY hh:mm:ss"
+      );
     }
 
     act_exitedMoment(obj: $scale_modelAct) {
-      return obj.checkOutDateTime;
+      return new $mol_time_moment(obj.checkOutDateTime).toString(
+        "DD.MM.YYYY hh:mm:ss"
+      );
     }
 
     count() {

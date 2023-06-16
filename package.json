@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/dmitry-uknowme/scale_client#readme",
   "dependencies": {
-    "centrifuge": "^3.1.1"
+    "centrifuge": "^3.1.1",
+    "fuzzball": "^2.1.2"
   }
 }

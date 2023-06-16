@@ -137,7 +137,7 @@ namespace $.$$ {
       if (!this.auto_number() || !this.auto_number().trim().length) {
         return "*";
       } else if (
-        !/^[А-Я]{1}[0-9]{3}[А-Я]{2}[0-9]{2,3}$/.test(
+        !this.number_mask_regex().test(
           this.auto_number().trim().replaceAll("|", "")
         )
       ) {
@@ -250,6 +250,16 @@ namespace $.$$ {
 
     @$mol_mem
     auto_number(next?: string): string {
+      if (
+        this.detected_auto_stack_list()?.find((auto) => auto.direction === "IN")
+          ?.number
+      ) {
+        const number = this.detected_auto_stack_list()?.find(
+          (auto) => auto.direction === "IN"
+        )?.number!;
+        console.log("parsedd", number, this.number_mask_parse(number));
+        this.number_mask_parse(number);
+      }
       return (
         next?.toUpperCase() ??
         this.detected_auto_stack_list()?.find((auto) => auto.direction === "IN")
@@ -294,6 +304,75 @@ namespace $.$$ {
         .form_fields()
         .filter((field) => field.name() !== "Гос. номер")
         .every((field) => !field.bid());
+    }
+
+    number_mask(): string {
+      if (this.number_mask_type() === "tractor") {
+        return "|____|__|___|";
+      } else if (this.number_mask_type() === "trailer") {
+        return "|__|____|___|";
+      }
+      return "|_|___|__|___|";
+    }
+
+    @$mol_mem
+    auto_number_name() {
+      if (this.number_mask_type() === "tractor") {
+        return "Гос. номер трактор";
+      } else if (this.number_mask_type() === "trailer") {
+        return "Гос. номер прицеп";
+      }
+      return "Гос. номер";
+    }
+
+    @$mol_mem
+    number_mask_stack() {
+      return ["default", "tractor", "trailer"];
+    }
+
+    @$mol_mem
+    number_mask_regex() {
+      if (this.number_mask_type() === "tractor") {
+        return /^([0-9]{4})([А-Я]{2})([0-9]{2,3})$/;
+      } else if (this.number_mask_type() === "trailer") {
+        return /^([А-Я]{2})([0-9]{4})([0-9]{2,3})$/;
+      }
+      return /^([А-Я]{1})([0-9]{3})([А-Я]{2})([0-9]{2,3})$/;
+    }
+
+    @$mol_mem
+    number_mask_id(next?: number) {
+      return next ?? 0;
+    }
+
+    @$mol_mem
+    number_mask_type(): "default" | "tractor" | "trailer" {
+      return this.number_mask_stack()[this.number_mask_id()] as
+        | "default"
+        | "tractor"
+        | "trailer";
+    }
+
+    @$mol_action
+    number_mask_next() {
+      const prev = this.number_mask_id();
+      if (this.number_mask_id() - 1 < this.number_mask_stack().length) {
+        this.number_mask_id(prev + 1);
+      } else {
+        this.number_mask_id(0);
+      }
+    }
+
+    @$mol_action
+    number_mask_parse(value: string) {
+      if (/^([А-Я]{1})([0-9]{3})([А-Я]{2})([0-9]{2,3})$/.test(value)) {
+        return this.number_mask_id(0);
+      } else if (/^([0-9]{4})([А-Я]{2})([0-9]{2,3})$/.test(value)) {
+        return this.number_mask_id(1);
+      } else if (/^([А-Я]{2})([0-9]{4})([0-9]{2,3})$/.test(value)) {
+        return this.number_mask_id(2);
+      }
+      return this.number_mask_id(0);
     }
 
     // auto() {

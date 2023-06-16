@@ -44,7 +44,9 @@ namespace $.$$ {
     @$mol_mem
     detected_auto_stack() {
       const list = this.detected_auto_stack_list();
-      return list.map((item) => this.Detected_auto_stack_row(item));
+      return list?.length
+        ? [list[0]].map((item) => this.Detected_auto_stack_row(item))
+        : [];
     }
 
     @$mol_mem_key
@@ -94,7 +96,6 @@ namespace $.$$ {
 
     transfer_adopt(transfer: DataTransfer) {
       const uri = transfer.getData("text/uri-list");
-      console.log("url", uri);
       if (!uri) return;
 
       return this.detected_auto_stack_list().find(

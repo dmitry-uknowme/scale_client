@@ -33,10 +33,10 @@ namespace $.$$ {
       if (next === undefined) {
         return this.settings()?.POLYGON_NAME ?? "";
       }
-      const prevSettings = $mol_state_local.value("settings");
-      //   const prevSettings = $mol_mem_cached(() =>
-      //     $mol_state_local.value("settings")
-      //   );
+      const prevSettings = $mol_state_local.value(
+        "settings"
+      ) as $scale_modelSettings;
+
       this.settings({ ...prevSettings, POLYGON_NAME: next });
       return next;
     }
@@ -46,10 +46,10 @@ namespace $.$$ {
       if (next === undefined) {
         return this.settings()?.API_URL ?? "";
       }
-      const prevSettings = $mol_state_local.value("settings");
-      //   const prevSettings = $mol_mem_cached(() =>
-      //     $mol_state_local.value("settings")
-      //   );
+      const prevSettings = $mol_state_local.value(
+        "settings"
+      ) as $scale_modelSettings;
+
       this.settings({ ...prevSettings, API_URL: next });
       return next;
     }
@@ -59,10 +59,10 @@ namespace $.$$ {
       if (next === undefined) {
         return this.settings()?.WEBSOCKET_URL ?? "";
       }
-      const prevSettings = $mol_state_local.value("settings");
-      //   const prevSettings = $mol_mem_cached(() =>
-      //     $mol_state_local.value("settings")
-      //   );
+      const prevSettings = $mol_state_local.value(
+        "settings"
+      ) as $scale_modelSettings;
+
       this.settings({ ...prevSettings, WEBSOCKET_URL: next });
       return next;
     }
@@ -83,8 +83,10 @@ namespace $.$$ {
     @$mol_mem
     stack_detect_timeout(next?: string) {
       if (next === undefined) {
-        return this.settings()?.STACK_DETECT_TIMEOUT ?? 5;
+        return (1).toString();
+        // return this.settings()?.STACK_DETECT_TIMEOUT ?? 5;
       }
+
       const prevSettings = $mol_state_local.value(
         "settings"
       ) as $scale_modelSettings;
@@ -125,7 +127,9 @@ namespace $.$$ {
     @$mol_action
     camera_remove(obj: { id: number; name: string }) {
       return this.cameras(
-        this.cameras().filter((camera) => camera.id !== obj.id)
+        this.cameras().filter(
+          (camera: { id: number; name: string }) => camera.id !== obj.id
+        )
       );
     }
 
@@ -152,6 +156,10 @@ namespace $.$$ {
 
     @$mol_mem
     logs(next?: any): string {
+      if (!$mol_state_local.value("logs")) {
+        return $mol_state_local.value("logs", "") as string;
+      }
+
       return $mol_state_local.value("logs", next);
     }
   }

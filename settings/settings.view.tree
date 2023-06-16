@@ -48,5 +48,8 @@ $scale_settings $mol_list rows /
 				<= Camera_row*0 $scale_settings_camera
 					name?val <=> camera_name*?val \
 					remove? <=> camera_remove*? null
-			<= Logs $mol_textarea
-				value?val <=> logs?val \
+			<= Logs_section $mol_section
+				title \Логи приложения
+				content /
+					<= Logs $mol_textarea
+						value?val <=> logs?val \

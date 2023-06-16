@@ -8,10 +8,7 @@ namespace $.$$ {
     @$mol_mem
     client() {
       if (this.websocket_url()) {
-        return new $scale_centrifuge_lib(
-          this.websocket_url()
-          // "ws://192.168.88.67:8877/connection/websocket"
-        );
+        return new $scale_lib_centrifuge(this.websocket_url());
       }
     }
 
@@ -46,26 +43,46 @@ namespace $.$$ {
 
       const stackDetectTimeout =
         $mol_state_local.value("settings")?.STACK_DETECT_TIMEOUT;
-
+      this.logs_add(
+        `[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}] Обнаружено авто на ${
+          data.direction === "IN"
+            ? "въезд"
+            : data.direction === "OUT"
+            ? "выезд"
+            : ""
+        } с гос.номером ${data.number}.\t`
+      );
       if (prevAutoDetect) {
         if (stackDetectTimeout) {
           const prevAutoDetectDate = new Date(prevAutoDetect.detected_date);
           const now = new Date();
+          this.logs_add(
+            `Разница с последним детектом номера на ${
+              prevAutoDetect.direction === "IN"
+                ? "въезд"
+                : prevAutoDetect.direction === "OUT"
+                ? "выезд"
+                : ""
+            }: ${((now - prevAutoDetectDate) / 1000).toFixed(2)} сек.\t`
+          );
           if ((now - prevAutoDetectDate) / 1000 / 60 >= stackDetectTimeout) {
+            this.logs_add("Добавляем в очередь");
             console.log(
               "add detect",
               data,
               (now - prevAutoDetectDate) / 1000 / 60
             );
+
             this.autoNumber_stack([
               {
                 ...data,
                 stack_order: prev.length + 1,
                 detected_date: new Date().toUTCString(),
               },
-              ...prev,
+              //   ...prev,
             ]);
           } else {
+            this.logs_add("Пропускаем очередь");
             console.log(
               "skip detect",
               data,
@@ -74,6 +91,7 @@ namespace $.$$ {
           }
         }
       } else {
+        this.logs_add(`Последний детект не найден. Добавляем в очередь`);
         console.log("add detect", data);
         this.autoNumber_stack([
           {
@@ -81,7 +99,7 @@ namespace $.$$ {
             stack_order: prev.length + 1,
             detected_date: new Date().toUTCString(),
           },
-          ...prev,
+          //   ...prev,
         ]);
         const firstAuto = this.autoNumber_stack()?.length
           ? this.autoNumber_stack()![0]
@@ -93,6 +111,7 @@ namespace $.$$ {
           this.open_exit_form();
         }
       }
+      this.logs_add("\n");
     }
 
     @$mol_mem
@@ -171,6 +190,18 @@ namespace $.$$ {
         "": "dash",
         dash: "form_exit",
       });
+    }
+
+    @$mol_mem
+    logs(next?: string) {
+      return $mol_state_local.value("logs", next);
+    }
+
+    @$mol_action
+    logs_add(text: string) {
+      const prev = this.logs();
+      //   return $mol_state_local.value("logs", prev + text);
+      return this.logs(prev + text);
     }
   }
 }

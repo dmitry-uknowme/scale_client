@@ -23,12 +23,13 @@ $scale_form_enter $mol_list
 						Content <= Weight_control $mol_paragraph
 							title <= weight_formatted \
 					<= Auto_number_field $mol_form_field
-						name \Гос. номер
+						name <= auto_number_name \Гос. номер
 						bid <= auto_number_bid \
 						Content <= Auto_number_control $mol_format
-							allow \авсденкмортхуАВСДЕНКМОРТХУ01234567890
-							mask \|_|___|__|___|
+							allow \абвсденкмортхуАБВСДЕНКМОРТХУ01234567890
+							mask <= number_mask \|_|___|__|___|
 							value?val <=> auto_number?val
+						event * dblclick? <=> number_mask_next? null
 					<= Payer_field $mol_form_field
 						name \Оператор
 						bid <= payer_bid \
