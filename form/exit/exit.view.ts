@@ -161,7 +161,7 @@ namespace $.$$ {
       if (initialFormData?.act_id) {
         this.act(initialFormData?.act_id);
       } else {
-        console.log("innn check", this.detected_auto_stack_list());
+        // console.log("innn check", this.detected_auto_stack_list());
         // if (this.detected_auto_stack_list()[0].direction === "IN") {
         //   this.open_enter_form();
         // }

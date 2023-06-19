@@ -7,9 +7,10 @@ namespace $.$$ {
         POLYGON_NAME: "ООО Тест",
         API_URL: "http://localhost:888/api/v1",
         WEBSOCKET_URL: "ws://localhost:8877/connection/websocket",
-        SECRET_KEY: "c38f3b55-a207-47f5-8e87-9d6681f68613",
+        SECRET_KEY: $mol_guid(),
+        // SECRET_KEY: "c38f3b55-a207-47f5-8e87-9d6681f68613",
         CAMERA_STREAMS: [{ id: 1, name: "CAMERA_1" }],
-        STACK_DETECT_TIMEOUT: 2,
+        STACK_DETECT_TIMEOUT: 1,
       };
       //   return {
       //     POLYGON_NAME: "ООО Спецэкотранс",

@@ -45,6 +45,32 @@ namespace $.$$ {
     }
 
     @$mol_mem
+    cargo_type(next?: any): string {
+      if (next) return next;
+      if (
+        this.auto_related() &&
+        this.auto_relations() &&
+        this.auto_relations()?.prev_cargoType
+      ) {
+        return this.auto_relations()?.prev_cargoType!;
+      }
+      return "Выберите оператора";
+    }
+
+    @$mol_mem
+    cargo_category(next?: any): string {
+      if (next) return next;
+      if (
+        this.auto_related() &&
+        this.auto_relations() &&
+        this.auto_relations()?.prev_cargoCategory
+      ) {
+        return this.auto_relations()?.prev_cargoCategory!;
+      }
+      return "Выберите оператора";
+    }
+
+    @$mol_mem
     transporters_options() {
       if (this.auto_related() === true && this.auto_relations()?.transporters) {
         return this.auto_relations()?.transporters as {};
@@ -84,13 +110,13 @@ namespace $.$$ {
 
     @$mol_mem
     auto_relations() {
-      const number = this.auto_number();
+      const number = this.auto_number_final()
+        .replaceAll("|", "")
+        .replaceAll("_", "");
       //   const number = $mol_mem_cached(() => this.autoNumber_IN());
       if (number && this.auto_number_bid() === "") {
         try {
-          const relations = this.api().getAutoRelations(
-            number.replaceAll("|", "")
-          );
+          const relations = this.api().getAutoRelations(number);
           this.auto_related(true);
           const data = {
             payers: relations.payers.map((p) => ({
@@ -104,7 +130,22 @@ namespace $.$$ {
               //   publicId: t.public_id as string,
             })) as $scale_modelOrganization[],
           };
+
+          const prevActs = this.api().getActs({
+            autoNumber: number,
+            cargoType: null,
+            wasteCategory: null,
+            payerPublicId: null,
+            transporterPublicId: null,
+            page: 1,
+            status: $scale_modelActStatus.COMPLETED,
+          });
+
+          const prevAct = prevActs.data.length ? prevActs.data[0]! : null;
+
           const result = {
+            prev_cargoType: prevAct?.cargoType?.publicId ?? null,
+            prev_cargoCategory: prevAct?.wasteCategory?.publicId ?? null,
             payers: data.payers.reduce(
               (acc, curr) => ((acc[curr.public_id] = curr.title), acc),
               {}
@@ -134,11 +175,20 @@ namespace $.$$ {
     @$mol_mem
     auto_number_bid(next?: string): string {
       if (next !== undefined) return next;
-      if (!this.auto_number() || !this.auto_number().trim().length) {
+
+      if (
+        !this.auto_number_final() ||
+        !this.auto_number_final().replaceAll("|", "").replaceAll("_", "").trim()
+          .length
+      ) {
         return "*";
       } else if (
         !this.number_mask_regex().test(
-          this.auto_number().trim().replaceAll("|", "")
+          this.auto_number_final()
+            .toUpperCase()
+            .trim()
+            .replaceAll("|", "")
+            .replaceAll("_", "")
         )
       ) {
         return "Неверный формат";
@@ -208,7 +258,10 @@ namespace $.$$ {
     enter_submit() {
       try {
         const response = this.api().createAct({
-          autoNumber: this.auto_number().trim().replaceAll("|", ""),
+          autoNumber: this.auto_number_final()
+            .trim()
+            .replaceAll("|", "")
+            .replaceAll("_", ""),
           payerPublicId: this.payer(),
           transporterPublicId: this.transporter(),
           cargoTypePublicId: this.cargo_type(),
@@ -220,7 +273,10 @@ namespace $.$$ {
         console.log("resss", response);
         // $mol_state_arg.dict({ "": "dash" });
         const autoStack = this.detected_auto_stack_list();
-        const currentAutoNumber = this.auto_number().replaceAll("|", "").trim();
+        const currentAutoNumber = this.auto_number_final()
+          .replaceAll("|", "")
+          .replaceAll("_", "")
+          .trim();
         console.log("stack", autoStack, currentAutoNumber);
         if (
           autoStack.length &&
@@ -252,14 +308,16 @@ namespace $.$$ {
     auto_number(next?: string): string {
       if (
         this.detected_auto_stack_list()?.find((auto) => auto.direction === "IN")
-          ?.number
+          ?.number &&
+        next === undefined
       ) {
         const number = this.detected_auto_stack_list()?.find(
           (auto) => auto.direction === "IN"
         )?.number!;
-        console.log("parsedd", number, this.number_mask_parse(number));
+        console.log("ppparrs");
         this.number_mask_parse(number);
       }
+
       return (
         next?.toUpperCase() ??
         this.detected_auto_stack_list()?.find((auto) => auto.direction === "IN")
@@ -303,6 +361,8 @@ namespace $.$$ {
       return this.Form()
         .form_fields()
         .filter((field) => field.name() !== "Гос. номер")
+        .filter((field) => field.name() !== "Гос. номер трактор")
+        .filter((field) => field.name() !== "Гос. номер прицеп")
         .every((field) => !field.bid());
     }
 
@@ -356,7 +416,7 @@ namespace $.$$ {
     @$mol_action
     number_mask_next() {
       const prev = this.number_mask_id();
-      if (this.number_mask_id() - 1 < this.number_mask_stack().length) {
+      if (this.number_mask_id() < this.number_mask_stack().length - 1) {
         this.number_mask_id(prev + 1);
       } else {
         this.number_mask_id(0);

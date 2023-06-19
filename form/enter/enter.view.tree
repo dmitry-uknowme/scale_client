@@ -29,6 +29,7 @@ $scale_form_enter $mol_list
 							allow \абвсденкмортхуАБВСДЕНКМОРТХУ01234567890
 							mask <= number_mask \|_|___|__|___|
 							value?val <=> auto_number?val
+							value_changed?val => auto_number_final?val
 						event * dblclick? <=> number_mask_next? null
 					<= Payer_field $mol_form_field
 						name \Оператор
