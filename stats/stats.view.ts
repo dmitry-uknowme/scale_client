@@ -21,7 +21,7 @@ namespace $.$$ {
           this.transporter() === this.default_values().transporter
             ? null
             : this.transporter(),
-        page: parseInt(this.current_page()),
+        page: this.current_page(),
       });
     }
 

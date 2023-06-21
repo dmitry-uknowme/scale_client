@@ -19,12 +19,12 @@ namespace $.$$ {
       //   };
     }
     @$mol_mem
-    settings(next?: any) {
+    settings(next?: $scale_modelSettings) {
       if (next !== undefined) {
-        return $mol_state_local.value("settings", next);
+        return $mol_state_local.value("settings", next) as $scale_modelSettings;
       }
       if ($mol_state_local.value("settings")) {
-        return $mol_state_local.value("settings");
+        return $mol_state_local.value("settings") as $scale_modelSettings;
       }
       return $mol_state_local.value("settings", this.default_settings());
     }

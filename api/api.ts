@@ -14,12 +14,14 @@ namespace $ {
   export class $scale_api extends $mol_object {
     @$mol_mem
     base_url() {
-      return $mol_state_local.value("settings")?.API_URL;
+      return ($mol_state_local.value("settings") as $scale_modelSettings)
+        ?.API_URL!;
     }
 
     @$mol_mem
     secret_key() {
-      return $mol_state_local.value("settings")?.SECRET_KEY;
+      return ($mol_state_local.value("settings") as $scale_modelSettings)
+        ?.SECRET_KEY!;
     }
 
     getActs(
@@ -45,7 +47,9 @@ namespace $ {
         `${this.base_url()}/getActs${
           Object.keys(filter).length
             ? `?${Object.keys(filter)
+                //@ts-expect-error
                 .filter((key) => filter[key] !== null)
+                //@ts-expect-error
                 .map((key) => `${key}=${filter[key]}`)
                 .join("&")}`
             : ""
@@ -84,7 +88,7 @@ namespace $ {
           ...payload,
           apiClientSecretKey: this.secret_key(),
         }),
-      });
+      }) as $scale_apiResponse<{}>;
 
       if (response.status !== "success") {
         if (response?.errors) {

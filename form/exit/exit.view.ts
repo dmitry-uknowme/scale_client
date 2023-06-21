@@ -16,49 +16,38 @@ namespace $.$$ {
 
     @$mol_mem
     act(next?: string) {
-      if (next !== undefined) return next;
-
-      //   if (
-      //     $mol_state_arg.value("form_data") &&
-      //     JSON.parse($mol_state_arg.value("form_data")!)
-      //   ) {
-      //     const initialFormData = JSON.parse(
-      //       $mol_state_arg.value("form_data")!
-      //     ) as {
-      //       act_id: string;
-      //     };
-      //     if (initialFormData?.act_id) {
-      //       this.act(initialFormData?.act_id);
-      //     }
-      //   }
-      if ($mol_state_arg.value("form_data")) {
-        return;
-      }
-      if (
-        this.detected_auto_stack_list()?.find(
-          (auto) => auto.direction === "OUT"
-        )?.number
-      ) {
-        const index = Object.values(this.acts_options()).indexOf(
+      if (next === undefined) {
+        if ($mol_state_arg.value("form_data")) {
+          return;
+        }
+        if (
           this.detected_auto_stack_list()?.find(
             (auto) => auto.direction === "OUT"
           )?.number
-        );
+        ) {
+          const index = Object.values(this.acts_options()).indexOf(
+            this.detected_auto_stack_list()?.find(
+              (auto) => auto.direction === "OUT"
+            )?.number
+          );
 
-        if (index > -1) {
-          return Object.keys(this.acts_options())[index] as string;
+          if (index > -1) {
+            document
+              .getElementById(
+                `$scale_app.Root(0).Form_exit_body().Auto_number_field().Label()`
+              )!
+              ?.scrollIntoViewIfNeeded();
+            return Object.keys(this.acts_options())[index] as string;
+          }
+        }
+
+        if (!this.acts_exist()) {
+          return "Нет авто на территории";
+        } else {
+          return this.default_values().act;
         }
       }
-      if (this.autoNumber_OUT()) {
-        const index = Object.values(this.acts_options()).indexOf(
-          this.autoNumber_OUT()
-        );
-        if (index) {
-          return Object.keys(this.acts_options())[index] as string;
-        }
-      }
-
-      return "";
+      return next;
     }
 
     @$mol_mem
@@ -66,11 +55,18 @@ namespace $.$$ {
       const data = this.api().getActs({
         status: $scale_modelActStatus.ON_TERRITORY,
       }).data;
+
       const result = data.reduce(
         (acc, curr) => ((acc[curr.publicId] = curr.auto.number), acc),
         {}
       );
       return result;
+    }
+
+    @$mol_mem
+    acts_exist() {
+      if (Object.keys(this.acts_options()).length === 0) return false;
+      return true;
     }
 
     @$mol_action

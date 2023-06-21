@@ -18,6 +18,11 @@ namespace $.$$ {
     @$mol_action
     open_enter_form() {
       $mol_state_arg.dict({ "": "dash", dash: "form_enter" });
+      document
+        .getElementById(
+          `$scale_app.Root(0).Form_enter_body().Auto_number_field().Label()`
+        )!
+        ?.scrollIntoViewIfNeeded();
     }
 
     @$mol_action
@@ -26,6 +31,11 @@ namespace $.$$ {
         "": "dash",
         dash: "form_exit",
       });
+      document
+        .getElementById(
+          `$scale_app.Root(0).Form_exit_body().Auto_number_field().Label()`
+        )!
+        ?.scrollIntoViewIfNeeded();
     }
 
     @$mol_action
@@ -35,6 +45,11 @@ namespace $.$$ {
         dash: "form_exit",
         form_data: JSON.stringify({ act_id: obj.publicId }),
       });
+      document
+        .getElementById(
+          `$scale_app.Root(0).Form_exit_body().Auto_number_field().Label()`
+        )!
+        ?.scrollIntoViewIfNeeded();
     }
 
     @$mol_mem
@@ -92,7 +107,9 @@ namespace $.$$ {
 
     @$mol_mem
     act_table_title() {
-      return `Авто на территории (${this.count()})`;
+      return this.count() === 0
+        ? "Нет авто на территории"
+        : `Авто на территории (${this.count()})`;
     }
 
     @$mol_mem_key

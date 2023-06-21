@@ -305,7 +305,7 @@ namespace $.$$ {
     }
 
     @$mol_mem
-    auto_number(next?: string): string {
+    auto_number(next?: string) {
       if (
         this.detected_auto_stack_list()?.find((auto) => auto.direction === "IN")
           ?.number &&
@@ -316,13 +316,18 @@ namespace $.$$ {
         )?.number!;
         console.log("ppparrs");
         this.number_mask_parse(number);
+        document
+          .getElementById(
+            `$scale_app.Root(0).Form_enter_body().Auto_number_field().Label()`
+          )!
+          ?.scrollIntoViewIfNeeded();
       }
 
       return (
         next?.toUpperCase() ??
         this.detected_auto_stack_list()?.find((auto) => auto.direction === "IN")
           ?.number ??
-        this.autoNumber_IN() ??
+        // this.autoNumber_IN() ??
         ""
       );
     }
